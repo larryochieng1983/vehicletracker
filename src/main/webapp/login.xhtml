@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns="http://www.w3.org/1999/xhtml">
+
+<h:head>
+	<title>Vehicle Tracker</title>
+	<h:outputStylesheet library="css" name="style.css">
+	</h:outputStylesheet>
+</h:head>
+<h:body>
+	<h3>Please enter your credentials:</h3>
+	<h:form>
+
+		<h:panelGrid border="0" columns="2" id="panel">
+			<h:outputLabel for="userName" value="Username:">
+				<h:panelGroup>
+					<h:inputText id="userName" required="true"
+						requiredmessage="Value is required"
+						value="#{userManagedBean.userLogin}">
+					</h:inputText>
+					<h:message errorclass="error" for="userName">
+					</h:message>
+				</h:panelGroup>
+
+				<h:outputLabel for="password" value="Password:">
+					<h:panelGroup>
+						<h:inputSecret id="password" required="true"
+							requiredmessage="Value is required"
+							value="#{userManagedBean.password}">
+							<h:message errorclass="error" for="password">
+							</h:message>
+						</h:inputSecret>
+					</h:panelGroup>
+					<h:commandButton action="#{userManagedBean.login}" value="Login"></h:commandButton>
+				</h:outputLabel>
+			</h:outputLabel>
+		</h:panelGrid>
+	</h:form>
+</h:body>
+
+</html>

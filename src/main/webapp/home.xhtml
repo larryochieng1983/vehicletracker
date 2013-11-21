@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns="http://www.w3.org/1999/xhtml">
+
+<h:head>
+	<title>Vehicle Tracker - Home</title>
+</h:head>
+<h:body>
+	<h:panelGrid border="0" columns="2" id="panel"
+		rendered="#{not empty userManagedBean.user}">
+     Welcome home dear <h:outputText
+			value="#{userManagedBean.user.firstName} #{userManagedBean.user.lastName}">
+		</h:outputText>
+	</h:panelGrid>
+	<h:panelGrid border="0" columns="2" id="panel"
+		rendered="#{empty userManagedBean.user}">
+     You are not allowed to see this content.
+    </h:panelGrid>
+</h:body>
+</html>
