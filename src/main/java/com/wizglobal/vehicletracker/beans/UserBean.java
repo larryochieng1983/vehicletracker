@@ -14,9 +14,9 @@ import com.wizglobal.vehicletracker.domain.User;
  * @author Otieno Lawrence
  * 
  */
-@ManagedBean(name = "userManagedBean")
+@ManagedBean(name = "userBean")
 @SessionScoped
-public class UserManagedBean implements Serializable {
+public class UserBean implements Serializable {
 
 	private static final long serialVersionUID = 152717293232892353L;
 	private static final String HOME_PAGE = "home?faces-redirect=true";
