@@ -7,7 +7,10 @@
 	<packaging>war</packaging>
 	<name>Vehicle Tracker Web</name>
 	<description>An sms based web vehicle tracking application</description>
-	<properties></properties>
+	<properties>
+		<javaee-web-api-version>6.0</javaee-web-api-version>
+		<ejb-api-version>3.0</ejb-api-version>
+	</properties>
 	<repositories>
 		<repository>
 			<id>prime-repo</id>
@@ -102,6 +105,18 @@
 			<groupId>org.smslib</groupId>
 			<artifactId>smslib</artifactId>
 			<version>3.5.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-web-api</artifactId>
+			<version>${javaee-web-api-version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.ejb</groupId>
+			<artifactId>ejb-api</artifactId>
+			<version>${ejb-api-version}</version>
 		</dependency>
 	</dependencies>
 	<build>

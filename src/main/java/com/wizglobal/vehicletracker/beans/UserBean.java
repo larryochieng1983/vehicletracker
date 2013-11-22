@@ -4,11 +4,22 @@
 package com.wizglobal.vehicletracker.beans;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.event.ActionEvent;
+import javax.inject.Inject;
+import javax.management.relation.Role;
+
+import org.primefaces.model.LazyDataModel;
 
 import com.wizglobal.vehicletracker.domain.User;
+import com.wizglobal.vehicletracker.domain.UserRole;
+import com.wizglobal.vehicletracker.service.UserService;
 
 /**
  * @author Otieno Lawrence
@@ -18,51 +29,135 @@ import com.wizglobal.vehicletracker.domain.User;
 @SessionScoped
 public class UserBean implements Serializable {
 
-	private static final long serialVersionUID = 152717293232892353L;
-	private static final String HOME_PAGE = "home?faces-redirect=true";
-	private User user;
-	private String userLogin;
-	private String password;
+	 /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private @Inject transient Logger logger;
+    private @Inject UserService das;
+    // Selected users that will be removed 
+    private User[] selectedUsers; 
+    // Lazy loading user list
+    private LazyDataModel<User> lazyModel; 
+    // Creating new user
+    private User newUser = new User();
+    // Selected user that will be updated
+    private User selectedUser = new User();
+            
+    // Available role list
+    private List<Role> roleList; 
 
-	public String login() {
-		if( userLogin != null && password != null ) {
-			return someLoginMethod();
-		}
-		return "login?faces-redirect=true";
-	}
+    /**
+     * Default constructor
+     */
+    public UserBean() {
 
-	private String someLoginMethod() {
-		if( userLogin.equals( "tom" ) && password.equals( "tom" ) ) {
-			user = new User( userLogin, password, "Tom", "Hanks" );
-			return HOME_PAGE;
-		} else if( userLogin.equals( "forrest" ) && password.equals( "forrest" ) ) {
-			user = new User( userLogin, password, "Forrest", "Gump" );
-			return HOME_PAGE;
-		}
-		return "login?faces-redirect=true";
-	}
+    }
 
-	public User getUser() {
-		return user;
-	}
+    /**
+     * Initializing Data Access Service for LazyUserDataModel class
+     * role list for UserContoller class
+     */
+    @PostConstruct
+    public void init(){
+        logger.log(Level.INFO, "UserController is initializing");
+        lazyModel = new LazyUserDataModel(das);
+        roleList = das.findWithNamedQuery(UserRole.ALL);
+    }
 
-	public void setUser( User user ) {
-		this.user = user;
-	}
+    /**
+     * Create, Update and Delete operations
+     */
+    public void doCreateUser() {
+        das.create(newUser);
+    }
+        
+    /**
+     *
+     * @param actionEvent
+     */
+    public void doUpdateUser(ActionEvent actionEvent){
+            das.update(selectedUser);
+    }
+        
+    /**
+     *
+     * @param actionEvent
+     */
+    public void doDeleteUsers(ActionEvent actionEvent){
+            das.deleteItems(selectedUsers);
+    }     
+        
+    /**
+     * Getters, Setters
+     * @return 
+     */
 
-	public String getUserLogin() {
-		return userLogin;
-	}
+    public User getSelectedUser() {  
+        return selectedUser;  
+    }  
 
-	public void setUserLogin( String userLogin ) {
-		this.userLogin = userLogin;
-	}
+    /**
+     *
+     * @param selectedUser
+     */
+    public void setSelectedUser(User selectedUser) {  
+            this.selectedUser = selectedUser;  
+    } 
+        
+    /**
+     *
+     * @return
+     */
+    public User[] getSelectedUsers() {  
+            return selectedUsers;  
+    }  
+        
+    /**
+     *
+     * @param selectedUsers
+     */
+    public void setSelectedUsers(User[] selectedUsers) {  
+            this.selectedUsers = selectedUsers;  
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    /**
+     *
+     * @return
+     */
+    public User getNewUser() {
+            return newUser;
+    }
 
-	public void setPassword( String password ) {
-		this.password = password;
-	}
+    /**
+     *
+     * @param newUser
+     */
+    public void setNewUser(User newUser) {
+            this.newUser = newUser; 
+    }
+       
+    /**
+     *
+     * @return LazyDataModel
+     */
+    public LazyDataModel<User> getLazyModel() {
+            return lazyModel;
+    }
+
+    /**
+     *
+     * @return List<Role>
+     */
+    public List<Role> getRoleList() {
+            return roleList;
+    }
+
+    /**
+     *
+     * @param roleList
+     */
+    public void setRoleList(List<Role> roleList) {
+            this.roleList = roleList;
+    }
 }
