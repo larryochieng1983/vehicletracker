@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../WEB-INF/templates/master.xhtml"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:h="http://java.sun.com/jsf/html">
+
+    <ui:define name="content-heading">
+        Vehicle Detail
+    </ui:define>
+    <ui:define name="content">
+	<h:form>
+	    <h:link value="Vehicles " outcome="/vehicles/list.jsf?faces-redirect=true"/>
+	    <h:outputText value="/ Current Vehicle"/>
+	    <h:panelGroup style="float: right">
+		<h:commandLink action="#{vehicleController.editVehicle}" value="Edit | "/>
+		<h:commandLink action="#{vehicleController.deleteCurrentVehicle()}" value="Delete"/>
+	    </h:panelGroup>
+	</h:form>
+	<h:panelGroup style="width: 100%">
+	    <p:gmap center="43.000, 35.000" type="HYBRID" zoom="4"/>
+	</h:panelGroup>
+    </ui:define>
+
+</ui:composition>

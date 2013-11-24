@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../WEB-INF/templates/master.xhtml"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:h="http://java.sun.com/jsf/html">
+
+    <ui:define name="content-heading">
+        Vehicles
+    </ui:define>
+
+    <ui:define name="content">
+	<p:dataTable value="#{vehicleController.vehicles}" var="vehicle">
+	    <p:column headerText="Registration">
+		<h:link outcome="#{vehicleController.viewSelectedVehicle()}">
+		    <h:outputText value="#{vehicle.registrationNumber}"/>
+		</h:link>
+	    </p:column>
+	    <p:column headerText="Customer">
+		<h:link outcome="/customers/view">
+		    <h:outputText value="#{vehicle.customer}"/>
+		</h:link>
+	    </p:column>
+	    <p:column headerText="Model">
+		<h:outputText value="#{vehicle.model.modelName}"/>
+	    </p:column>
+	    <p:column headerText="GPS Device">
+		<h:outputText value="#{vehicle.gpsDevice.gpsType}"/>
+	    </p:column>
+	</p:dataTable>
+    </ui:define>
+
+</ui:composition>
