@@ -21,7 +21,11 @@ import com.wizglobal.vehicletracker.util.LazySorter;
  */
 public class LazyUserDataModel extends LazyDataModel<User> implements Serializable{
 
-   // Data Source for binding data to the DataTable
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	// Data Source for binding data to the DataTable
    private List<User> datasource;
    // Selected Page size in the DataTable
    private int pageSize;
