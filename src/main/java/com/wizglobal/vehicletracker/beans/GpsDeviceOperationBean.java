@@ -35,8 +35,7 @@ public class GpsDeviceOperationBean implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private @Inject
-	transient Logger logger;
+	private transient Logger logger;
 
 	@Inject
 	private GpsDeviceService gpsDeviceService;
