@@ -41,6 +41,18 @@ public class GpsDevice extends BaseEntity {
 	@Column(name = "AUTHORIZED_NUMBERS", nullable = true)
 	private String[] otherAuthorizedNumbers;
 
+	@Size(max = 12)
+	@Column(name = "IP_ADDRESS")
+	private String ipAddress;
+
+	@Size(max = 12)
+	@Column(name = "IP_PORT")
+	private String ipPort;
+
+	@Size(max = 15)
+	@Column(name = "OPERATION_MODE")
+	private String operationMode;
+
 	@Size(max = 6)
 	@Column(name = "DEVICE_PASS")
 	private String password;
@@ -53,10 +65,9 @@ public class GpsDevice extends BaseEntity {
 	}
 
 	/**
-	 * @param gpsType
-	 *            the gpsType to set
+	 * @param gpsType the gpsType to set
 	 */
-	public void setGpsType(GpsType gpsType) {
+	public void setGpsType( GpsType gpsType ) {
 		this.gpsType = gpsType;
 	}
 
@@ -68,10 +79,9 @@ public class GpsDevice extends BaseEntity {
 	}
 
 	/**
-	 * @param card
-	 *            the card to set
+	 * @param card the card to set
 	 */
-	public void setCard(SimCard card) {
+	public void setCard( SimCard card ) {
 		this.card = card;
 	}
 
@@ -83,10 +93,9 @@ public class GpsDevice extends BaseEntity {
 	}
 
 	/**
-	 * @param mainAuthorizedNumber
-	 *            the mainAuthorizedNumber to set
+	 * @param mainAuthorizedNumber the mainAuthorizedNumber to set
 	 */
-	public void setMainAuthorizedNumber(String mainAuthorizedNumber) {
+	public void setMainAuthorizedNumber( String mainAuthorizedNumber ) {
 		this.mainAuthorizedNumber = mainAuthorizedNumber;
 	}
 
@@ -98,11 +107,52 @@ public class GpsDevice extends BaseEntity {
 	}
 
 	/**
-	 * @param otherAuthorizedNumbers
-	 *            the otherAuthorizedNumbers to set
+	 * @param otherAuthorizedNumbers the otherAuthorizedNumbers to set
 	 */
-	public void setOtherAuthorizedNumbers(String[] otherAuthorizedNumbers) {
+	public void setOtherAuthorizedNumbers( String[] otherAuthorizedNumbers ) {
 		this.otherAuthorizedNumbers = otherAuthorizedNumbers;
+	}
+
+	/**
+	 * @return the ipAddress
+	 */
+	public String getIpAddress() {
+		return ipAddress;
+	}
+
+	/**
+	 * @param ipAddress the ipAddress to set
+	 */
+	public void setIpAddress( String ipAddress ) {
+		this.ipAddress = ipAddress;
+	}
+
+	/**
+	 * @return the ipPort
+	 */
+	public String getIpPort() {
+		return ipPort;
+	}
+
+	/**
+	 * @param ipPort the ipPort to set
+	 */
+	public void setIpPort( String ipPort ) {
+		this.ipPort = ipPort;
+	}
+
+	/**
+	 * @return the operationMode
+	 */
+	public String getOperationMode() {
+		return operationMode;
+	}
+
+	/**
+	 * @param operationMode the operationMode to set
+	 */
+	public void setOperationMode( String operationMode ) {
+		this.operationMode = operationMode;
 	}
 
 	/**
@@ -113,10 +163,9 @@ public class GpsDevice extends BaseEntity {
 	}
 
 	/**
-	 * @param password
-	 *            the password to set
+	 * @param password the password to set
 	 */
-	public void setPassword(String password) {
+	public void setPassword( String password ) {
 		this.password = password;
 	}
 
