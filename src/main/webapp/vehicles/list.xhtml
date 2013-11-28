@@ -17,7 +17,7 @@
 		</h:link>
 	    </p:column>
 	    <p:column headerText="Customer">
-		<h:link outcome="/customers/view">
+		<h:link outcome="#{vehicleController.viewSelectedvehicleCustomer()}">
 		    <h:outputText value="#{vehicle.customer}"/>
 		</h:link>
 	    </p:column>

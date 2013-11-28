@@ -1,13 +1,25 @@
 package com.wizglobal.vehicletracker.beans;
 
 import com.wizglobal.vehicletracker.domain.Vehicle;
+import com.wizglobal.vehicletracker.domain.VehicleColor;
+import com.wizglobal.vehicletracker.domain.VehicleColorService;
+import com.wizglobal.vehicletracker.domain.VehicleModel;
+import com.wizglobal.vehicletracker.service.VehicleManufacturerService;
+import com.wizglobal.vehicletracker.service.VehicleModelService;
 import com.wizglobal.vehicletracker.service.VehicleService;
+import com.wizglobal.vehicletracker.service.VehicleTypeService;
+import com.wizglobal.vehicletracker.util.QueryParam;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.apache.log4j.Logger;
 import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortOrder;
 
 /**
  *
@@ -16,11 +28,23 @@ import org.primefaces.model.LazyDataModel;
 @Named(value = "vehicleController")
 @SessionScoped
 public class VehicleController extends BaseFacesController implements Serializable {
+    
+    private static final Logger LOG = Logger.getLogger(VehicleController.class);
 
     @Inject
     private VehicleService vehicleService;
     @Inject
     private CustomerController customerController;
+    @Inject
+    private VehicleColorService vehicleColorService;
+    @Inject
+    private VehicleManufacturerService manufacturerService;
+    @Inject 
+    private VehicleModelService modelService;
+    @Inject 
+    private VehicleTypeService vehicleTypeService;
+    
+    
     private Vehicle currentVehicle;
     private LazyVehicleTableModel vehicleTableModel;
 
@@ -96,15 +120,85 @@ public class VehicleController extends BaseFacesController implements Serializab
 	return null;
     }
     
+    public String addNewVehicle(){
+	vehicleService.create(currentVehicle);
+	return null;
+    }
+    
     /**
      *
      * @return Save editing changes for current vehicle.
      */
     public String saveCurrentVehicle(){
-	vehicleService.update(currentVehicle);
+	try {
+	    vehicleService.update(currentVehicle);
+	    addInfoMessage("New Vehicle added", null);
+	} catch (Exception e) {
+	    addErrorgMessage("Failed to save the new vehicle data. Please try again", null);
+	}
 	return null;
     }
+    
+    /**
+     *
+     * @return Save editing changes for current vehicle.
+     */
+    public String cancelCurrentVehicleEdit(){
+	if (currentVehicle != null) {
+	    //reset reference from a clean copy from Db
+	    currentVehicle = vehicleService.find(currentVehicle.getId());
+	}
+	return null;
+    }
+    
+    public List<VehicleColor> getListofColors(){
+	List<VehicleColor> result = new ArrayList<>();
+	try {
+	    result = vehicleColorService.findWithNamedQuery("VehicleColor.findAll");
+	} catch (Exception e) {
+	    LOG.warn("Vehicle Color Service failed to retrieve colors: " + e.getMessage());
+	}
+	
+	return result;
+    }
+    public List<VehicleModel> getListofModels(){
+	List<VehicleModel> result = new ArrayList<>();
+	try {
+	    result = modelService.findWithNamedQuery("VehicleModel.findAll");
+	} catch (Exception e) {
+	    LOG.warn("Failed to retrieve vehicle models: " + e.getMessage());
+	}
+	
+	return result;
+    }
 
-    public static class LazyVehicleTableModel extends LazyDataModel<Vehicle> {
+    public class LazyVehicleTableModel extends LazyDataModel<Vehicle> {
+	private List<Vehicle> vehicleList;
+
+	public LazyVehicleTableModel() {
+	    vehicleList = new ArrayList<>();
+	}
+	
+	
+	@Override
+	public Vehicle getRowData() {
+	    return super.getRowData();
+	}
+
+	@Override
+	public List<Vehicle> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+	    //ignoring filters
+	    List<QueryParam> filterQueryParams = new ArrayList<>();
+	    if (filters != null && !filters.isEmpty()) {
+		for (Map.Entry<String, String> entry : filters.entrySet()) {
+		    String ket = entry.getKey();
+		    String value = entry.getValue();
+		    filterQueryParams.add(new QueryParam(ket, value.concat("%"))); //do a partial match
+		}
+	    }
+	    vehicleService.loadVehicles(first, pageSize, filterQueryParams);
+	    return super.load(first, pageSize, sortField, sortOrder, filters);
+	}
+	
     }
 }

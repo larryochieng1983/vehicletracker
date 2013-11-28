@@ -3,7 +3,6 @@ package com.wizglobal.vehicletracker.service;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -18,7 +17,7 @@ import javax.persistence.Query;
 public abstract class DataAccessService<T> {
 
     @PersistenceContext
-    private EntityManager em;
+    protected EntityManager em;
 
     public DataAccessService() {
     }

@@ -3,7 +3,8 @@
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
                 template="./../WEB-INF/templates/master.xhtml"
 		xmlns:p="http://primefaces.org/ui"
-		xmlns:h="http://java.sun.com/jsf/html">
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:define name="content-heading">
         Vehicle Detail
@@ -17,8 +18,15 @@
 		<h:commandLink action="#{vehicleController.deleteCurrentVehicle()}" value="Delete"/>
 	    </h:panelGroup>
 	</h:form>
-	<h:panelGroup style="width: 100%">
-	    <p:gmap center="43.000, 35.000" type="HYBRID" zoom="4"/>
+	<h:panelGroup style="width: 100%" layout="block">
+	    <h:outputFormat value="{0} - {1}, ">
+		<f:param value="#{vehicleController.currentVehicle.registrationNumber}"/>
+		<f:param value="#{vehicleController.currentVehicle.model}"/>
+	    </h:outputFormat>
+	    <h:outputLabel value="#{vehicleController.currentVehicle.customer}"/>
+	    <h:outputLabel value="#{vehicleController.currentVehicle.color}"/>
+	    <h:outputLabel value="#{vehicleController.currentVehicle.gpsDevice}"/>
+	    <h:outputLabel value="Manufactured by #{vehicleController.currentVehicle.customer}"/>
 	</h:panelGroup>
     </ui:define>
 
