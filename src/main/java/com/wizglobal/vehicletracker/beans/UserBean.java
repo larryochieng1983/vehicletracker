@@ -20,7 +20,7 @@ import org.primefaces.model.LazyDataModel;
 
 /**
  * @author Otieno Lawrence
- *
+ * 
  */
 @ManagedBean(name = "userBean")
 @SessionScoped
@@ -151,9 +151,9 @@ public class UserBean implements Serializable {
 
     /**
      *
-     * @param roleList
      */
     public void setRoleList(List<Role> roleList) {
 	this.roleList = roleList;
     }
+
 }
