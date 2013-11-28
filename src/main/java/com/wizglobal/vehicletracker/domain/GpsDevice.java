@@ -30,6 +30,11 @@ public class GpsDevice extends BaseEntity {
 	@ManyToOne(cascade = { CascadeType.ALL }, optional = false)
 	private GpsType gpsType;
 
+	@NotNull
+	@Size(max = 14)
+	@Column(name = "IDN")
+	private String idn;// The tracker's unique ID
+
 	@ManyToOne(cascade = { CascadeType.ALL }, optional = false)
 	private SimCard card;
 
@@ -40,14 +45,6 @@ public class GpsDevice extends BaseEntity {
 
 	@Column(name = "AUTHORIZED_NUMBERS", nullable = true)
 	private String[] otherAuthorizedNumbers;
-
-	@Size(max = 12)
-	@Column(name = "IP_ADDRESS")
-	private String ipAddress;
-
-	@Size(max = 12)
-	@Column(name = "IP_PORT")
-	private String ipPort;
 
 	@Size(max = 15)
 	@Column(name = "OPERATION_MODE")
@@ -69,6 +66,20 @@ public class GpsDevice extends BaseEntity {
 	 */
 	public void setGpsType( GpsType gpsType ) {
 		this.gpsType = gpsType;
+	}
+
+	/**
+	 * @return the idn
+	 */
+	public String getIdn() {
+		return idn;
+	}
+
+	/**
+	 * @param idn the idn to set
+	 */
+	public void setIdn( String idn ) {
+		this.idn = idn;
 	}
 
 	/**
@@ -111,34 +122,6 @@ public class GpsDevice extends BaseEntity {
 	 */
 	public void setOtherAuthorizedNumbers( String[] otherAuthorizedNumbers ) {
 		this.otherAuthorizedNumbers = otherAuthorizedNumbers;
-	}
-
-	/**
-	 * @return the ipAddress
-	 */
-	public String getIpAddress() {
-		return ipAddress;
-	}
-
-	/**
-	 * @param ipAddress the ipAddress to set
-	 */
-	public void setIpAddress( String ipAddress ) {
-		this.ipAddress = ipAddress;
-	}
-
-	/**
-	 * @return the ipPort
-	 */
-	public String getIpPort() {
-		return ipPort;
-	}
-
-	/**
-	 * @param ipPort the ipPort to set
-	 */
-	public void setIpPort( String ipPort ) {
-		this.ipPort = ipPort;
 	}
 
 	/**

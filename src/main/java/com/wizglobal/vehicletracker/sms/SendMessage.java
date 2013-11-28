@@ -68,6 +68,7 @@ public class SendMessage {
 		Service.getInstance().startService();
 		// Send a message synchronously.
 		OutboundMessage msg = new OutboundMessage( receiver, message );
+		msg.setStatusReport( true );
 		if( Service.getInstance().sendMessage( msg ) ) {
 			sent = true;
 		} else {

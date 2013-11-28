@@ -11,14 +11,18 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 import org.primefaces.model.LazyDataModel;
 import org.smslib.SMSLibException;
 import org.smslib.TimeoutException;
 
+import com.wizglobal.vehicletracker.domain.GprsSetting;
 import com.wizglobal.vehicletracker.domain.GpsDevice;
+import com.wizglobal.vehicletracker.service.GprsSettingService;
 import com.wizglobal.vehicletracker.service.GpsDeviceService;
 import com.wizglobal.vehicletracker.sms.SendMessage;
 
@@ -60,6 +64,9 @@ public class GpsDeviceOperationBean implements Serializable {
 
 	private SendMessage sendMessage = new SendMessage();
 
+	@Inject
+	private GprsSettingService gprsSettingService;
+
 	public GpsDeviceOperationBean() {
 
 	}
@@ -76,7 +83,7 @@ public class GpsDeviceOperationBean implements Serializable {
 	 */
 	public void initDevice( ActionEvent actionEvent ) {
 		try {
-			if( sendMessage.send( getSelectedGpsDevice().getCard().getPhoneNumber(), "begin"
+			if( sendMessage.send( getSelectedGpsDevice().getCard().getPhoneNumber(), "111111PSW"
 					+ getPassword() ) ) {
 				logger.log( Level.INFO, "DEVICE OPERATION: Initialization OK" );
 				getSelectedGpsDevice().setPassword( getPassword() );
@@ -140,6 +147,27 @@ public class GpsDeviceOperationBean implements Serializable {
 	 * 
 	 * @param actionEvent
 	 */
+	public void stopVehicle( ActionEvent actionEvent ) {
+		try {
+			if( sendMessage.send( getSelectedGpsDevice().getCard().getPhoneNumber(), getPassword()
+					+ "STP" ) ) {
+				logger.log( Level.INFO, "DEVICE OPERATION: Reset Password OK" );
+			}
+		} catch( TimeoutException e ) {
+			logger.log( Level.SEVERE, "SMS ERROR: " + e );
+		} catch( SMSLibException e ) {
+			logger.log( Level.SEVERE, "SMS ERROR: " + e );
+		} catch( IOException e ) {
+			logger.log( Level.SEVERE, "SMS ERROR: " + e );
+		} catch( InterruptedException e ) {
+			logger.log( Level.SEVERE, "SMS ERROR: " + e );
+		}
+	}
+
+	/**
+	 * 
+	 * @param actionEvent
+	 */
 	public void setAuthorizedNumber( ActionEvent actionEvent ) {
 		try {
 			if( sendMessage.send( getSelectedGpsDevice().getCard().getPhoneNumber(), "admin"
@@ -168,6 +196,29 @@ public class GpsDeviceOperationBean implements Serializable {
 			if( sendMessage.send( getSelectedGpsDevice().getCard().getPhoneNumber(), "noadmin"
 					+ getSelectedGpsDevice().getPassword() + "#"
 					+ getSelectedGpsDevice().getCard().getPhoneNumber() ) ) {
+				logger.log( Level.INFO, "DEVICE OPERATION: Reset Authorized No. OK" );
+				getSelectedGpsDevice().setMainAuthorizedNumber( null );
+			}
+		} catch( TimeoutException e ) {
+			logger.log( Level.SEVERE, "SMS ERROR: " + e );
+		} catch( SMSLibException e ) {
+			logger.log( Level.SEVERE, "SMS ERROR: " + e );
+		} catch( IOException e ) {
+			logger.log( Level.SEVERE, "SMS ERROR: " + e );
+		} catch( InterruptedException e ) {
+			logger.log( Level.SEVERE, "SMS ERROR: " + e );
+		}
+	}
+
+	public void setAuthorizedNumbers( ActionEvent actionEvent ) {
+		// Construct the sms instruction to send from the list of numbers to be authorized
+		StringBuilder builder = new StringBuilder();
+		for( int i = 1; i < getAuthorizedNumbers().length; i++ ) {
+			builder.append( "*" + i + "0" + getAuthorizedNumbers()[i] );
+		}
+		try {
+			if( sendMessage.send( getSelectedGpsDevice().getCard().getPhoneNumber(),
+					getSelectedGpsDevice().getPassword() + builder.toString() ) ) {
 				logger.log( Level.INFO, "DEVICE OPERATION: Reset Authorized No. OK" );
 				getSelectedGpsDevice().setMainAuthorizedNumber( null );
 			}
@@ -228,10 +279,17 @@ public class GpsDeviceOperationBean implements Serializable {
 	 * 
 	 * @param actionEvent
 	 */
-	public void setGprs( ActionEvent actionEvent ) {
+	public void setGprsSetting( ActionEvent actionEvent ) {
+		GprsSetting gprsSetting = gprsSettingService
+				.findGprsSettingByServiceProviderName( getSelectedGpsDevice().getCard()
+						.getServiceProviderName() );
+		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance();
+		String gprsMsg = getSelectedGpsDevice().getPassword() + "WWW" + ":IPN"
+				+ request.getServerName() + ";" + "COM:" + request.getServerPort() + ";" + "APN:"
+				+ gprsSetting.getAccessPointName() + ";" + gprsSetting.getUserName() + ";"
+				+ gprsSetting.getPassword();
 		try {
-			if( sendMessage.send( getSelectedGpsDevice().getCard().getPhoneNumber(), "ip"
-					+ getIpAddress() + "port" + getIpPort() ) ) {
+			if( sendMessage.send( getSelectedGpsDevice().getCard().getPhoneNumber(), gprsMsg ) ) {
 				logger.log( Level.INFO, "DEVICE OPERATION: Setup GPRS OK" );
 			}
 		} catch( TimeoutException e ) {
