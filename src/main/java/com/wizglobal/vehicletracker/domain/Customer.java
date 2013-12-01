@@ -3,12 +3,16 @@
  */
 package com.wizglobal.vehicletracker.domain;
 
+import java.util.Collection;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -65,6 +69,9 @@ public class Customer extends BaseEntity {
 	@Column(name = "MOBILE_PHONE_NUMBER")
 	@Size(max = 15)
 	private String mobilePhoneNumber;
+	
+	@OneToMany(cascade= CascadeType.ALL, fetch= FetchType.LAZY)
+	private Collection<Vehicle> vehicles;
 
 	/**
 	 * @return the firstName
@@ -199,6 +206,22 @@ public class Customer extends BaseEntity {
 	 */
 	public void setMobilePhoneNumber(String mobilePhoneNumber) {
 		this.mobilePhoneNumber = mobilePhoneNumber;
+	}
+
+	/**
+	 *
+	 * @return Vehicles associated with this customer.
+	 */
+	public Collection<Vehicle> getVehicles() {
+	    return vehicles;
+	}
+
+	/**
+	 *
+	 * @param vehicles list of vehicles.
+	 */
+	public void setVehicles(Collection<Vehicle> vehicles) {
+	    this.vehicles = vehicles;
 	}
 
 }

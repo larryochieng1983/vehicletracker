@@ -10,6 +10,12 @@
     </ui:define>
 
     <ui:define name="content">
+	<h:form>
+	    <h:panelGroup style="float: right">
+		<h:commandLink action="#{vehicleController.createNewVehicle()}" value="New"/>
+	    </h:panelGroup>
+	</h:form>
+	<p:spacer height="15" width="20"/>
 	<p:dataTable value="#{vehicleController.vehicles}" var="vehicle">
 	    <p:column headerText="Registration">
 		<h:link outcome="#{vehicleController.viewSelectedVehicle()}">

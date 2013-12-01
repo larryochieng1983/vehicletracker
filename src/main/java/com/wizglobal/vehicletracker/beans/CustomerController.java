@@ -1,8 +1,11 @@
 package com.wizglobal.vehicletracker.beans;
 
 import com.wizglobal.vehicletracker.domain.Customer;
+import com.wizglobal.vehicletracker.domain.Vehicle;
 import com.wizglobal.vehicletracker.service.CustomerService;
+import com.wizglobal.vehicletracker.service.VehicleService;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;

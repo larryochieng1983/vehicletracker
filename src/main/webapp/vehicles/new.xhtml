@@ -3,10 +3,48 @@
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
                 template="./../WEB-INF/templates/master.xhtml"
 		xmlns:h="http://java.sun.com/jsf/html"
-		xmlns:p="http://primefaces.org/ui">
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="content-heading">
+        Add New Vehicle
+    </ui:define>
 
     <ui:define name="content">
-        <h:inputText value="Kenny"/>
+        <h:form>
+	    <h:link value="Back to Vehicle List " outcome="/vehicles/list.jsf?faces-redirect=true" style="float: right"/>
+
+	    <h:panelGroup layout="block">
+		<p:spacer width="15" height="50"/>
+		<fieldset>
+		    <h:outputLabel value="Customer:" styleClass="legend-label"/>
+		    <h:selectOneMenu >
+			<f:selectItem itemLabel="Select Customer"/>
+		    </h:selectOneMenu>
+		    <h:outputLabel value="Registration:" styleClass="legend-label"/>
+		    <h:inputText value="#{vehicleController.currentVehicle.registrationNumber}"/>
+		    <h:outputLabel value="Type" styleClass="legend-label"/>
+		    <h:selectOneMenu >
+			<f:selectItem itemLabel="Select Vehicle Type"/>
+		    </h:selectOneMenu>
+		    <h:outputLabel value="Manufacturer:" styleClass="legend-label"/>
+		    <h:selectOneMenu >
+			<f:selectItem itemLabel="Select Manufacturer"/>
+		    </h:selectOneMenu>
+		    <h:outputLabel value="Model:" styleClass="legend-label"/>
+		    <h:selectOneMenu >
+			<f:selectItem itemLabel="Select Vehicle Model"/>
+		    </h:selectOneMenu>
+		    <h:outputLabel value="Color:" styleClass="legend-label"/>
+		    <h:selectOneMenu >
+			<f:selectItem itemLabel="Select Vehicle Color"/>
+		    </h:selectOneMenu>
+		</fieldset>
+		<h:commandButton action="#{vehicleController.addNewVehicle()}" value="Save"/>
+		<p:spacer width="20"/>
+		<h:button outcome="/vehicles/list.jsf" value="Cancel"/>
+	    </h:panelGroup>
+	</h:form>
     </ui:define>
 
 </ui:composition>

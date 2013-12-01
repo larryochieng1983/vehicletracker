@@ -9,20 +9,26 @@
     <ui:define name="content-heading">
         Vehicle Detail
     </ui:define>
+
+
     <ui:define name="content">
 	<h:form>
 	    <h:link value="Vehicles " outcome="/vehicles/list.jsf?faces-redirect=true"/>
-	    <h:outputText value="/ Current Vehicle"/>
+	    <h:outputText value="/ #{vehicleController.currentVehicle.registrationNumber}"/>
 	    <h:panelGroup style="float: right">
-		<h:commandLink action="#{vehicleController.editVehicle}" value="Edit | "/>
+		<h:commandLink action="#{vehicleController.editVehicle}" value="Edit"/>
+		<h:outputText value="  |  "/>
 		<h:commandLink action="#{vehicleController.deleteCurrentVehicle()}" value="Delete"/>
 	    </h:panelGroup>
 	</h:form>
 	<h:panelGroup style="width: 100%" layout="block">
-	    <h:outputFormat value="{0} - {1}, ">
-		<f:param value="#{vehicleController.currentVehicle.registrationNumber}"/>
-		<f:param value="#{vehicleController.currentVehicle.model}"/>
-	    </h:outputFormat>
+	    <fieldset>
+		<legend>Vehicle Detail</legend>
+		<h:outputFormat value="{0} - {1}, ">
+		    <f:param value="#{vehicleController.currentVehicle.registrationNumber}"/>
+		    <f:param value="#{vehicleController.currentVehicle.model}"/>
+		</h:outputFormat>
+	    </fieldset>
 	    <h:outputLabel value="#{vehicleController.currentVehicle.customer}"/>
 	    <h:outputLabel value="#{vehicleController.currentVehicle.color}"/>
 	    <h:outputLabel value="#{vehicleController.currentVehicle.gpsDevice}"/>

@@ -122,6 +122,19 @@ public class VehicleController extends BasePage implements Serializable {
 	return null;
     }
     
+    /**
+     *
+     * @return prepare to add a new vehicle.
+     */
+    public String createNewVehicle(){
+	currentVehicle = new Vehicle();
+	return appendFacesRedirectTrue("/vehicles/new.jsf");
+    }
+    
+    /**
+     *
+     * @return Performs actual database ADD.
+     */
     public String addNewVehicle(){
 	vehicleService.create(currentVehicle);
 	return null;
