@@ -8,9 +8,11 @@ import com.wizglobal.vehicletracker.service.VehicleManufacturerService;
 import com.wizglobal.vehicletracker.service.VehicleModelService;
 import com.wizglobal.vehicletracker.service.VehicleService;
 import com.wizglobal.vehicletracker.service.VehicleTypeService;
+import com.wizglobal.vehicletracker.util.LazySorter;
 import com.wizglobal.vehicletracker.util.QueryParam;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
@@ -27,7 +29,7 @@ import org.primefaces.model.SortOrder;
  */
 @Named(value = "vehicleController")
 @SessionScoped
-public class VehicleController extends BaseFacesController implements Serializable {
+public class VehicleController extends BasePage implements Serializable {
     
     private static final Logger LOG = Logger.getLogger(VehicleController.class);
 
@@ -178,7 +180,11 @@ public class VehicleController extends BaseFacesController implements Serializab
 	public LazyVehicleTableModel() {
 	    vehicleList = new ArrayList<>();
 	}
-	
+
+	@Override
+	public Object getRowKey(Vehicle vehicle) {
+	    return vehicle.getId();
+	}
 	
 	@Override
 	public Vehicle getRowData() {
@@ -187,16 +193,22 @@ public class VehicleController extends BaseFacesController implements Serializab
 
 	@Override
 	public List<Vehicle> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
-	    //ignoring filters
+	    //Add filters
 	    List<QueryParam> filterQueryParams = new ArrayList<>();
 	    if (filters != null && !filters.isEmpty()) {
 		for (Map.Entry<String, String> entry : filters.entrySet()) {
-		    String ket = entry.getKey();
+		    String key = entry.getKey();
 		    String value = entry.getValue();
-		    filterQueryParams.add(new QueryParam(ket, value.concat("%"))); //do a partial match
+		    filterQueryParams.add(new QueryParam(key, value.concat("%"))); //do a partial match
 		}
 	    }
-	    vehicleService.loadVehicles(first, pageSize, filterQueryParams);
+	    List<Vehicle> loadVehicles = vehicleService.loadVehicles(first, pageSize, filterQueryParams);
+	    
+	    //sort
+	    Collections.sort(vehicleList, new LazySorter<Vehicle>(sortField, sortOrder));
+	    //set page size
+	    setRowCount(loadVehicles.size());
+	    setPageSize(pageSize);
 	    return super.load(first, pageSize, sortField, sortOrder, filters);
 	}
 	

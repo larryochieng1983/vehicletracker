@@ -4,7 +4,10 @@ import com.wizglobal.vehicletracker.domain.Customer;
 import com.wizglobal.vehicletracker.service.CustomerService;
 import java.io.Serializable;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.model.DataModel;
+import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -14,13 +17,13 @@ import javax.inject.Named;
  */
 @Named(value = "customerController")
 @SessionScoped
-public class CustomerController extends BaseFacesController implements Serializable {
+public class CustomerController extends BasePage implements Serializable {
 
     @Inject
     private CustomerService customerService;
     private Customer currectCustomer;
     private List<Customer> customerList;
-    
+
     /**
      * Creates a new instance of CustomerController
      */
@@ -36,15 +39,46 @@ public class CustomerController extends BaseFacesController implements Serializa
     }
 
     @Override
+    @PostConstruct
     public void init() {
-	
+	getCustomerList();
     }
     
-    public List<Customer> getCustomerList(){
+    public String deleteCurrentCustomer(){
+	try {
+	    customerService.delete(currectCustomer);
+	    addInfoMessage("Customer " + currectCustomer.getFirstName() + " " + currectCustomer.getLastName() + " removed.", null);
+	} catch (Exception e) {
+	    addErrorgMessage("Failed to delete customer. " + e.getMessage(), null);
+	}
+	return appendFacesRedirectTrue("/customers/list.jsf");
+    }
+
+    public String saveCurrentCustomerChanges() {
+	if (currectCustomer == null) {
+	    addWarningMessage("Please Select a customer to edit and try again.", "No Customer Selected for update");
+	} else {
+	    customerService.update(currectCustomer);
+	    addInfoMessage("Customer updated", null);
+	}
+	return null;
+    }
+
+    public String editCustomer() {
+	return currectCustomer == null ? null : appendFacesRedirectTrue("/customers/edit.jsf");
+    }
+
+    public DataModel<Customer> getCustomersListDataModel() {
+	if (customerList == null || customerList.isEmpty()) {
+	    customerList = getCustomerList();
+	}
+	return new ListDataModel<>(customerList);
+    }
+
+    public List<Customer> getCustomerList() {
 	if (customerList == null) {
 	    customerList = customerService.findWithNamedQuery("Customer.findAll");
 	}
 	return customerList;
     }
-    
 }

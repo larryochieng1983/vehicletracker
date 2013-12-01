@@ -1,5 +1,6 @@
 package com.wizglobal.vehicletracker.beans;
 
+import com.wizglobal.vehicletracker.util.StringUtils;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
@@ -9,7 +10,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author kenny
  */
-public abstract class BaseFacesController {
+public abstract class BasePage {
+    
     
     /**
      * Method to annotate with @PostConstruct
@@ -69,5 +71,55 @@ public abstract class BaseFacesController {
      */
     public HttpServletResponse getreServletResponse(){
 	return  (HttpServletResponse) getFacesContext().getExternalContext().getResponse();
+    }
+    
+    /**
+     * Append ?faces-redirect=true
+     *
+     * @param navigationCase navigation case e.g /home.jsf. ;
+     * @return {navigationCase}.concat('?faces-redirect=true') or null if nav outcome is null.
+     */
+    public String appendFacesRedirectTrue(String navigationCase){
+	return  StringUtils.isNonEmptyString(navigationCase) ? navigationCase.concat(FacesRedirect.FACES_REDIRECT_TRUE.getValueAsGETparam()) : null;
+    }
+    
+    /**
+     * Faces constants for navigation outcomes.
+     *
+     */
+    public static enum FacesRedirect{
+	/**
+	 * faces-redirect=true
+	 *
+	 */
+	FACES_REDIRECT_TRUE("faces-redirect=true"),
+	
+	/**
+	 * faces-redirect=true
+	 *
+	 */
+	FACES_REDIRECT_FALSE("faces-redirect=false");
+	
+	private final String value;
+	
+	private FacesRedirect(String stringVal) {
+	    value = stringVal;
+	}
+
+	/**
+	 *
+	 * @return string value of the enum.
+	 */
+	public String getValue() {
+	    return value;
+	}
+	
+	/**
+	 *
+	 * @return adds '?' to the {@link #getValue() } above.
+	 */
+	public String getValueAsGETparam() {
+	    return "?".concat(value);
+	}
     }
 }

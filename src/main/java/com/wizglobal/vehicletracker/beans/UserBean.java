@@ -38,9 +38,9 @@ public class UserBean implements Serializable {
     // Lazy loading user list
     private LazyDataModel<User> lazyModel;
     // Creating new user
-    private User newUser = new User();
+    private User newUser;
     // Selected user that will be updated
-    private User selectedUser = new User();
+    private User selectedUser;
     // Available role list
     private List<Role> roleList;
 
