@@ -4,13 +4,14 @@
 package com.wizglobal.vehicletracker.domain;
 
 import java.util.Date;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -24,6 +25,8 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "VEHICLE_MODEL")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@NamedQueries({
+    @NamedQuery(name="VehicleModel.findAll", query="SELECT m FROM VehicleModel m ORDER BY m.modelName")})
 public class VehicleModel extends BaseEntity {
 	/**
 	 * 

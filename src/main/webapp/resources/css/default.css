@@ -27,3 +27,11 @@ a:link:hover, a:visited:hover  {
   font-weight : bold;
   text-decoration : underline;
 }
+
+.ui-nav{
+    list-style: none outside none;
+}
+
+.legend-label {
+    color: #2B7C59;
+}
