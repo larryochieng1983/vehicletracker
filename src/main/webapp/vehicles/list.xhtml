@@ -12,18 +12,18 @@
     <ui:define name="content">
 	<h:form>
 	    <h:panelGroup style="float: right">
-		<h:commandLink action="#{vehicleController.createNewVehicle()}" value="New"/>
+		<h:commandLink action="#{vehicleController.createNewVehicle}" value="New"/>
 	    </h:panelGroup>
 	</h:form>
 	<p:spacer height="15" width="20"/>
 	<p:dataTable value="#{vehicleController.vehicles}" var="vehicle">
 	    <p:column headerText="Registration">
-		<h:link outcome="#{vehicleController.viewSelectedVehicle()}">
+		<h:link outcome="#{vehicleController.viewSelectedVehicle}">
 		    <h:outputText value="#{vehicle.registrationNumber}"/>
 		</h:link>
 	    </p:column>
 	    <p:column headerText="Customer">
-		<h:link outcome="#{vehicleController.viewSelectedvehicleCustomer()}">
+		<h:link outcome="#{vehicleController.viewSelectedvehicleCustomer}">
 		    <h:outputText value="#{vehicle.customer}"/>
 		</h:link>
 	    </p:column>
