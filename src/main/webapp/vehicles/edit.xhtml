@@ -14,7 +14,7 @@
 	    <h:link value="Vehicles " outcome="/vehicles/list.jsf?faces-redirect=true"/>
 	    <h:outputText value="/ #{vehicleController.currentVehicle.registrationNumber}"/>
 	    <h:panelGroup style="float: right">
-		<h:commandLink action="#{vehicleController.deleteCurrentVehicle()}" value="Delete"/>
+		<h:commandLink action="#{vehicleController.deleteCurrentVehicle}" value="Delete"/>
 	    </h:panelGroup>
 	</h:form>
 
