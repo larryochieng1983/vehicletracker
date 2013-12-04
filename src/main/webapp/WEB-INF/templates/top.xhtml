@@ -4,17 +4,39 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      >
+
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:beacon="http://java.sun.com/jsf/composite/beacon">
     <f:view>
 	<h:head>
 	    <link href="#{request.contextPath}/resources/css/bootstrap.css" type="text/css" rel="styleSheet"/> 
 	</h:head>
-	<h:outputLabel value="Beacon Track"/>
+	<!--	<h:outputLabel value="Beacon Track"/>-->
 	<h:form>
-	    <div id="track-icon">
-	    </div>
-	    <div id="user-icon" style="float: right">
-	    </div>
+
+	    <h:panelGroup layout="block" id="nav-bar" styleClass="nav-bar  ">
+		<h:panelGroup class="container">
+		    <div id="track-logo" style="top: 10px; left: 10px;">
+			<h:outputLink value="#{request.contextPath}/home.jsf">
+			    <h:outputText value="Beacon Track"/>
+			</h:outputLink>
+		    </div>
+		    <div id="user-current" style="float: right; ">
+
+			<p:commandButton id="user-account" value="User"/>
+			<p:overlayPanel dynamic="true" for="user-account" >
+			    <p:panel>
+				Kenny
+			    </p:panel>
+			</p:overlayPanel>
+		    </div>
+		</h:panelGroup>
+	    </h:panelGroup>
+	    <!--	    <div id="track-logo" style="float: left">
+			</div>
+			<div id="user-icon" style=" height: 100%; vertical-align: top; margin-left: auto">
+			    <h:outputLabel value="Kenny" style="vertical-align: central"/>
+			</div>-->
 	</h:form>
 	<!--	<div id="navbar" class="navbar">
 		    <div id="navbar-inner" class="navbar-inner">
