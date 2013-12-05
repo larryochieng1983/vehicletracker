@@ -1,2 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context antiJARLocking="true" path="/beacon"/>
+<Context path="/vehicleTracker" reloadable="false"
+	docBase="work/Catalina/localhost">
+	<Resource name="jdbc/vehicleTrackerDS" auth="Container"
+		type="javax.sql.DataSource" driverClassName="org.hsqldb.jdbcDriver"
+		url="jdbc:hsqldb:mem:vehicleTracker" username="sa" password=""
+		maxActive="20" maxIdle="10" maxWait="-1" />
+</Context>   
