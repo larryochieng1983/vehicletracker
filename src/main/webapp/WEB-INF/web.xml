@@ -23,6 +23,11 @@
     </listener>
     
     <listener>
+        <description>Weld Servlet</description>
+        <listener-class>org.jboss.weld.environment.servlet.Listener
+    </listener-class>
+    </listener>
+    <listener>
 	<description>Spring ContextLoadListener</description>
 	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
