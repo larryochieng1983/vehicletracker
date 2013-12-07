@@ -114,7 +114,7 @@ public class JpaUtil {
 			}
 			initialized = true;
 			try {
-				emf = Persistence.createEntityManagerFactory( "vehicleTracker" );
+				emf = Persistence.createEntityManagerFactory( "vehicleTrackerPU" );
 			} catch( Throwable t ) {
 				t.printStackTrace();
 				return;

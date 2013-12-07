@@ -12,16 +12,12 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 
 /**
  * @author Otieno Lawrence
  * 
  */
-@Entity
-@NamedQueries({ @NamedQuery(name = User.ALL, query = "SELECT u FROM User u "),
-		@NamedQuery(name = User.TOTAL, query = "SELECT COUNT(u) FROM User u") })
+@Entity(name = "App_User")
 public class User extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 3571343460175211199L;
@@ -40,7 +36,6 @@ public class User extends BaseEntity implements Serializable {
 
 	@Column(length = 50)
 	private String lastName;
-
 	@ManyToMany
 	@JoinTable(name = "user_roles", joinColumns = { @JoinColumn(name = "User_userid") }, inverseJoinColumns = { @JoinColumn(name = "UserRole_roleid") })
 	private List<UserRole> userRoles = new ArrayList<UserRole>();;
