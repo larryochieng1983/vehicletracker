@@ -25,7 +25,7 @@ public class AppConfig {
 	@SuppressWarnings("unchecked")
 	public static List<User> getAllUsers( JpaUtil jpaUtil ) {
 		load();
-		return jpaUtil.getActiveEm().createQuery( "select u from User u order by u.name" )
+		return jpaUtil.getActiveEm().createQuery( "select u from App_User u order by u.userName" )
 				.getResultList();
 	}
 
@@ -47,13 +47,14 @@ public class AppConfig {
 				EntityManager em = jpaUtil.getActiveEm();
 
 				// insert all test data here
-				em.persist( new User() );
+				//em.persist( new User() );
 
 				// more init here
 
 				logger.info( "AppConfig initialized succesfully." );
 
 			} catch( Throwable t ) {
+				t.printStackTrace();
 				logger.error( "Failed to setup persistence unit!", t );
 			} finally {
 				jpaUtil.closeEm();
