@@ -29,6 +29,11 @@ public class SimCard extends BaseEntity {
 	@Size(max = 15)
 	@Column(name = "PHONE_NUMBER")
 	private String phoneNumber;
+	
+	@Column(name = "SERVICE_PROVIDER_NAME")
+	@Size(max = 40)
+	@NotNull
+	private String serviceProviderName;
 
 	@Size(max = 4)
 	@Column(name = "PIN1")
@@ -63,6 +68,20 @@ public class SimCard extends BaseEntity {
 	 */
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+
+	/**
+	 * @return the serviceProviderName
+	 */
+	public String getServiceProviderName() {
+		return serviceProviderName;
+	}
+
+	/**
+	 * @param serviceProviderName the serviceProviderName to set
+	 */
+	public void setServiceProviderName( String serviceProviderName ) {
+		this.serviceProviderName = serviceProviderName;
 	}
 
 	/**
