@@ -1,5 +1,6 @@
 package com.wizglobal.vehicletracker.service;
 
+import com.wizglobal.vehicletracker.exception.DataAccessException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,10 +39,14 @@ public abstract class DataAccessService<T> {
      * @param T Object
      * @return 
      */
-    public T create(T t) {
-        this.em.persist(t);
-        this.em.flush();
-        this.em.refresh(t);
+    public T create(T t) throws DataAccessException {
+        try {
+	    this.em.persist(t);
+	    this.em.flush();
+	    this.em.refresh(t);
+	} catch (Exception e) {
+	    throw new DataAccessException("Error adding item to database.", e);
+	}
         return t;
     }
 

@@ -5,6 +5,7 @@ package com.wizglobal.vehicletracker.beans;
 
 import com.wizglobal.vehicletracker.domain.User;
 import com.wizglobal.vehicletracker.domain.UserRole;
+import com.wizglobal.vehicletracker.exception.DataAccessException;
 import com.wizglobal.vehicletracker.service.UserService;
 import java.io.Serializable;
 import java.util.List;
@@ -65,7 +66,11 @@ public class UserBean implements Serializable {
      * Create, Update and Delete operations
      */
     public void doCreateUser() {
-	das.create(newUser);
+	try {
+	    das.create(newUser);
+	} catch (DataAccessException ex) {
+	    Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+	}
     }
 
     /**

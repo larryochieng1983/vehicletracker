@@ -4,6 +4,7 @@ import com.wizglobal.vehicletracker.domain.Vehicle;
 import com.wizglobal.vehicletracker.domain.VehicleColor;
 import com.wizglobal.vehicletracker.domain.VehicleColorService;
 import com.wizglobal.vehicletracker.domain.VehicleModel;
+import com.wizglobal.vehicletracker.exception.DataAccessException;
 import com.wizglobal.vehicletracker.service.VehicleManufacturerService;
 import com.wizglobal.vehicletracker.service.VehicleModelService;
 import com.wizglobal.vehicletracker.service.VehicleService;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
@@ -48,7 +50,14 @@ public class VehicleController extends BasePage implements Serializable {
     
     
     private Vehicle currentVehicle;
+    private Vehicle newVehicle;
     private LazyVehicleTableModel vehicleTableModel;
+    
+    public void preRenderPrepareNewVehicle(){
+	if (!isAjaxRequest() && currentVehicle == null) {
+	    currentVehicle = new Vehicle();
+	}
+    }
 
     @Override@PostConstruct
     public void init() {
@@ -69,6 +78,14 @@ public class VehicleController extends BasePage implements Serializable {
 	return currentVehicle;
     }
 
+    public Vehicle getNewVehicle() {
+	return newVehicle;
+    }
+
+    public void setNewVehicle(Vehicle newVehicle) {
+	this.newVehicle = newVehicle;
+    }
+    
     /**
      *
      * @param currentVehicle set current vehicle.
@@ -84,7 +101,7 @@ public class VehicleController extends BasePage implements Serializable {
     public String viewSelectedvehicleCustomer() {
 	Vehicle vehicle = vehicleTableModel.getRowData();
 	if (vehicle != null) {
-	    customerController.setCurrectCustomer(vehicle.getCustomer());
+	    customerController.setCurrentCustomer(vehicle.getCustomer());
 	    return "/customers/view?faces-redirect=true";
 	}
 	return null;
@@ -127,7 +144,7 @@ public class VehicleController extends BasePage implements Serializable {
      * @return prepare to add a new vehicle.
      */
     public String createNewVehicle(){
-	currentVehicle = new Vehicle();
+	newVehicle = null;
 	return appendFacesRedirectTrue("/vehicles/new.jsf");
     }
     
@@ -136,7 +153,13 @@ public class VehicleController extends BasePage implements Serializable {
      * @return Performs actual database ADD.
      */
     public String addNewVehicle(){
-	vehicleService.create(currentVehicle);
+	try {
+	    currentVehicle = vehicleService.create(newVehicle);
+	    appendFacesRedirectTrue("/vehicles/view.jsf");
+	} catch (DataAccessException ex) {
+	    addErrorgMessage("Unable to create new vehicle. Please try again.", ex.getMessage());
+	    java.util.logging.Logger.getLogger(VehicleController.class.getName()).log(Level.SEVERE, null, ex);
+	}
 	return null;
     }
     

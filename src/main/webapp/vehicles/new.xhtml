@@ -14,35 +14,36 @@
         <h:form>
 	    <h:link value="Back to Vehicle List " outcome="/vehicles/list.jsf?faces-redirect=true" style="float: right"/>
 
-	    <h:panelGroup layout="block">
+	    <h:panelGroup layout="block" style="width: 50%">
 		<p:spacer width="15" height="50"/>
-		<fieldset>
-		    <h:outputLabel value="Customer:" styleClass="legend-label"/>
-		    <h:selectOneMenu >
-			<f:selectItem itemLabel="Select Customer"/>
-		    </h:selectOneMenu>
-		    <h:outputLabel value="Registration:" styleClass="legend-label"/>
-		    <h:inputText value="#{vehicleController.currentVehicle.registrationNumber}"/>
-		    <h:outputLabel value="Type" styleClass="legend-label"/>
-		    <h:selectOneMenu >
-			<f:selectItem itemLabel="Select Vehicle Type"/>
-		    </h:selectOneMenu>
-		    <h:outputLabel value="Manufacturer:" styleClass="legend-label"/>
-		    <h:selectOneMenu >
-			<f:selectItem itemLabel="Select Manufacturer"/>
-		    </h:selectOneMenu>
-		    <h:outputLabel value="Model:" styleClass="legend-label"/>
-		    <h:selectOneMenu >
-			<f:selectItem itemLabel="Select Vehicle Model"/>
-		    </h:selectOneMenu>
-		    <h:outputLabel value="Color:" styleClass="legend-label"/>
-		    <h:selectOneMenu >
-			<f:selectItem itemLabel="Select Vehicle Color"/>
-		    </h:selectOneMenu>
-		</fieldset>
-		<h:commandButton action="#{vehicleController.addNewVehicle}" value="Save"/>
-		<p:spacer width="20"/>
-		<h:button outcome="/vehicles/list.jsf" value="Cancel"/>
+		<p:outputLabel value="Customer:" styleClass="legend-label" for="customer"/>
+		<h:selectOneMenu id="customer" value="#{vehicleController.newVehicle.customer}" >
+		    <f:selectItem itemLabel="Select Customer"/>
+		</h:selectOneMenu>
+		<p:outputLabel value="Registration:" styleClass="legend-label" for="registration"/>
+		<h:inputText id="registration" value="#{vehicleController.newVehicle.registrationNumber}" required="true" requiredMessage="Please specify valid registration number"/>
+		<p:outputLabel value="Type" styleClass="legend-label" for="vehicle-type"/>
+		<h:selectOneMenu id="vehicle-type" value="#{vehicleController.newVehicle.vehicleType}" required="true">
+		    <f:selectItem itemLabel="Select Vehicle Type"/>
+		</h:selectOneMenu>
+		<p:outputLabel value="Manufacturer:" styleClass="legend-label" for="manufacturer"/>
+		<h:selectOneMenu id="manufacturer" value="#{vehicleController.newVehicle.manufacturer}" required="true" >
+		    <f:selectItem itemLabel="Select Manufacturer"/>
+		</h:selectOneMenu>
+		<p:outputLabel value="Model:" styleClass="legend-label" for="model"/>
+		<h:selectOneMenu id="model" value="#{vehicleController.newVehicle.model}" required="true" >
+		    <f:selectItem itemLabel="Select Vehicle Model"/>
+		</h:selectOneMenu>
+		<p:outputLabel value="Color:" styleClass="legend-label" for="vehicle-color"/>
+		<h:selectOneMenu  id="vehicle-color" value="#{vehicleController.newVehicle.color}" required="true">
+		    <f:selectItem itemLabel="Select Vehicle Color"/>
+		</h:selectOneMenu>
+		<br/>
+		<h:panelGroup>
+		    <h:commandButton action="#{vehicleController.addNewVehicle}" value="Save"/>
+		    <p:spacer width="20"/>
+		    <h:button outcome="/vehicles/list.jsf" value="Cancel"/>
+		</h:panelGroup>
 	    </h:panelGroup>
 	</h:form>
     </ui:define>
