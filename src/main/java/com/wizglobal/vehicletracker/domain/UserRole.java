@@ -4,10 +4,8 @@
 package com.wizglobal.vehicletracker.domain;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
@@ -19,7 +17,12 @@ import javax.persistence.NamedQuery;
 @NamedQueries({ @NamedQuery(name = UserRole.ALL, query = "SELECT r FROM UserRole r") })
 public class UserRole extends BaseEntity implements Serializable {
 	
-	 public final static String ALL = "Role.populateRoles";
+	 /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public final static String ALL = "Role.populateRoles";
 	 
 	private String roledesc;
 	private String rolename;
@@ -30,10 +33,7 @@ public class UserRole extends BaseEntity implements Serializable {
 	public UserRole( Integer roleid, String rolename ) {
 		this.rolename = rolename;
 	}
-
-	@ManyToMany(mappedBy = "roles")
-	private List<User> users;
-
+	
 	public String getRoledesc() {
 		return this.roledesc;
 	}
@@ -48,13 +48,5 @@ public class UserRole extends BaseEntity implements Serializable {
 
 	public void setRolename( String rolename ) {
 		this.rolename = rolename;
-	}
-
-	public List<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers( List<User> users ) {
-		this.users = users;
-	}
+	}	
 }

@@ -12,6 +12,11 @@ import java.io.Serializable;
  */
 public class CustomerService extends DataAccessService<Customer> implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public CustomerService(){
 		super(Customer.class);
 	}
