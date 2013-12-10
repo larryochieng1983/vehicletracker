@@ -68,7 +68,7 @@ public class UserBean implements Serializable {
     public void doCreateUser() {
 	try {
 	    das.create(newUser);
-	} catch (DataAccessException ex) {
+	} catch (Exception ex) {
 	    Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
