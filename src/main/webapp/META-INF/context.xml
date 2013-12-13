@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="/vehicleTracker" reloadable="false"
 	docBase="work/Catalina/localhost">
-	<Resource name="jdbc/vehicleTrackerDS" auth="Container"
-		type="javax.sql.DataSource" driverClassName="org.hsqldb.jdbcDriver"
-		url="jdbc:hsqldb:mem:vehicleTracker" username="sa" password=""
-		maxActive="20" maxIdle="10" maxWait="-1" />
+	<Resource name="jdbc/VehicleTrackerDS" auth="Container"
+		type="javax.sql.DataSource" driverClassName="org.postgresql.Driver"
+		dialect="org.hibernate.dialect.PostgreSQLDialect" url="jdbc:postgresql://localhost:5432/vehicletracker"
+		username="ono" password="ono" maxActive="20" maxIdle="10" maxWait="-1" />
 </Context>   

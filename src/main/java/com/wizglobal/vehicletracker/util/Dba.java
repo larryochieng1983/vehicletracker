@@ -16,7 +16,7 @@ import com.wizglobal.vehicletracker.domain.BaseEntity;
  * @author Otieno Lawrence
  * 
  */
-public class JpaUtil {
+public class Dba {
 	private static volatile boolean initialized = false;
 	private static Boolean lock = new Boolean( true );
 	private static EntityManagerFactory emf = null;
@@ -28,7 +28,7 @@ public class JpaUtil {
 	/**
 	 * open jpautil and also start a transaction
 	 */
-	public JpaUtil() {
+	public Dba() {
 		this( false );
 	}
 
@@ -36,7 +36,7 @@ public class JpaUtil {
 	 * open jpautil; if readonly no JPA transaction is actually started, meaning you will have no persistence store. You
 	 * can still persist stuff, but the entities won't become managed.
 	 */
-	public JpaUtil( boolean readOnly ) {
+	public Dba( boolean readOnly ) {
 
 		initialize();
 		openEm( readOnly );

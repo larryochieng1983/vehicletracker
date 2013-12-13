@@ -23,7 +23,7 @@ public class AppConfig {
 	protected static Logger logger = LoggerFactory.getLogger( AppConfig.class );
 
 	@SuppressWarnings("unchecked")
-	public static List<User> getAllUsers( JpaUtil jpaUtil ) {
+	public static List<User> getAllUsers( Dba jpaUtil ) {
 		load();
 		return jpaUtil.getActiveEm().createQuery( "select u from App_User u order by u.userName" )
 				.getResultList();
@@ -42,7 +42,7 @@ public class AppConfig {
 
 			initialized = true;
 
-			JpaUtil jpaUtil = new JpaUtil();
+			Dba jpaUtil = new Dba();
 			try {
 				EntityManager em = jpaUtil.getActiveEm();
 
