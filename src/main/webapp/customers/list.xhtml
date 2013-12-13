@@ -1,9 +1,58 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="./../WEB-INF/templates/master.xhtml">
+                template="./../WEB-INF/templates/master.xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="page-title">
+        Customers
+    </ui:define>
+
+    <ui:define name="content-heading">
+        Customers
+    </ui:define>
 
     <ui:define name="content">
-        content
+        <h:panelGroup id="vehicle-list">
+	    <p:dataTable id="vehicle-list-table" value="#{customerController.lazyCustomersDataModel}" var="customer">
+		<p:column headerText="Customer">
+		    <h:outputFormat value="{0} {1}{2}{3}">
+			<f:param value="#{customer.lastName}"/>
+			<f:param value="#{customer.firstName}"/>
+			<f:param value=",' '" rendered="#{not empty customer.middleName}"/>
+			<f:param value="#{customer.middleName}" rendered="#{not empty customer.middleName}"/>
+		    </h:outputFormat>
+		</p:column>
+		<p:column headerText="Id/Passport">
+		    <h:outputFormat value="{0}{1}{2}">
+			<f:param value="#{customer.idNumber}"/>
+			<f:param value="/" rendered="#{not empty customer.passportNumber}"/>
+			<f:param value="#{customer.passportNumber}" rendered="#{not empty customer.passportNumber}"/>
+		    </h:outputFormat>
+		</p:column>
+		<p:column headerText="E-mail">
+		    <h:outputText value="#{customer.emailAddress}"/>
+		</p:column>
+		<p:column headerText="Phones">
+		    <h:outputFormat value="{0}{1}{2}">
+			<f:param value="#{customer.mobilePhoneNumber}"/>
+			<f:param value="," rendered="#{not empty customer.phoneNumber}"/>
+			<f:param value="#{customer.phoneNumber}" rendered="#{not empty customer.phoneNumber}"/>
+		    </h:outputFormat>
+		</p:column>
+		<p:column headerText="Vehicles">
+		    <h:commandLink action="#{customerController.viewCurrentCustomer()}" actionListener="#{customerController.selectCurrentCustomer()}">
+			<h:outputText value="#{customer.vehicles eq null ? '(0)' : '(' + customer.vehicles.size() + ')'}"/>
+		    </h:commandLink>
+		</p:column>
+		<p:column headerText="">
+		    <h:commandLink action="#{customerController.viewCurrentCustomer()}" actionListener="#{customerController.selectCurrentCustomer()}" value="view"/>
+		    <h:commandLink action="#{customerController.deleteCurrentCustomer()}" actionListener="#{customerController.selectCurrentCustomer()}" value="remove"/>
+		</p:column>
+	    </p:dataTable>
+	</h:panelGroup>
     </ui:define>
+
 </ui:composition>
