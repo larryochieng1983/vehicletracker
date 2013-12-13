@@ -20,7 +20,7 @@ public class Index {
 	@PostConstruct
 	public void init() {
 		//Some test
-		JpaUtil jpaUtil = new JpaUtil();
+		Dba jpaUtil = new Dba();
 		try {
 			// some stupid code that triggers the database to be created
 			AppConfig.getAllUsers( jpaUtil );

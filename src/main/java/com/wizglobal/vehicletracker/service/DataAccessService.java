@@ -2,38 +2,13 @@ package com.wizglobal.vehicletracker.service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
-import com.wizglobal.vehicletracker.util.JpaUtil;
 
 /**
- * Implementation of the generic Data Access Service All CRUD (create, read, update, delete) basic data access
- * operations for any persistent object are performed in this class.
  * 
  * @author Otieno Lawrence
  */
 
-public abstract class DataAccessService<T> {
-
-	protected EntityManager em;
-
-	public DataAccessService( JpaUtil jpaUtil ) {
-		em = jpaUtil.getActiveEm();
-	}
-
-	private Class<T> type;
-
-	/**
-	 * Default constructor
-	 * 
-	 * @param type entity class
-	 */
-	public DataAccessService( Class<T> type ) {
-		this.type = type;
-	}
+public interface DataAccessService<T> {
 
 	/**
 	 * Stores an instance of the entity class in the database
@@ -41,12 +16,7 @@ public abstract class DataAccessService<T> {
 	 * @param T Object
 	 * @return
 	 */
-	public T create( T t ) {
-		this.em.persist( t );
-		this.em.flush();
-		this.em.refresh( t );
-		return t;
-	}
+	public T create( T t );
 
 	/**
 	 * Retrieves an entity instance that was previously persisted to the database
@@ -55,9 +25,7 @@ public abstract class DataAccessService<T> {
 	 * @param id
 	 * @return
 	 */
-	public T find( Object id ) {
-		return this.em.find( this.type, id );
-	}
+	public T find( Object id );
 
 	/**
 	 * Removes the record that is associated with the entity instance
@@ -65,10 +33,7 @@ public abstract class DataAccessService<T> {
 	 * @param type
 	 * @param id
 	 */
-	public void delete( Object id ) {
-		Object ref = this.em.getReference( this.type, id );
-		this.em.remove( ref );
-	}
+	public void delete( Object id );
 
 	/**
 	 * Removes the number of entries from a table
@@ -77,12 +42,7 @@ public abstract class DataAccessService<T> {
 	 * @param items
 	 * @return
 	 */
-	public boolean deleteItems( T[] items ) {
-		for( T item : items ) {
-			em.remove( em.merge( item ) );
-		}
-		return true;
-	}
+	public boolean deleteItems( T[] items );
 
 	/**
 	 * Updates the entity instance
@@ -91,10 +51,7 @@ public abstract class DataAccessService<T> {
 	 * @param t
 	 * @return the object that is updated
 	 */
-	public T update( T item ) {
-		return (T) this.em.merge( item );
-
-	}
+	public T update( T item );
 
 	/**
 	 * Returns the number of records that meet the criteria
@@ -102,9 +59,7 @@ public abstract class DataAccessService<T> {
 	 * @param namedQueryName
 	 * @return List
 	 */
-	public List findWithNamedQuery( String namedQueryName ) {
-		return this.em.createNamedQuery( namedQueryName ).getResultList();
-	}
+	public List findWithNamedQuery( String namedQueryName );
 
 	/**
 	 * Returns the number of records that meet the criteria
@@ -113,9 +68,7 @@ public abstract class DataAccessService<T> {
 	 * @param parameters
 	 * @return List
 	 */
-	public List findWithNamedQuery( String namedQueryName, Map parameters ) {
-		return findWithNamedQuery( namedQueryName, parameters, 0 );
-	}
+	public List findWithNamedQuery( String namedQueryName, Map parameters );
 
 	/**
 	 * Returns the number of records with result limit
@@ -124,9 +77,7 @@ public abstract class DataAccessService<T> {
 	 * @param resultLimit
 	 * @return List
 	 */
-	public List findWithNamedQuery( String queryName, int resultLimit ) {
-		return this.em.createNamedQuery( queryName ).setMaxResults( resultLimit ).getResultList();
-	}
+	public List findWithNamedQuery( String queryName, int resultLimit );
 
 	/**
 	 * Returns the number of records that meet the criteria
@@ -136,9 +87,7 @@ public abstract class DataAccessService<T> {
 	 * @param type
 	 * @return List
 	 */
-	public List<T> findByNativeQuery( String sql ) {
-		return this.em.createNativeQuery( sql, type ).getResultList();
-	}
+	public List<T> findByNativeQuery( String sql );
 
 	/**
 	 * Returns the number of total records
@@ -146,11 +95,7 @@ public abstract class DataAccessService<T> {
 	 * @param namedQueryName
 	 * @return int
 	 */
-	public int countTotalRecord( String namedQueryName ) {
-		Query query = em.createNamedQuery( namedQueryName );
-		Number result = (Number) query.getSingleResult();
-		return result.intValue();
-	}
+	public int countTotalRecord( String namedQueryName );
 
 	/**
 	 * Returns the number of records that meet the criteria with parameter map and result limit
@@ -160,17 +105,7 @@ public abstract class DataAccessService<T> {
 	 * @param resultLimit
 	 * @return List
 	 */
-	public List findWithNamedQuery( String namedQueryName, Map parameters, int resultLimit ) {
-		Set<Map.Entry<String, Object>> rawParameters = parameters.entrySet();
-		Query query = this.em.createNamedQuery( namedQueryName );
-		if( resultLimit > 0 ) {
-			query.setMaxResults( resultLimit );
-		}
-		for( Map.Entry<String, Object> entry : rawParameters ) {
-			query.setParameter( entry.getKey(), entry.getValue() );
-		}
-		return query.getResultList();
-	}
+	public List findWithNamedQuery( String namedQueryName, Map parameters, int resultLimit );
 
 	/**
 	 * Returns the number of records that will be used with lazy loading / pagination
@@ -180,10 +115,5 @@ public abstract class DataAccessService<T> {
 	 * @param end
 	 * @return List
 	 */
-	public List findWithNamedQuery( String namedQueryName, int start, int end ) {
-		Query query = this.em.createNamedQuery( namedQueryName );
-		query.setMaxResults( end - start );
-		query.setFirstResult( start );
-		return query.getResultList();
-	}
+	public List findWithNamedQuery( String namedQueryName, int start, int end );
 }

@@ -5,8 +5,8 @@
 	<persistence-unit name="vehicleTrackerPU"
 		transaction-type="RESOURCE_LOCAL">
 		<properties>
-			<property name="dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
 			<property name="hibernate.connection.driver_class" value="org.postgresql.Driver" />
+			<property name="dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
 			<property name="hibernate.connection.username" value="ono" />
 			<property name="hibernate.connection.password" value="ono" />
 			<property name="hibernate.connection.url"

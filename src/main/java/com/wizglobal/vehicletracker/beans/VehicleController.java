@@ -8,6 +8,7 @@ import com.wizglobal.vehicletracker.service.VehicleManufacturerService;
 import com.wizglobal.vehicletracker.service.VehicleModelService;
 import com.wizglobal.vehicletracker.service.VehicleService;
 import com.wizglobal.vehicletracker.service.VehicleTypeService;
+import com.wizglobal.vehicletracker.util.Dba;
 import com.wizglobal.vehicletracker.util.LazySorter;
 import com.wizglobal.vehicletracker.util.QueryParam;
 import java.io.Serializable;
@@ -37,8 +38,8 @@ public class VehicleController extends BasePage implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger LOG = Logger.getLogger( VehicleController.class );
+	private Dba dba = new Dba();
 
-	@Inject
 	private VehicleService vehicleService;
 	@Inject
 	private CustomerController customerController;
@@ -63,6 +64,7 @@ public class VehicleController extends BasePage implements Serializable {
 	 * Creates a new instance of VehicleController
 	 */
 	public VehicleController() {
+		vehicleService = new VehicleService( dba );
 	}
 
 	public LazyDataModel<Vehicle> getVehicles() {
