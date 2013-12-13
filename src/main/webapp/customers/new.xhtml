@@ -1,10 +1,52 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="./../WEB-INF/templates/master.xhtml">
+                template="./../WEB-INF/templates/master.xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="page-title">
+        New Customer
+    </ui:define>
+
+    <ui:define name="content-heading">
+        New Customer
+    </ui:define>
+
+    <f:metadata>
+	<!--Create new customer-->
+	<f:event type="preRenderView" listener="#{customerController.preRenderNewCustomer()}"/>
+    </f:metadata>
 
     <ui:define name="content">
-        content
+        <h:form id="new-customer-form">
+	    <h:panelGroup layout="block" rendered="#{not empty customerController.newCustomer}" style="width: 50%">
+		<p:outputLabel value="First Name:" for="firstName" styleClass="legend-label"/>
+		<h:inputText id="firstName" value="#{customerController.newCustomer.firstName}" required="true" />
+		<p:outputLabel value="Last Name:" for="lastName" styleClass="legend-label"/>
+		<h:inputText id="lastName" value="#{customerController.newCustomer.lastName}" required="true"/>
+		<p:outputLabel value="Middle Name:" for="middleName" styleClass="legend-label"/>
+		<h:inputText id="middleName" value="#{customerController.newCustomer.middleName}" />
+		<p:outputLabel value="Id/Passport No.:" for="passport-id" styleClass="legend-label"/>
+		<h:inputText id="passport-id" value="#{customerController.newCustomer.middleName}" required="true"/>
+		<p:outputLabel value="E-mail:" for="email" styleClass="legend-label"/>
+		<h:inputText id="email" value="#{customerController.newCustomer.emailAddress}" required="true"/>
+		<p:outputLabel value="Mobile Phone Number:" for="mobile" styleClass="legend-label"/>
+		<h:inputText id="mobile" value="#{customerController.newCustomer.mobilePhoneNumber}" required="true"/>
+		<p:outputLabel value="Other Phone Number:" for="other-phone" styleClass="legend-label"/>
+		<h:inputText id="other-phone" value="#{customerController.newCustomer.phoneNumber}" required="false"/>
+		<p:outputLabel value="Address:" for="address" styleClass="legend-label"/>
+		<h:inputText id="address" value="#{customerController.newCustomer.address}" required="true"/>
+	    </h:panelGroup>
+	    <br/>
+	    <h:panelGroup>
+		<h:commandButton id="save-button" action="#{customerController.addCustomer()}" value="Add"/>
+		<p:spacer width="15"/>
+		<h:commandButton id="cancel-button" action="#{customerController.showCustomerList()}" value="cancel" immediate="true"/>
+	    </h:panelGroup>
+	</h:form>
+	
     </ui:define>
 
 </ui:composition>
