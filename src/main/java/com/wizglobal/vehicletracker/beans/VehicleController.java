@@ -90,7 +90,7 @@ public class VehicleController extends BasePage implements Serializable {
 	public String viewSelectedvehicleCustomer() {
 		Vehicle vehicle = vehicleTableModel.getRowData();
 		if( vehicle != null ) {
-			customerController.setCurrectCustomer( vehicle.getCustomer() );
+			customerController.setCurrentCustomer( vehicle.getCustomer() );
 			return "/customers/view?faces-redirect=true";
 		}
 		return null;
