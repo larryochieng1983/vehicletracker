@@ -1,6 +1,5 @@
 package com.wizglobal.vehicletracker.service;
 
-import com.wizglobal.vehicletracker.exception.DataAccessException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
