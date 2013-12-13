@@ -28,8 +28,9 @@ public class CustomerController extends BasePage implements Serializable {
 
 	private Dba dba = new Dba();
 	private CustomerService customerService;
-	private Customer currectCustomer;
+	private Customer currentCustomer;
 	private List<Customer> customerList;
+	private Customer newCustomer;
 
 	/**
 	 * Creates a new instance of CustomerController
@@ -38,12 +39,26 @@ public class CustomerController extends BasePage implements Serializable {
 		customerService = new CustomerService( dba );
 	}
 
-	public Customer getCurrectCustomer() {
-		return currectCustomer;
+	public Customer getCurrentCustomer() {
+		return currentCustomer;
 	}
 
-	public void setCurrectCustomer( Customer currectCustomer ) {
-		this.currectCustomer = currectCustomer;
+	public void setCurrentCustomer( Customer currentCustomer ) {
+		this.currentCustomer = currentCustomer;
+	}
+
+	/**
+	 * @return the newCustomer
+	 */
+	public Customer getNewCustomer() {
+		return newCustomer;
+	}
+
+	/**
+	 * @param newCustomer the newCustomer to set
+	 */
+	public void setNewCustomer( Customer newCustomer ) {
+		this.newCustomer = newCustomer;
 	}
 
 	@Override
@@ -52,11 +67,23 @@ public class CustomerController extends BasePage implements Serializable {
 		getCustomerList();
 	}
 
+	public String addCustomer() {
+		try {
+			customerService.create( currentCustomer );
+			addInfoMessage(
+					"Customer " + currentCustomer.getFirstName() + " " + currentCustomer.getLastName()
+							+ " created.", null );
+		} catch( Exception e ) {
+			addErrorgMessage( "Failed to create customer. " + e.getMessage(), null );
+		}
+		return appendFacesRedirectTrue( "/customers/list.jsf" );
+	}
+
 	public String deleteCurrentCustomer() {
 		try {
-			customerService.delete( currectCustomer );
+			customerService.delete( currentCustomer );
 			addInfoMessage(
-					"Customer " + currectCustomer.getFirstName() + " " + currectCustomer.getLastName()
+					"Customer " + currentCustomer.getFirstName() + " " + currentCustomer.getLastName()
 							+ " removed.", null );
 		} catch( Exception e ) {
 			addErrorgMessage( "Failed to delete customer. " + e.getMessage(), null );
@@ -65,18 +92,18 @@ public class CustomerController extends BasePage implements Serializable {
 	}
 
 	public String saveCurrentCustomerChanges() {
-		if( currectCustomer == null ) {
+		if( currentCustomer == null ) {
 			addWarningMessage( "Please Select a customer to edit and try again.",
 					"No Customer Selected for update" );
 		} else {
-			customerService.update( currectCustomer );
+			customerService.update( currentCustomer );
 			addInfoMessage( "Customer updated", null );
 		}
 		return null;
 	}
 
 	public String editCustomer() {
-		return currectCustomer == null ? null : appendFacesRedirectTrue( "/customers/edit.jsf" );
+		return currentCustomer == null ? null : appendFacesRedirectTrue( "/customers/edit.jsf" );
 	}
 
 	public DataModel<Customer> getCustomersListDataModel() {
