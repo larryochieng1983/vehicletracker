@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.wizglobal.vehicletracker.util;
+package com.wizglobal.vehicletracker.service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wizglobal.vehicletracker.domain.BaseEntity;
+import com.wizglobal.vehicletracker.util.QueryUtil;
 
 /**
  * @author Otieno Lawrence
@@ -26,14 +27,14 @@ public class Dba {
 	private EntityManager outer;
 
 	/**
-	 * open jpautil and also start a transaction
+	 * open dba and also start a transaction
 	 */
 	public Dba() {
 		this( false );
 	}
 
 	/**
-	 * open jpautil; if readonly no JPA transaction is actually started, meaning you will have no persistence store. You
+	 * open dba; if readonly no JPA transaction is actually started, meaning you will have no persistence store. You
 	 * can still persist stuff, but the entities won't become managed.
 	 */
 	public Dba( boolean readOnly ) {
@@ -113,7 +114,7 @@ public class Dba {
 				return;
 			}
 			initialized = true;
-			try {
+			try {				
 				emf = Persistence.createEntityManagerFactory( "vehicleTrackerPU" );
 			} catch( Throwable t ) {
 				t.printStackTrace();

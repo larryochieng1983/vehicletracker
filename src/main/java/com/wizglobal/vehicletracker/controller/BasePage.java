@@ -1,4 +1,4 @@
-package com.wizglobal.vehicletracker.beans;
+package com.wizglobal.vehicletracker.controller;
 
 import com.wizglobal.vehicletracker.util.StringUtils;
 import javax.faces.application.FacesMessage;

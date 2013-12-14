@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.wizglobal.vehicletracker.beans;
+package com.wizglobal.vehicletracker.controller;
 
 import com.wizglobal.vehicletracker.domain.User;
 import com.wizglobal.vehicletracker.domain.UserRole;

@@ -1,25 +1,28 @@
-package com.wizglobal.vehicletracker.beans;
+package com.wizglobal.vehicletracker.controller;
 
 import com.wizglobal.vehicletracker.domain.Vehicle;
 import com.wizglobal.vehicletracker.domain.VehicleColor;
-import com.wizglobal.vehicletracker.domain.VehicleColorService;
 import com.wizglobal.vehicletracker.domain.VehicleModel;
+import com.wizglobal.vehicletracker.service.Dba;
+import com.wizglobal.vehicletracker.service.VehicleColorService;
 import com.wizglobal.vehicletracker.service.VehicleManufacturerService;
 import com.wizglobal.vehicletracker.service.VehicleModelService;
 import com.wizglobal.vehicletracker.service.VehicleService;
 import com.wizglobal.vehicletracker.service.VehicleTypeService;
-import com.wizglobal.vehicletracker.util.Dba;
 import com.wizglobal.vehicletracker.util.LazySorter;
 import com.wizglobal.vehicletracker.util.QueryParam;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import org.apache.log4j.Logger;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
