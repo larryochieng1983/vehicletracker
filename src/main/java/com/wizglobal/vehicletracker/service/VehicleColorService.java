@@ -29,6 +29,7 @@ public class VehicleColorService implements DataAccessService<VehicleColor>,
 		this.dba = dba;
 	}
 
+	@Override
 	public List<VehicleColor> findWithNamedQuery(String string) {
 		// TODO Auto-generated method stub
 		return null;
