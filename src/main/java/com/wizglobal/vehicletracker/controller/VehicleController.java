@@ -46,7 +46,7 @@ public class VehicleController extends BasePage implements Serializable {
 	private VehicleService vehicleService;
 	@Inject
 	private CustomerController customerController;
-	@Inject
+//	@Inject
 	private VehicleColorService vehicleColorService;
 	@Inject
 	private VehicleManufacturerService manufacturerService;
