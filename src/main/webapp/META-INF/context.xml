@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context path="/vehicleTracker" reloadable="false"
-	docBase="work/Catalina/localhost">
+<Context path="/beacon" reloadable="true">
 	<Resource name="jdbc/VehicleTrackerDS" auth="Container"
 		type="javax.sql.DataSource" driverClassName="org.postgresql.Driver"
 		dialect="org.hibernate.dialect.PostgreSQLDialect" url="jdbc:postgresql://localhost:5432/vehicletracker"
