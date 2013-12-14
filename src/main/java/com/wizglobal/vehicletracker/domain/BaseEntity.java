@@ -18,39 +18,13 @@ public abstract class BaseEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private long id;
 
-	public Integer getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId( Integer id ) {
+	public void setId( long id ) {
 		this.id = id;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (id != null ? id.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public boolean equals( Object obj ) {
-
-		if( obj == null ) {
-			return false;
-		} else if( !(obj instanceof BaseEntity) ) {
-			return false;
-		} else if( ((BaseEntity) obj).id.equals( this.id ) ) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	@Override
-	public String toString() {
-		return "entity." + this.getClass() + "[ id=" + id + " ] ";
-	}
+	}	
 }

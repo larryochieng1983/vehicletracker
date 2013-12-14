@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.wizglobal.vehicletracker.beans;
+package com.wizglobal.vehicletracker.controller;
 
 import static org.junit.Assert.*;
 
@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean;
 import com.wizglobal.vehicletracker.domain.GpsDevice;
 import com.wizglobal.vehicletracker.domain.SimCard;
 
@@ -62,7 +63,7 @@ public class GpsDeviceOperationBeanTest {
 
 	/**
 	 * Test method for
-	 * {@link com.wizglobal.vehicletracker.beans.GpsDeviceOperationBean#changePassword(javax.faces.event.ActionEvent)}
+	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#changePassword(javax.faces.event.ActionEvent)}
 	 * .
 	 */
 	@Test
@@ -72,7 +73,7 @@ public class GpsDeviceOperationBeanTest {
 
 	/**
 	 * Test method for
-	 * {@link com.wizglobal.vehicletracker.beans.GpsDeviceOperationBean#resetDevice(javax.faces.event.ActionEvent)}
+	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#resetDevice(javax.faces.event.ActionEvent)}
 	 * .
 	 */
 	@Test
@@ -82,7 +83,7 @@ public class GpsDeviceOperationBeanTest {
 
 	/**
 	 * Test method for
-	 * {@link com.wizglobal.vehicletracker.beans.GpsDeviceOperationBean#stopVehicle(javax.faces.event.ActionEvent)}
+	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#stopVehicle(javax.faces.event.ActionEvent)}
 	 * .
 	 */
 	@Test
@@ -92,7 +93,7 @@ public class GpsDeviceOperationBeanTest {
 
 	/**
 	 * Test method for
-	 * {@link com.wizglobal.vehicletracker.beans.GpsDeviceOperationBean#setAuthorizedNumber(javax.faces.event.ActionEvent)}
+	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#setAuthorizedNumber(javax.faces.event.ActionEvent)}
 	 * .
 	 */
 	@Test
@@ -102,7 +103,7 @@ public class GpsDeviceOperationBeanTest {
 
 	/**
 	 * Test method for
-	 * {@link com.wizglobal.vehicletracker.beans.GpsDeviceOperationBean#deleteAuthorizedNumber(javax.faces.event.ActionEvent)}
+	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#deleteAuthorizedNumber(javax.faces.event.ActionEvent)}
 	 * .
 	 */
 	@Test
@@ -112,7 +113,7 @@ public class GpsDeviceOperationBeanTest {
 
 	/**
 	 * Test method for
-	 * {@link com.wizglobal.vehicletracker.beans.GpsDeviceOperationBean#setAuthorizedNumbers(javax.faces.event.ActionEvent)}
+	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#setAuthorizedNumbers(javax.faces.event.ActionEvent)}
 	 * .
 	 */
 	@Test
@@ -122,7 +123,7 @@ public class GpsDeviceOperationBeanTest {
 
 	/**
 	 * Test method for
-	 * {@link com.wizglobal.vehicletracker.beans.GpsDeviceOperationBean#rebootDevice(javax.faces.event.ActionEvent)}
+	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#rebootDevice(javax.faces.event.ActionEvent)}
 	 * .
 	 */
 	@Test
@@ -132,7 +133,7 @@ public class GpsDeviceOperationBeanTest {
 
 	/**
 	 * Test method for
-	 * {@link com.wizglobal.vehicletracker.beans.GpsDeviceOperationBean#changeOperationMode(javax.faces.event.ActionEvent)}
+	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#changeOperationMode(javax.faces.event.ActionEvent)}
 	 * .
 	 */
 	@Test
@@ -142,7 +143,7 @@ public class GpsDeviceOperationBeanTest {
 
 	/**
 	 * Test method for
-	 * {@link com.wizglobal.vehicletracker.beans.GpsDeviceOperationBean#setGprsSetting(javax.faces.event.ActionEvent)}
+	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#setGprsSetting(javax.faces.event.ActionEvent)}
 	 * .
 	 */
 	@Test

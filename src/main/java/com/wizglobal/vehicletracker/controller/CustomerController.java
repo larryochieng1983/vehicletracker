@@ -1,4 +1,4 @@
-package com.wizglobal.vehicletracker.beans;
+package com.wizglobal.vehicletracker.controller;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,7 +11,7 @@ import javax.inject.Named;
 
 import com.wizglobal.vehicletracker.domain.Customer;
 import com.wizglobal.vehicletracker.service.CustomerService;
-import com.wizglobal.vehicletracker.util.Dba;
+import com.wizglobal.vehicletracker.service.Dba;
 
 /**
  * 

@@ -68,4 +68,12 @@ public class VehicleColor extends BaseEntity {
 		this.description = description;
 	}
 
+	@Override
+	public String toString() {
+		return "VehicleColor [colorCode=" + colorCode + ", description="
+				+ description + ", getId()=" + getId() + "]";
+	}
+	
+	
+
 }

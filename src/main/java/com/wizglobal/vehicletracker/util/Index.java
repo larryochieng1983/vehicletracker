@@ -7,6 +7,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import com.wizglobal.vehicletracker.service.Dba;
+
 /**
  * @author Otieno Lawrence
  * 

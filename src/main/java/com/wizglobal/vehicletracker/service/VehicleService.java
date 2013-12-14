@@ -10,7 +10,6 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 
 import com.wizglobal.vehicletracker.domain.Vehicle;
-import com.wizglobal.vehicletracker.util.Dba;
 import com.wizglobal.vehicletracker.util.QueryParam;
 
 /**
