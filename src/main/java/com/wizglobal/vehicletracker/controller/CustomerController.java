@@ -146,9 +146,7 @@ public class CustomerController extends BasePage implements Serializable {
 	}
 
 	public List<Customer> getCustomerList() {
-		if( customerList == null ) {
-			customerList = customerService.findWithNamedQuery( "Customer.findAll" );
-		}
+		customerList = customerService.findWithNamedQuery( "Customer.findAll" );
 		return customerList;
 	}
 	
