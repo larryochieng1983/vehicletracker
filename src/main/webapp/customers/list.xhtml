@@ -15,43 +15,52 @@
     </ui:define>
 
     <ui:define name="content">
+	<h:form>
+	    <h:panelGroup style="float: right">
+		<h:commandLink action="#{customerController.createNewCustomer()}" value="New"/>
+	    </h:panelGroup>
+	    <p:spacer height="15" width="20"/>
+	</h:form>
         <h:panelGroup id="vehicle-list">
-	    <p:dataTable id="vehicle-list-table" value="#{customerController.lazyCustomersDataModel}" var="customer">
-		<p:column headerText="Customer">
-		    <h:outputFormat value="{0} {1}{2}{3}">
-			<f:param value="#{customer.lastName}"/>
-			<f:param value="#{customer.firstName}"/>
-			<f:param value=",' '" rendered="#{not empty customer.middleName}"/>
-			<f:param value="#{customer.middleName}" rendered="#{not empty customer.middleName}"/>
-		    </h:outputFormat>
-		</p:column>
-		<p:column headerText="Id/Passport">
-		    <h:outputFormat value="{0}{1}{2}">
-			<f:param value="#{customer.idNumber}"/>
-			<f:param value="/" rendered="#{not empty customer.passportNumber}"/>
-			<f:param value="#{customer.passportNumber}" rendered="#{not empty customer.passportNumber}"/>
-		    </h:outputFormat>
-		</p:column>
-		<p:column headerText="E-mail">
-		    <h:outputText value="#{customer.emailAddress}"/>
-		</p:column>
-		<p:column headerText="Phones">
-		    <h:outputFormat value="{0}{1}{2}">
-			<f:param value="#{customer.mobilePhoneNumber}"/>
-			<f:param value="," rendered="#{not empty customer.phoneNumber}"/>
-			<f:param value="#{customer.phoneNumber}" rendered="#{not empty customer.phoneNumber}"/>
-		    </h:outputFormat>
-		</p:column>
-		<p:column headerText="Vehicles">
-		    <h:commandLink action="#{customerController.viewCurrentCustomer()}" actionListener="#{customerController.selectCurrentCustomer()}">
-			<h:outputText value="#{customer.vehicles eq null ? '(0)' : '(' + customer.vehicles.size() + ')'}"/>
-		    </h:commandLink>
-		</p:column>
-		<p:column headerText="">
-		    <h:commandLink action="#{customerController.viewCurrentCustomer()}" actionListener="#{customerController.selectCurrentCustomer()}" value="view"/>
-		    <h:commandLink action="#{customerController.deleteCurrentCustomer()}" actionListener="#{customerController.selectCurrentCustomer()}" value="remove"/>
-		</p:column>
-	    </p:dataTable>
+	    <h:form>
+		<p:dataTable id="vehicle-list-table" value="#{customerController.customerList}" var="customer" lazy="true" >
+		    <p:column headerText="Customer">
+			<h:outputFormat value="{0} {1}{2}{3}">
+			    <f:param value="#{customer.lastName}"/>
+			    <f:param value="#{customer.firstName}"/>
+			    <f:param value="#{null eq customer.middleName ? '' : ', '}"/>
+			    <f:param value="#{customer.middleName}" rendered="#{not empty customer.middleName}"/>
+			</h:outputFormat>
+		    </p:column>
+		    <p:column headerText="Id/Passport">
+			<h:outputFormat value="{0}{1}{2}">
+			    <f:param value="#{null eq  customer.idNumber ? '' : customer.idNumber}"/>
+			    <f:param value="#{(null eq customer.passportNumber ) ? '' : '/'}"/>
+			    <f:param value="#{null eq customer.passportNumber ? '' : customer.passportNumber}"/>
+			</h:outputFormat>
+		    </p:column>
+		    <p:column headerText="E-mail">
+			<h:outputText value="#{customer.emailAddress}"/>
+		    </p:column>
+		    <p:column headerText="Phones">
+			<h:outputFormat value="{0}{1}{2}">
+			    <f:param value="#{customer.mobilePhoneNumber}"/>
+			    <f:param value="," rendered="#{not empty customer.phoneNumber}"/>
+			    <f:param value="#{customer.phoneNumber}" rendered="#{not empty customer.phoneNumber}"/>
+			</h:outputFormat>
+		    </p:column>
+		    <p:column headerText="Vehicles">
+			<h:commandLink action="#{customerController.viewCurrentCustomer()}" actionListener="#{customerController.selectCurrentCustomer()}">
+			    <h:outputText value="#{customer.vehicles eq null ? '(0)' :  customer.vehicles.size() }"/>
+			</h:commandLink>
+		    </p:column>
+		    <p:column headerText="">
+			<h:commandLink action="#{customerController.viewCurrentCustomer()}" actionListener="#{customerController.selectCurrentCustomer()}" value="view"/>
+			<h:outputText value=" | " />
+			<h:commandLink action="#{customerController.deleteCurrentCustomer()}" actionListener="#{customerController.selectCurrentCustomer()}" value="remove"/>
+		    </p:column>
+		</p:dataTable>
+	    </h:form>
 	</h:panelGroup>
     </ui:define>
 

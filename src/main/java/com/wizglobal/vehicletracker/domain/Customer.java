@@ -224,4 +224,11 @@ public class Customer extends BaseEntity {
 	    this.vehicles = vehicles;
 	}
 
+    @Override
+    public String toString() {
+	return firstName + "-" + lastName + ":" + idNumber;
+    }
+	
+	
+
 }

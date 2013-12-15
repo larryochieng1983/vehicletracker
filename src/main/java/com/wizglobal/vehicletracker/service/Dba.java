@@ -18,42 +18,26 @@ import com.wizglobal.vehicletracker.util.QueryUtil;
  * 
  */
 public class Dba {
-	private static volatile boolean initialized = false;
-	private static Boolean lock = new Boolean( true );
-	private static EntityManagerFactory emf = null;
-
-	protected Logger logger = LoggerFactory.getLogger( getClass() );
+	private EntityManagerFactory emf = null;
+	protected static final Logger logger = LoggerFactory.getLogger( Dba.class );
 
 	private EntityManager outer;
+	private EntityManager entityManager;
 
 	/**
-	 * open dba and also start a transaction
+	 * Called only once to instantiate the persistence context.
 	 */
-	public Dba() {
-		this( false );
+	private Dba() {
+	    logger.info("Initializing Persistence context");
+	    try {
+		emf = Persistence.createEntityManagerFactory("vehicleTrackerPU");
+		entityManager = emf.createEntityManager();
+		logger.info("Persistence Context initialized");
+	    } catch (Exception e) {
+		logger.error("Failed to initialize persistence context. Application will not work as expected", e);
+	    }
 	}
-
-	/**
-	 * open dba; if readonly no JPA transaction is actually started, meaning you will have no persistence store. You
-	 * can still persist stuff, but the entities won't become managed.
-	 */
-	public Dba( boolean readOnly ) {
-
-		initialize();
-		openEm( readOnly );
-	}
-
-	public void openEm( boolean readOnly ) {
-		if( outer != null ) {
-			return;
-		}
-
-		outer = emf.createEntityManager();
-
-		if( readOnly == false ) {
-			outer.getTransaction().begin();
-		}
-	}
+	
 
 	/**
 	 * Get the outer transaction; an active transaction must already exist for this to succeed.
@@ -104,24 +88,24 @@ public class Dba {
 		return outer != null && outer.getTransaction().getRollbackOnly();
 	}
 
-	// thread safe way to initialize the entity manager factory.
-	private void initialize() {
-		if( initialized ) {
-			return;
-		}
-		synchronized( lock ) {
-			if( initialized ) {
-				return;
-			}
-			initialized = true;
-			try {				
-				emf = Persistence.createEntityManagerFactory( "vehicleTrackerPU" );
-			} catch( Throwable t ) {
-				t.printStackTrace();
-				return;
-			}
-		}
-	}
+//	// thread safe way to initialize the entity manager factory.
+//	private void initialize() {
+//		if( initialized ) {
+//			return;
+//		}
+//		synchronized( lock ) {
+//			if( initialized ) {
+//				return;
+//			}
+//			initialized = true;
+//			try {				
+//				emf = Persistence.createEntityManagerFactory( "vehicleTrackerPU" );
+//			} catch( Throwable t ) {
+//				t.printStackTrace();
+//				return;
+//			}
+//		}
+//	}
 
 	public QueryUtil query( String q ) {
 
@@ -167,5 +151,26 @@ public class Dba {
 			outer.persist( obj );
 			return obj;
 		}
+	}
+	
+	/**
+	 * Note that transactions should be managed
+	*
+	* @return Entity manager
+	*/
+	public EntityManager getEntityManager(){
+	    return entityManager;
+	}
+	
+	/**
+	 *
+	 * @return A singleton isntance of 
+	 */
+	public static Dba getInstance() {
+	    return DbaHolder.DBA_INSTANCE;
+	}
+	
+	private static class DbaHolder{
+	    private static final Dba DBA_INSTANCE = new Dba();
 	}
 }
