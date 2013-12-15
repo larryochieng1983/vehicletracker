@@ -21,6 +21,7 @@ public class Dba {
 	private EntityManagerFactory emf = null;
 	protected static final Logger logger = LoggerFactory.getLogger( Dba.class );
 
+	//TODO Lawrence clean this up, I haven't used it.
 	private EntityManager outer;
 	private EntityManager entityManager;
 

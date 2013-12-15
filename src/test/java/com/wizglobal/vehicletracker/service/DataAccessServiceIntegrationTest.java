@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.wizglobal.vehicletracker.domain.Customer;
+import javax.persistence.EntityManager;
 
 /**
  * @author Otieno Lawrence
@@ -26,7 +27,6 @@ public class DataAccessServiceIntegrationTest {
 	@Before
 	public void setUp() throws Exception {
 		customerService = new CustomerService();
-		
 	}
 
 	/**
@@ -34,7 +34,14 @@ public class DataAccessServiceIntegrationTest {
 	 */
 	@After
 	public void tearDown() throws Exception {
-		
+	    try {
+		EntityManager entityManager = Dba.getInstance().getEntityManager();
+		if (entityManager.getTransaction().isActive()) {
+		    entityManager.getTransaction().rollback();
+		}
+	    } catch (Exception e) {
+		System.out.println("Trouble reseting persistence context");
+	    }
 	}
 	
 	private Customer creatDummyCustomer(){

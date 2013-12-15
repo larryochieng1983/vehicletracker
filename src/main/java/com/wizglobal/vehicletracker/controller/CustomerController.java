@@ -10,6 +10,7 @@ import javax.faces.model.ListDataModel;
 import javax.inject.Named;
 
 import com.wizglobal.vehicletracker.domain.Customer;
+import com.wizglobal.vehicletracker.exception.DataAccessException;
 import com.wizglobal.vehicletracker.service.CustomerService;
 import java.util.Map;
 import javax.inject.Inject;
@@ -128,8 +129,12 @@ public class CustomerController extends BasePage implements Serializable {
 			addWarningMessage( "Please Select a customer to edit and try again.",
 					"No Customer Selected for update" );
 		} else {
+		    try {
 			customerService.update( currentCustomer );
 			addInfoMessage( "Customer updated", null );
+		    } catch (DataAccessException ex) {
+			addErrorgMessage("Customer changes not save due to data access error. Please try again.", null);
+		    }
 		}
 		return null;
 	}

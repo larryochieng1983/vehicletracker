@@ -5,6 +5,7 @@ package com.wizglobal.vehicletracker.controller;
 
 import com.wizglobal.vehicletracker.domain.User;
 import com.wizglobal.vehicletracker.domain.UserRole;
+import com.wizglobal.vehicletracker.exception.DataAccessException;
 import com.wizglobal.vehicletracker.service.UserService;
 import java.io.Serializable;
 import java.util.List;
@@ -24,7 +25,7 @@ import org.primefaces.model.LazyDataModel;
  */
 @ManagedBean(name = "userBean")
 @SessionScoped
-public class UserBean implements Serializable {
+public class UserBean extends BasePage implements Serializable {
 
     /**
      *
@@ -55,6 +56,7 @@ public class UserBean implements Serializable {
      * for UserContoller class
      */
     @PostConstruct
+    @Override
     public void init() {
 	logger.log(Level.INFO, "UserController is initializing");
 	lazyModel = new LazyUserDataModel(das);
@@ -73,7 +75,11 @@ public class UserBean implements Serializable {
      * @param actionEvent
      */
     public void doUpdateUser(ActionEvent actionEvent) {
-	das.update(selectedUser);
+	try {
+	    das.update(selectedUser);
+	} catch (DataAccessException ex) {
+	    addErrorgMessage("User not update due to a data access problem. Please try again.", null);
+	}
     }
 
     /**

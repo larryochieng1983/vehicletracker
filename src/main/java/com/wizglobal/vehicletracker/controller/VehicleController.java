@@ -56,6 +56,17 @@ public class VehicleController extends BasePage implements Serializable {
 	private Vehicle currentVehicle;
 	private Vehicle newVehicle;
 	private LazyVehicleTableModel vehicleTableModel;
+	
+	/**
+	 * Sets a new instance for {@link #currentCustomer} to be used as new
+	 * customer.
+	 *
+	*/
+	public void preRenderNewVehicle() {
+	    if (!isAjaxRequest() && newVehicle == null) {
+		newVehicle = new Vehicle();
+	    } 
+	}
 
 	@Override
 	@PostConstruct
@@ -111,7 +122,7 @@ public class VehicleController extends BasePage implements Serializable {
 	 */
 	public String viewSelectedVehicle() {
 		currentVehicle = vehicleTableModel.getRowData();
-		return currentVehicle == null ? null : "/vehicles/view.jsf?faces-redirect=true";
+		return currentVehicle == null ? null : appendFacesRedirectTrue("/vehicles/view.jsf");
 	}
 
 	/**

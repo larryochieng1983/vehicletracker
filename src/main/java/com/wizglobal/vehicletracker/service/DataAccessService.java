@@ -1,5 +1,7 @@
 package com.wizglobal.vehicletracker.service;
 
+import com.wizglobal.vehicletracker.exception.DataAccessException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,7 +47,7 @@ public abstract class DataAccessService<T> {
 	 *            Object
 	 * @return
 	 */
-	public synchronized T create(T t) {
+	public synchronized T create(final T t) {
 		try {
 		    em.getTransaction().begin();
 		    this.em.persist(t);
@@ -85,7 +87,7 @@ public abstract class DataAccessService<T> {
 	 * @param type
 	 * @param id
 	 */
-	public void delete(Object id) {
+	public synchronized boolean delete(final Object id) {
 		try {
 		    this.em.getTransaction().begin();
 		    Object ref = this.em.getReference(this.type, id);
@@ -100,7 +102,9 @@ public abstract class DataAccessService<T> {
 		    } catch (Exception exception) {
 			LOGGER.error("Fatal error in closing transaction.", exception);
 		    }
+		    return false;
 		}
+		return true;
 	}
 
 	/**
@@ -108,11 +112,26 @@ public abstract class DataAccessService<T> {
 	 * 
 	 * @param <T>
 	 * @param items
-	 * @return
+	 * @return true for success, false otherwise.
 	 */
-	public boolean deleteItems(T[] items) {
-		for (T item : items) {
+	public synchronized boolean deleteItems(final T[] items) {
+		try {
+		    em.getTransaction().begin();
+		    for (T item : items) {
 			em.remove(em.merge(item));
+		    }
+		    em.flush();
+		    em.getTransaction().commit();
+		} catch (Exception e) {
+		    try {
+			LOGGER.warn("Failed to remove entities with " + Arrays.asList(items) + ", transaction will be rolled back");
+			if (em.getTransaction().isActive()) {
+			    em.getTransaction().rollback();
+			}
+		    } catch (Exception exception) {
+			LOGGER.error("Fatal error in closing transaction.", exception);
+		    }
+		    return false;
 		}
 		return true;
 	}
@@ -124,9 +143,24 @@ public abstract class DataAccessService<T> {
 	 * @param t
 	 * @return the object that is updated
 	 */
-	public T update(T item) {
-		return (T) this.em.merge(item);
-
+	public synchronized T update(final T item) throws DataAccessException {
+	       try {
+		    em.getTransaction().begin();
+		    T mergeResult;
+		    mergeResult = this.em.merge(item);
+		    em.getTransaction().commit();
+		    return mergeResult;
+		} catch (Exception e) {
+		    try {
+			LOGGER.warn("Failed to update entity " + item + ", transaction will be rolled back");
+			if (em.getTransaction().isActive()) {
+			    em.getTransaction().rollback();
+			}
+		    } catch (Exception exception) {
+			LOGGER.error("Fatal error in closing transaction.", exception);
+		    }
+		    throw new DataAccessException("Update aborted. " + e.getMessage(), e);
+		}
 	}
 
 	/**
