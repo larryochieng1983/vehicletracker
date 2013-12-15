@@ -3,7 +3,6 @@ package com.wizglobal.vehicletracker.controller;
 import com.wizglobal.vehicletracker.domain.Vehicle;
 import com.wizglobal.vehicletracker.domain.VehicleColor;
 import com.wizglobal.vehicletracker.domain.VehicleModel;
-import com.wizglobal.vehicletracker.service.Dba;
 import com.wizglobal.vehicletracker.service.VehicleColorService;
 import com.wizglobal.vehicletracker.service.VehicleManufacturerService;
 import com.wizglobal.vehicletracker.service.VehicleModelService;
@@ -41,12 +40,11 @@ public class VehicleController extends BasePage implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger LOG = Logger.getLogger( VehicleController.class );
-	private Dba dba = new Dba();
-
+	@Inject
 	private VehicleService vehicleService;
 	@Inject
 	private CustomerController customerController;
-//	@Inject
+	@Inject
 	private VehicleColorService vehicleColorService;
 	@Inject
 	private VehicleManufacturerService manufacturerService;
@@ -56,6 +54,7 @@ public class VehicleController extends BasePage implements Serializable {
 	private VehicleTypeService vehicleTypeService;
 
 	private Vehicle currentVehicle;
+	private Vehicle newVehicle;
 	private LazyVehicleTableModel vehicleTableModel;
 
 	@Override
@@ -67,7 +66,6 @@ public class VehicleController extends BasePage implements Serializable {
 	 * Creates a new instance of VehicleController
 	 */
 	public VehicleController() {
-		vehicleService = new VehicleService( dba );
 	}
 
 	public LazyDataModel<Vehicle> getVehicles() {
@@ -78,6 +76,14 @@ public class VehicleController extends BasePage implements Serializable {
 		return currentVehicle;
 	}
 
+	public Vehicle getNewVehicle() {
+	    return newVehicle;
+	}
+
+	public void setNewVehicle(Vehicle newVehicle) {
+	    this.newVehicle = newVehicle;
+	}
+    
 	/**
 	 * 
 	 * @param currentVehicle set current vehicle.
@@ -135,17 +141,23 @@ public class VehicleController extends BasePage implements Serializable {
 	 * 
 	 * @return prepare to add a new vehicle.
 	 */
-	public String createNewVehicle() {
-		currentVehicle = new Vehicle();
-		return appendFacesRedirectTrue( "/vehicles/new.jsf" );
+	public String createNewVehicle(){
+	    newVehicle = null;
+	    return appendFacesRedirectTrue("/vehicles/new.jsf");
 	}
 
 	/**
 	 * 
 	 * @return Performs actual database ADD.
 	 */
-	public String addNewVehicle() {
-		vehicleService.create( currentVehicle );
+    public String addNewVehicle(){
+	try {
+	    currentVehicle = vehicleService.create(newVehicle);
+	    appendFacesRedirectTrue("/vehicles/view.jsf");
+	} catch (Exception ex) {
+	    addErrorgMessage("Unable to create new vehicle. Please try again.", ex.getMessage());
+	    LOG.warn("Failed to add new vehicle. " + ex.getMessage());
+	}
 		return null;
 	}
 

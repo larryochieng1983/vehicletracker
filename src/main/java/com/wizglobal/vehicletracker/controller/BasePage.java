@@ -1,6 +1,7 @@
 package com.wizglobal.vehicletracker.controller;
 
 import com.wizglobal.vehicletracker.util.StringUtils;
+import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
  * @author kenny
  */
 public abstract class BasePage {
+    
+    public static final String AJAX_PARTIAL_REQUEST_PARAM = "javax.faces.partial.ajax";
     
     
     /**
@@ -74,6 +77,14 @@ public abstract class BasePage {
     }
     
     /**
+     *
+     * @return Request params from the servlet request.
+     */
+    protected Map<String, String[]> getRequestParams(){
+	return getServletRequest().getParameterMap();
+    }
+    
+    /**
      * Append ?faces-redirect=true
      *
      * @param navigationCase navigation case e.g /home.jsf. ;
@@ -81,6 +92,14 @@ public abstract class BasePage {
      */
     public String appendFacesRedirectTrue(String navigationCase){
 	return  StringUtils.isNonEmptyString(navigationCase) ? navigationCase.concat(FacesRedirect.FACES_REDIRECT_TRUE.getValueAsGETparam()) : null;
+    }
+    
+    /**
+     *
+     * @return determines if the current request is an Ajax request or not.
+     */
+    protected boolean isAjaxRequest() {
+	return "true".equalsIgnoreCase(getServletRequest().getParameter(AJAX_PARTIAL_REQUEST_PARAM));
     }
     
     /**
