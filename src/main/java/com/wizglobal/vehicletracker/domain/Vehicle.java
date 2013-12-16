@@ -6,6 +6,7 @@ package com.wizglobal.vehicletracker.domain;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
@@ -22,8 +23,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "VEHICLE")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@NamedQueries({
-    @NamedQuery(name="Vehicle.findAll",query="SELECT v FROM Vehicle v ORDER BY v.registrationNumber")})
+@NamedQueries({ @NamedQuery(name = "Vehicle.findAll", query = "SELECT v FROM Vehicle v ORDER BY v.registrationNumber") })
 public class Vehicle extends BaseEntity {
 	/**
 	 * 
@@ -41,17 +41,24 @@ public class Vehicle extends BaseEntity {
 	@ManyToOne(cascade = { CascadeType.ALL })
 	private GpsDevice gpsDevice;
 
-	@ManyToOne(cascade = { CascadeType.ALL })
+	@Enumerated
+	@Column(name = "VEHICLE_TYPE")
 	private VehicleType vehicleType;
 
-	@ManyToOne(cascade = { CascadeType.ALL })
-	private VehicleManufacturer manufacturer;
+	@Size(max = 50)
+	@NotNull
+	@Column(name = "MANUFACTURER")
+	private String manufacturer;
 
-	@ManyToOne(cascade = { CascadeType.ALL })
-	private VehicleModel model;
+	@Size(max = 50)
+	@NotNull
+	@Column(name = "MODEL")
+	private String model;
 
-	@ManyToOne(cascade = { CascadeType.ALL })
-	private VehicleColor color;
+	@Size(max = 50)
+	@NotNull
+	@Column(name = "VEHICLE_COLOR")
+	private String color;
 
 	/**
 	 * @return the registrationNumber
@@ -61,10 +68,9 @@ public class Vehicle extends BaseEntity {
 	}
 
 	/**
-	 * @param registrationNumber
-	 *            the registrationNumber to set
+	 * @param registrationNumber the registrationNumber to set
 	 */
-	public void setRegistrationNumber(String registrationNumber) {
+	public void setRegistrationNumber( String registrationNumber ) {
 		this.registrationNumber = registrationNumber;
 	}
 
@@ -76,10 +82,9 @@ public class Vehicle extends BaseEntity {
 	}
 
 	/**
-	 * @param customer
-	 *            the customer to set
+	 * @param customer the customer to set
 	 */
-	public void setCustomer(Customer customer) {
+	public void setCustomer( Customer customer ) {
 		this.customer = customer;
 	}
 
@@ -91,10 +96,9 @@ public class Vehicle extends BaseEntity {
 	}
 
 	/**
-	 * @param gpsDevice
-	 *            the gpsDevice to set
+	 * @param gpsDevice the gpsDevice to set
 	 */
-	public void setGpsDevice(GpsDevice gpsDevice) {
+	public void setGpsDevice( GpsDevice gpsDevice ) {
 		this.gpsDevice = gpsDevice;
 	}
 
@@ -106,56 +110,63 @@ public class Vehicle extends BaseEntity {
 	}
 
 	/**
-	 * @param vehicleType
-	 *            the vehicleType to set
+	 * @param vehicleType the vehicleType to set
 	 */
-	public void setVehicleType(VehicleType vehicleType) {
+	public void setVehicleType( VehicleType vehicleType ) {
 		this.vehicleType = vehicleType;
 	}
 
 	/**
 	 * @return the manufacturer
 	 */
-	public VehicleManufacturer getManufacturer() {
+	public String getManufacturer() {
 		return manufacturer;
 	}
 
 	/**
-	 * @param manufacturer
-	 *            the manufacturer to set
+	 * @param manufacturer the manufacturer to set
 	 */
-	public void setManufacturer(VehicleManufacturer manufacturer) {
+	public void setManufacturer( String manufacturer ) {
 		this.manufacturer = manufacturer;
 	}
 
 	/**
 	 * @return the model
 	 */
-	public VehicleModel getModel() {
+	public String getModel() {
 		return model;
 	}
 
 	/**
-	 * @param model
-	 *            the model to set
+	 * @param model the model to set
 	 */
-	public void setModel(VehicleModel model) {
+	public void setModel( String model ) {
 		this.model = model;
 	}
 
 	/**
 	 * @return the color
 	 */
-	public VehicleColor getColor() {
+	public String getColor() {
 		return color;
 	}
 
 	/**
-	 * @param color
-	 *            the color to set
+	 * @param color the color to set
 	 */
-	public void setColor(VehicleColor color) {
+	public void setColor( String color ) {
 		this.color = color;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Vehicle [registrationNumber=" + registrationNumber + ", manufacturer=" + manufacturer
+				+ ", model=" + model + "]";
 	}
 
 }

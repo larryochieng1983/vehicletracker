@@ -1,16 +1,5 @@
 package com.wizglobal.vehicletracker.controller;
 
-import com.wizglobal.vehicletracker.domain.Vehicle;
-import com.wizglobal.vehicletracker.domain.VehicleColor;
-import com.wizglobal.vehicletracker.domain.VehicleModel;
-import com.wizglobal.vehicletracker.service.VehicleColorService;
-import com.wizglobal.vehicletracker.service.VehicleManufacturerService;
-import com.wizglobal.vehicletracker.service.VehicleModelService;
-import com.wizglobal.vehicletracker.service.VehicleService;
-import com.wizglobal.vehicletracker.service.VehicleTypeService;
-import com.wizglobal.vehicletracker.util.LazySorter;
-import com.wizglobal.vehicletracker.util.QueryParam;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,6 +14,11 @@ import javax.inject.Named;
 import org.apache.log4j.Logger;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
+
+import com.wizglobal.vehicletracker.domain.Vehicle;
+import com.wizglobal.vehicletracker.service.VehicleService;
+import com.wizglobal.vehicletracker.util.LazySorter;
+import com.wizglobal.vehicletracker.util.QueryParam;
 
 /**
  * 
@@ -43,15 +37,7 @@ public class VehicleController extends BasePage implements Serializable {
 	@Inject
 	private VehicleService vehicleService;
 	@Inject
-	private CustomerController customerController;
-	@Inject
-	private VehicleColorService vehicleColorService;
-	@Inject
-	private VehicleManufacturerService manufacturerService;
-	@Inject
-	private VehicleModelService modelService;
-	@Inject
-	private VehicleTypeService vehicleTypeService;
+	private CustomerController customerController;	
 
 	private Vehicle currentVehicle;
 	private Vehicle newVehicle;
@@ -196,29 +182,7 @@ public class VehicleController extends BasePage implements Serializable {
 			currentVehicle = vehicleService.find( currentVehicle.getId() );
 		}
 		return null;
-	}
-
-	public List<VehicleColor> getListofColors() {
-		List<VehicleColor> result = new ArrayList<>();
-		try {
-			result = vehicleColorService.findWithNamedQuery( "VehicleColor.findAll" );
-		} catch( Exception e ) {
-			LOG.warn( "Vehicle Color Service failed to retrieve colors: " + e.getMessage() );
-		}
-
-		return result;
-	}
-
-	public List<VehicleModel> getListofModels() {
-		List<VehicleModel> result = new ArrayList<>();
-		try {
-			result = modelService.findWithNamedQuery( "VehicleModel.findAll" );
-		} catch( Exception e ) {
-			LOG.warn( "Failed to retrieve vehicle models: " + e.getMessage() );
-		}
-
-		return result;
-	}
+	}	
 
 	public class LazyVehicleTableModel extends LazyDataModel<Vehicle> {
 		private List<Vehicle> vehicleList;
