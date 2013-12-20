@@ -30,6 +30,7 @@ public class VehicleService extends DataAccessService<Vehicle> implements Serial
      * @return results
      */
     public List<Vehicle> loadVehicles(int start, int pageSize, List<QueryParam> params) {
+	System.out.println("Loadinging vehicles: " + start + ", to " + pageSize );
 	Query query = em.createQuery("from Vehicle");
 	query.setFirstResult(start);
 	query.setMaxResults(pageSize);

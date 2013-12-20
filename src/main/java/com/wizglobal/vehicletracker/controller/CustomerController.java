@@ -10,8 +10,10 @@ import javax.faces.model.ListDataModel;
 import javax.inject.Named;
 
 import com.wizglobal.vehicletracker.domain.Customer;
+import com.wizglobal.vehicletracker.domain.Vehicle;
 import com.wizglobal.vehicletracker.exception.DataAccessException;
 import com.wizglobal.vehicletracker.service.CustomerService;
+import com.wizglobal.vehicletracker.service.VehicleService;
 import java.util.Map;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
@@ -31,6 +33,10 @@ public class CustomerController extends BasePage implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Inject
 	private CustomerService customerService;
+	@Inject
+	private VehicleController vehicleController;
+	@Inject
+	private VehicleService vehicleService;
 	private Customer currentCustomer;
 	private List<Customer> customerList;
 	private LazyCustomersDataModel lazyCustomersDataModel;
@@ -56,10 +62,32 @@ public class CustomerController extends BasePage implements Serializable {
 	    return newCustomer;
 	}
 	
+	public String showVehicle(Vehicle vehicle){
+	    vehicleController.setCurrentVehicle(vehicle);
+	    return appendFacesRedirectTrue("/vehicles/view.jsf");
+	}
+	
+	public String editVehicle(Vehicle vehicle){
+	    vehicleController.setCurrentVehicle(vehicle);
+	    return vehicleController.editVehicle();
+	}
+	
+	public String deleteVehicle(Vehicle vehicle){
+	    if (vehicle == null) {
+		addWarningMessage("Please select a vehicle and try again", null);
+	    }
+	    boolean success = vehicleService.delete(vehicle.getId());
+	    if (success) {
+		addInfoMessage("Vehicle removed", null);
+	    } else {
+		addErrorgMessage("Failed to complete request to remove vehicle. Please try again later.", null);
+	    }
+	    return null;
+	}
 	
 
 	/**
-	 * Sets a new instance for {@link #currentCustomer} to be used as new
+	 * Sets a new instance for {@link #newCustomer} to be used as new
 	 * customer.
 	 *
 	*/
@@ -111,6 +139,11 @@ public class CustomerController extends BasePage implements Serializable {
 	    }
 	    return null;
 	}
+	
+	public String selectAndDeletCurrentCustomer(){
+	    setCurrentCustomer(getLazyCustomersDataModel().getRowData());
+	    return deleteCurrentCustomer();
+	}
 
 	public String deleteCurrentCustomer() {
 		try {
@@ -118,10 +151,11 @@ public class CustomerController extends BasePage implements Serializable {
 			addInfoMessage(
 					"Customer " + currentCustomer.getFirstName() + " " + currentCustomer.getLastName()
 							+ " removed.", null );
+			return showCustomerList();
 		} catch( Exception e ) {
 			addErrorgMessage( "Failed to delete customer. " + e.getMessage(), null );
 		}
-		return appendFacesRedirectTrue( "/customers/list.jsf" );
+		return null;
 	}
 
 	public String saveCurrentCustomerChanges() {
@@ -141,6 +175,15 @@ public class CustomerController extends BasePage implements Serializable {
 
 	public String editCustomer() {
 		return currentCustomer == null ? null : appendFacesRedirectTrue( "/customers/edit.jsf" );
+	}
+	
+	public String addMoreVehiclesToCustomer() {
+	    if (currentCustomer != null) {
+		Vehicle vehicle = new Vehicle();
+		vehicle.setCustomer(currentCustomer);
+		vehicleController.setNewVehicle(vehicle);
+	    }
+	    return appendFacesRedirectTrue("/vehicles/new.jsf");
 	}
 
 	public DataModel<Customer> getCustomersListDataModel() {
@@ -181,62 +224,52 @@ public class CustomerController extends BasePage implements Serializable {
 	 * Sets current customer from the current row in the lazy dat
 	 *
 	 */
-	public void selectCurrentCustomer() {
+	public String selectAndViewCurrentCustomer() {
 	    setCurrentCustomer(getCustomersListDataModel().getRowData());
+	    return viewCurrentCustomer();
 	}
 	
-    public static class LazyCustomersDataModel extends LazyDataModel<Customer> {
+	public static class LazyCustomersDataModel extends LazyDataModel<Customer> {
 
-	private CustomerService customerDataSource;
+	    private CustomerService customerDataSource;
 
-	public LazyCustomersDataModel(CustomerService customerDataSource) {
-	    this.customerDataSource = customerDataSource;
-	}
-
-//	@Override
-//	public Customer getRowData(String rowKey) {
-//	    return super.getRowData(rowKey);
-//	}
-
-	@Override
-	public Object getRowKey(Customer customer) {
-	    System.out.println("Requested customer rowKey for " + customer);
-	    return customer.getId();
-	}
-	
-	
-	
-
-	@Override
-	public void setRowIndex(int rowIndex) {
-	    if (rowIndex == -1 || getPageSize() == 0) {
-		super.setRowIndex(-1);
-	    } else{
-		super.setRowIndex(rowIndex % getPageSize());
+	    public LazyCustomersDataModel(CustomerService customerDataSource) {
+		this.customerDataSource = customerDataSource;
 	    }
-	}
-	
-	
 
-	@Override
-	public List<Customer> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
-	    List<Customer> results = customerDataSource.findWithNamedQuery("Customer.findAll");
-	    setRowCount(results.size());
-//	    setWrappedData(results); 
-//	    setPageSize(pageSize);
-	    super.setPageSize(pageSize);
-	    System.out.println("Rowcount updated to: " + getRowCount());
-	    System.out.println("supplied page size: " + pageSize);
-	    System.out.println("Size is: " + results.size());
-	    if (results.size() > pageSize) {
-		try {
-		    return results.subList(first, first + pageSize);
-		} catch (Exception e) {
-		    return results.subList(first, (first + (results.size() % pageSize)));
+	    @Override
+	    public Object getRowKey(Customer customer) {
+		return customer.getId();
+	    }
+
+
+
+
+	    @Override
+	    public void setRowIndex(int rowIndex) {
+		if (rowIndex == -1 || getPageSize() == 0) {
+		    super.setRowIndex(-1);
+		} else{
+		    super.setRowIndex(rowIndex % getPageSize());
 		}
 	    }
-	    return results;
+
+
+
+	    @Override
+	    public List<Customer> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+		List<Customer> results = customerDataSource.findWithNamedQuery("Customer.findAll", first, first + pageSize);
+		setRowCount(results.size());
+		setPageSize(pageSize);
+		if (results.size() > pageSize) {
+		    try {
+			return results.subList(first, first + pageSize);
+		    } catch (Exception e) {
+			return results.subList(first, (first + (results.size() % pageSize)));
+		    }
+		}
+		return results;
+	    }
+
 	}
-	
-    }
 }

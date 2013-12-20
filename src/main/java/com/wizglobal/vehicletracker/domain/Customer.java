@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -69,8 +70,8 @@ public class Customer extends BaseEntity {
 	@Column(name = "MOBILE_PHONE_NUMBER")
 	@Size(max = 15)
 	private String mobilePhoneNumber;
-	
-	@OneToMany(cascade= CascadeType.ALL, fetch= FetchType.LAZY)
+
+	@OneToMany(cascade= CascadeType.ALL, fetch= FetchType.LAZY, mappedBy="customer")
 	private Collection<Vehicle> vehicles;
 
 	/**
@@ -224,11 +225,11 @@ public class Customer extends BaseEntity {
 	    this.vehicles = vehicles;
 	}
 
-    @Override
-    public String toString() {
-	return firstName + "-" + lastName + ":" + idNumber;
-    }
 	
 	
-
+	@Override
+	public String toString() {
+	    return firstName + " " + lastName + (middleName == null ? "" : ", " + middleName);
+	}
+	
 }
