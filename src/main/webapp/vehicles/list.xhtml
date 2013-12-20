@@ -16,24 +16,26 @@
 	    </h:panelGroup>
 	</h:form>
 	<p:spacer height="15" width="20"/>
-	<p:dataTable value="#{vehicleController.vehicles}" var="vehicle">
-	    <p:column headerText="Registration">
-		<h:link outcome="#{vehicleController.viewSelectedVehicle}">
-		    <h:outputText value="#{vehicle.registrationNumber}"/>
-		</h:link>
-	    </p:column>
-	    <p:column headerText="Customer">
-		<h:link outcome="#{vehicleController.viewSelectedvehicleCustomer}">
-		    <h:outputText value="#{vehicle.customer}"/>
-		</h:link>
-	    </p:column>
-	    <p:column headerText="Model">
-		<h:outputText value="#{vehicle.model.modelName}"/>
-	    </p:column>
-	    <p:column headerText="GPS Device">
-		<h:outputText value="#{vehicle.gpsDevice.gpsType}"/>
-	    </p:column>
-	</p:dataTable>
+	<h:form id="vehicle-list-form">
+	    <p:dataTable value="#{vehicleController.vehicles}" var="vehicle" lazy="true" rows="20">
+		<p:column headerText="Registration">
+		    <h:commandLink action="#{vehicleController.viewSelectedVehicle()}">
+			<h:outputText value="#{vehicle.registrationNumber}"/>
+		    </h:commandLink>
+		</p:column>
+		<p:column headerText="Customer">
+		    <h:commandLink action="#{vehicleController.viewSelectedvehicleCustomer}">
+			<h:outputText value="#{vehicle.customer}"/>
+		    </h:commandLink>
+		</p:column>
+		<p:column headerText="Model">
+		    <h:outputText value="#{vehicle.model}"/>
+		</p:column>
+		<p:column headerText="GPS Device">
+		    <h:outputText value="#{vehicle.gpsDevice.gpsType}"/>
+		</p:column>
+	    </p:dataTable>
+	</h:form>
     </ui:define>
 
 </ui:composition>

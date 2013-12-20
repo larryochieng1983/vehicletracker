@@ -11,11 +11,7 @@
     <class>com.wizglobal.vehicletracker.domain.User</class>
     <class>com.wizglobal.vehicletracker.domain.UserRole</class>
     <class>com.wizglobal.vehicletracker.domain.Vehicle</class>
-    <class>com.wizglobal.vehicletracker.domain.VehicleColor</class>
-    <class>com.wizglobal.vehicletracker.domain.VehicleManufacturer</class>
-    <class>com.wizglobal.vehicletracker.domain.VehicleModel</class>
     <class>com.wizglobal.vehicletracker.domain.VehiclePosition</class>
-    <class>com.wizglobal.vehicletracker.domain.VehicleType</class>
     <class>com.wizglobal.vehicletracker.domain.VoiceCall</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>

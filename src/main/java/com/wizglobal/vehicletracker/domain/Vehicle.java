@@ -35,7 +35,7 @@ public class Vehicle extends BaseEntity {
 	@Column(name = "REGISTRATION_NUMBER")
 	private String registrationNumber;
 
-	@ManyToOne(cascade = { CascadeType.ALL })
+	@ManyToOne(cascade = { CascadeType.REFRESH })
 	private Customer customer;
 
 	@ManyToOne(cascade = { CascadeType.ALL })

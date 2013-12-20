@@ -10,7 +10,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.inject.Inject;
 
-import com.wizglobal.vehicletracker.service.GpsDeviceService;
 import com.wizglobal.vehicletracker.service.VehiclePositionService;
 
 /**

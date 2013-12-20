@@ -23,7 +23,7 @@
 	</h:form>
         <h:panelGroup id="vehicle-list">
 	    <h:form>
-		<p:dataTable id="vehicle-list-table" value="#{customerController.customerList}" var="customer" lazy="true" >
+		<p:dataTable id="vehicle-list-table" value="#{customerController.lazyCustomersDataModel}" var="customer" lazy="true" rows="20" >
 		    <p:column headerText="Customer">
 			<h:outputFormat value="{0} {1}{2}{3}">
 			    <f:param value="#{customer.lastName}"/>
@@ -50,14 +50,14 @@
 			</h:outputFormat>
 		    </p:column>
 		    <p:column headerText="Vehicles">
-			<h:commandLink action="#{customerController.viewCurrentCustomer()}" actionListener="#{customerController.selectCurrentCustomer()}">
+			<h:commandLink action="#{customerController.selectAndViewCurrentCustomer()}">
 			    <h:outputText value="#{customer.vehicles eq null ? '(0)' :  customer.vehicles.size() }"/>
 			</h:commandLink>
 		    </p:column>
 		    <p:column headerText="">
-			<h:commandLink action="#{customerController.viewCurrentCustomer()}" actionListener="#{customerController.selectCurrentCustomer()}" value="view"/>
+			<h:commandLink action="#{customerController.selectAndViewCurrentCustomer()}" value="view"/>
 			<h:outputText value=" | " />
-			<h:commandLink action="#{customerController.deleteCurrentCustomer()}" actionListener="#{customerController.selectCurrentCustomer()}" value="remove"/>
+			<h:commandLink action="#{customerController.selectAndDeletCurrentCustomer()}" value="remove"/>
 		    </p:column>
 		</p:dataTable>
 	    </h:form>
