@@ -10,11 +10,15 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.smslib.AGateway;
 import org.smslib.IOutboundMessageNotification;
+import org.smslib.Message;
 import org.smslib.OutboundMessage;
 import org.smslib.SMSLibException;
 import org.smslib.Service;
 import org.smslib.TimeoutException;
 import org.smslib.modem.SerialModemGateway;
+
+import com.wizglobal.vehicletracker.domain.OutgoingSms;
+import com.wizglobal.vehicletracker.service.OutgoingSmsService;
 
 /**
  * @author Otieno Lawrence
@@ -26,6 +30,7 @@ public class SendMessage {
 
 	/** SMS Gateway Properties */
 	private Properties gatewayProperties = new Properties();
+	private OutgoingSmsService outgoingSmsService;
 
 	/**
 	 * 
@@ -70,6 +75,8 @@ public class SendMessage {
 		OutboundMessage msg = new OutboundMessage( receiver, message );
 		msg.setStatusReport( true );
 		if( Service.getInstance().sendMessage( msg ) ) {
+			outgoingSmsService.create( new OutgoingSms( Message.MessageTypes.OUTBOUND, msg
+					.getRecipient(), msg.getText(), msg.getDate() ) );
 			sent = true;
 		} else {
 			sent = false;

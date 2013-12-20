@@ -26,6 +26,9 @@ import org.smslib.Service;
 import org.smslib.TimeoutException;
 import org.smslib.modem.SerialModemGateway;
 
+import com.wizglobal.vehicletracker.domain.IncomingSms;
+import com.wizglobal.vehicletracker.service.IncomingSmsService;
+
 /**
  * @author Otieno Lawrence
  * 
@@ -36,6 +39,7 @@ public class ReadMessage {
 
 	/** SMS Gateway Properties */
 	private Properties gatewayProperties = new Properties();
+	private IncomingSmsService incomingSmsService;
 
 	public ReadMessage() {
 		try {
@@ -71,10 +75,17 @@ public class ReadMessage {
 			Service.getInstance().addGateway( gateway );
 			Service.getInstance().startService();
 			msgList = new ArrayList<InboundMessage>();
+			List<IncomingSms> smsList = new ArrayList<IncomingSms>();
 			Service.getInstance().readMessages( msgList, MessageClasses.ALL );
 			for( InboundMessage msg : msgList ) {
-
+				IncomingSms sms = new IncomingSms( msg.getType(), msg.getOriginator(), msg.getDate(),
+						msg.getDate(), msg.getText() );
+				smsList.add( sms );
+				// Delete after reading
+				Service.getInstance().deleteMessage( msg );
 			}
+			incomingSmsService.create( smsList );
+
 		} catch( Exception e ) {
 			log.error( e );
 		} finally {

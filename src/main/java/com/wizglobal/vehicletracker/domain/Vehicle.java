@@ -6,7 +6,6 @@ package com.wizglobal.vehicletracker.domain;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
@@ -41,22 +40,19 @@ public class Vehicle extends BaseEntity {
 	@ManyToOne(cascade = { CascadeType.ALL })
 	private GpsDevice gpsDevice;
 
-	@Enumerated
 	@Column(name = "VEHICLE_TYPE")
-	private VehicleType vehicleType;
+	@Size(max = 50)
+	private String vehicleType;
 
 	@Size(max = 50)
-	@NotNull
 	@Column(name = "MANUFACTURER")
 	private String manufacturer;
 
 	@Size(max = 50)
-	@NotNull
 	@Column(name = "MODEL")
 	private String model;
 
 	@Size(max = 50)
-	@NotNull
 	@Column(name = "VEHICLE_COLOR")
 	private String color;
 
@@ -105,14 +101,14 @@ public class Vehicle extends BaseEntity {
 	/**
 	 * @return the vehicleType
 	 */
-	public VehicleType getVehicleType() {
+	public String getVehicleType() {
 		return vehicleType;
 	}
 
 	/**
 	 * @param vehicleType the vehicleType to set
 	 */
-	public void setVehicleType( VehicleType vehicleType ) {
+	public void setVehicleType( String vehicleType ) {
 		this.vehicleType = vehicleType;
 	}
 

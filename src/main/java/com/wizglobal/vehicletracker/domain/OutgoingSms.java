@@ -7,11 +7,14 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.smslib.Message;
 
 /**
  * @author Otieno Lawrence
@@ -25,59 +28,89 @@ public class OutgoingSms extends BaseEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = 4369855708056490720L;
+
+	@Enumerated
 	@Column(name = "TYPE")
-	private char type;
+	private Message.MessageTypes type;
+
 	@Column(name = "RECIPIENT")
 	private String recipient;
+
 	@Column(name = "TEXT")
 	private String text;
+
 	@Column(name = "WAP_URL")
 	private String wapUrl;
+
 	@Column(name = "WAP_EXPIRY_DATE")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date wapExpiryDate;
+
 	@Column(name = "WAP_SIGNAL")
 	private char wapSignal;
+
 	@Column(name = "CREATE_DATE")
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date createDate;
+	private Date createDate = new Date();
+
 	@Column(name = "ORIGINATOR")
 	private String originator;
+
 	@Column(name = "ENCODING")
 	private char encoding;
+
 	@Column(name = "STATUS_REPORT")
 	private int statusReport;
+
 	@Column(name = "FLASH_SMS")
 	private int flash_sms;
+
 	@Column(name = "SRC_PORT")
 	private int srcPort;
+
 	@Column(name = "DST_PORT")
 	private int dstPort;
+
 	@Column(name = "SENT_DATE")
 	private Date sentDate;
+
 	@Column(name = "REF_NO")
 	private String refNumber;
+
 	@Column(name = "PRIORITY")
 	private int priority;
+
 	@Column(name = "STATUS")
 	private char status;
+
 	@Column(name = "ERRORS")
 	private int errors;
+
 	@Column(name = "GATEWAY_ID")
 	private String gatewayId;
+
+	public OutgoingSms() {
+
+	}
+
+	public OutgoingSms( Message.MessageTypes type, String recipient, String text, Date sentDate ) {
+		this.type = type;
+		this.recipient = recipient;
+		this.text = text;
+		this.sentDate = sentDate;
+	}
 
 	/**
 	 * @return the type
 	 */
-	public char getType() {
+	public Message.MessageTypes getType() {
 		return type;
 	}
 
 	/**
-	 * @param type
-	 *            the type to set
+	 * @param type the type to set
 	 */
-	public void setType(char type) {
+	public void setType( Message.MessageTypes type ) {
 		this.type = type;
 	}
 
@@ -89,10 +122,9 @@ public class OutgoingSms extends BaseEntity {
 	}
 
 	/**
-	 * @param recipient
-	 *            the recipient to set
+	 * @param recipient the recipient to set
 	 */
-	public void setRecipient(String recipient) {
+	public void setRecipient( String recipient ) {
 		this.recipient = recipient;
 	}
 
@@ -104,10 +136,9 @@ public class OutgoingSms extends BaseEntity {
 	}
 
 	/**
-	 * @param text
-	 *            the text to set
+	 * @param text the text to set
 	 */
-	public void setText(String text) {
+	public void setText( String text ) {
 		this.text = text;
 	}
 
@@ -119,10 +150,9 @@ public class OutgoingSms extends BaseEntity {
 	}
 
 	/**
-	 * @param wapUrl
-	 *            the wapUrl to set
+	 * @param wapUrl the wapUrl to set
 	 */
-	public void setWapUrl(String wapUrl) {
+	public void setWapUrl( String wapUrl ) {
 		this.wapUrl = wapUrl;
 	}
 
@@ -134,10 +164,9 @@ public class OutgoingSms extends BaseEntity {
 	}
 
 	/**
-	 * @param wapExpiryDate
-	 *            the wapExpiryDate to set
+	 * @param wapExpiryDate the wapExpiryDate to set
 	 */
-	public void setWapExpiryDate(Date wapExpiryDate) {
+	public void setWapExpiryDate( Date wapExpiryDate ) {
 		this.wapExpiryDate = wapExpiryDate;
 	}
 
@@ -149,10 +178,9 @@ public class OutgoingSms extends BaseEntity {
 	}
 
 	/**
-	 * @param wapSignal
-	 *            the wapSignal to set
+	 * @param wapSignal the wapSignal to set
 	 */
-	public void setWapSignal(char wapSignal) {
+	public void setWapSignal( char wapSignal ) {
 		this.wapSignal = wapSignal;
 	}
 
@@ -164,10 +192,9 @@ public class OutgoingSms extends BaseEntity {
 	}
 
 	/**
-	 * @param createDate
-	 *            the createDate to set
+	 * @param createDate the createDate to set
 	 */
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate( Date createDate ) {
 		this.createDate = createDate;
 	}
 
@@ -179,10 +206,9 @@ public class OutgoingSms extends BaseEntity {
 	}
 
 	/**
-	 * @param originator
-	 *            the originator to set
+	 * @param originator the originator to set
 	 */
-	public void setOriginator(String originator) {
+	public void setOriginator( String originator ) {
 		this.originator = originator;
 	}
 
@@ -194,10 +220,9 @@ public class OutgoingSms extends BaseEntity {
 	}
 
 	/**
-	 * @param encoding
-	 *            the encoding to set
+	 * @param encoding the encoding to set
 	 */
-	public void setEncoding(char encoding) {
+	public void setEncoding( char encoding ) {
 		this.encoding = encoding;
 	}
 
@@ -209,10 +234,9 @@ public class OutgoingSms extends BaseEntity {
 	}
 
 	/**
-	 * @param statusReport
-	 *            the statusReport to set
+	 * @param statusReport the statusReport to set
 	 */
-	public void setStatusReport(int statusReport) {
+	public void setStatusReport( int statusReport ) {
 		this.statusReport = statusReport;
 	}
 
@@ -224,10 +248,9 @@ public class OutgoingSms extends BaseEntity {
 	}
 
 	/**
-	 * @param flash_sms
-	 *            the flash_sms to set
+	 * @param flash_sms the flash_sms to set
 	 */
-	public void setFlash_sms(int flash_sms) {
+	public void setFlash_sms( int flash_sms ) {
 		this.flash_sms = flash_sms;
 	}
 
@@ -239,10 +262,9 @@ public class OutgoingSms extends BaseEntity {
 	}
 
 	/**
-	 * @param srcPort
-	 *            the srcPort to set
+	 * @param srcPort the srcPort to set
 	 */
-	public void setSrcPort(int srcPort) {
+	public void setSrcPort( int srcPort ) {
 		this.srcPort = srcPort;
 	}
 
@@ -254,10 +276,9 @@ public class OutgoingSms extends BaseEntity {
 	}
 
 	/**
-	 * @param dstPort
-	 *            the dstPort to set
+	 * @param dstPort the dstPort to set
 	 */
-	public void setDstPort(int dstPort) {
+	public void setDstPort( int dstPort ) {
 		this.dstPort = dstPort;
 	}
 
@@ -269,10 +290,9 @@ public class OutgoingSms extends BaseEntity {
 	}
 
 	/**
-	 * @param sentDate
-	 *            the sentDate to set
+	 * @param sentDate the sentDate to set
 	 */
-	public void setSentDate(Date sentDate) {
+	public void setSentDate( Date sentDate ) {
 		this.sentDate = sentDate;
 	}
 
@@ -284,10 +304,9 @@ public class OutgoingSms extends BaseEntity {
 	}
 
 	/**
-	 * @param refNumber
-	 *            the refNumber to set
+	 * @param refNumber the refNumber to set
 	 */
-	public void setRefNumber(String refNumber) {
+	public void setRefNumber( String refNumber ) {
 		this.refNumber = refNumber;
 	}
 
@@ -299,10 +318,9 @@ public class OutgoingSms extends BaseEntity {
 	}
 
 	/**
-	 * @param priority
-	 *            the priority to set
+	 * @param priority the priority to set
 	 */
-	public void setPriority(int priority) {
+	public void setPriority( int priority ) {
 		this.priority = priority;
 	}
 
@@ -314,10 +332,9 @@ public class OutgoingSms extends BaseEntity {
 	}
 
 	/**
-	 * @param status
-	 *            the status to set
+	 * @param status the status to set
 	 */
-	public void setStatus(char status) {
+	public void setStatus( char status ) {
 		this.status = status;
 	}
 
@@ -329,10 +346,9 @@ public class OutgoingSms extends BaseEntity {
 	}
 
 	/**
-	 * @param errors
-	 *            the errors to set
+	 * @param errors the errors to set
 	 */
-	public void setErrors(int errors) {
+	public void setErrors( int errors ) {
 		this.errors = errors;
 	}
 
@@ -344,10 +360,9 @@ public class OutgoingSms extends BaseEntity {
 	}
 
 	/**
-	 * @param gatewayId
-	 *            the gatewayId to set
+	 * @param gatewayId the gatewayId to set
 	 */
-	public void setGatewayId(String gatewayId) {
+	public void setGatewayId( String gatewayId ) {
 		this.gatewayId = gatewayId;
 	}
 

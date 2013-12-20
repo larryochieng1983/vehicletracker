@@ -279,6 +279,27 @@ public class GpsDeviceOperationBean implements Serializable {
 	 * 
 	 * @param actionEvent
 	 */
+	public void requestVehiclePosition( ActionEvent actionEvent ) {
+		try {
+			if( sendMessage.send( getSelectedGpsDevice().getCard().getPhoneNumber(),
+					getSelectedOperationMode() + getSelectedGpsDevice().getPassword() ) ) {
+				logger.log( Level.INFO, "DEVICE OPERATION: Change Operation Mode OK" );
+			}
+		} catch( TimeoutException e ) {
+			logger.log( Level.SEVERE, "SMS ERROR: " + e );
+		} catch( SMSLibException e ) {
+			logger.log( Level.SEVERE, "SMS ERROR: " + e );
+		} catch( IOException e ) {
+			logger.log( Level.SEVERE, "SMS ERROR: " + e );
+		} catch( InterruptedException e ) {
+			logger.log( Level.SEVERE, "SMS ERROR: " + e );
+		}
+	}
+
+	/**
+	 * 
+	 * @param actionEvent
+	 */
 	public void setGprsSetting( ActionEvent actionEvent ) {
 		GprsSetting gprsSetting = gprsSettingService
 				.findGprsSettingByServiceProviderName( getSelectedGpsDevice().getCard()
