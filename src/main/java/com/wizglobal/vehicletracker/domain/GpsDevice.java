@@ -22,8 +22,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "GPS_DEVICE")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@NamedQueries({
-    @NamedQuery(name="GpsDevice.findAll", query="SELECT d FROM GpsDevice d")})
+@NamedQueries({ @NamedQuery(name = "GpsDevice.findAll", query = "SELECT d FROM GpsDevice d") })
 public class GpsDevice extends BaseEntity {
 
 	/**

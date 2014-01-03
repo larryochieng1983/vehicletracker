@@ -27,7 +27,7 @@ import org.smslib.TimeoutException;
 import org.smslib.modem.SerialModemGateway;
 
 import com.wizglobal.vehicletracker.domain.IncomingSms;
-import com.wizglobal.vehicletracker.service.IncomingSmsService;
+import com.wizglobal.vehicletracker.util.IncomingMessageObserver;
 
 /**
  * @author Otieno Lawrence
@@ -39,7 +39,8 @@ public class ReadMessage {
 
 	/** SMS Gateway Properties */
 	private Properties gatewayProperties = new Properties();
-	private IncomingSmsService incomingSmsService;
+	private List<IncomingSms> incomingMessages = new ArrayList<IncomingSms>();
+	private List<IncomingMessageObserver> observers = new ArrayList<IncomingMessageObserver>();
 
 	public ReadMessage() {
 		try {
@@ -74,23 +75,37 @@ public class ReadMessage {
 			Service.getInstance().setOrphanedMessageNotification( orphanedMessageNotification );
 			Service.getInstance().addGateway( gateway );
 			Service.getInstance().startService();
+			List<IncomingSms> list = new ArrayList<IncomingSms>();
 			msgList = new ArrayList<InboundMessage>();
-			List<IncomingSms> smsList = new ArrayList<IncomingSms>();
 			Service.getInstance().readMessages( msgList, MessageClasses.ALL );
 			for( InboundMessage msg : msgList ) {
-				IncomingSms sms = new IncomingSms( msg.getType(), msg.getOriginator(), msg.getDate(),
-						msg.getDate(), msg.getText() );
-				smsList.add( sms );
-				// Delete after reading
+				IncomingSms incomingSms = new IncomingSms( msg.getType(), msg.getOriginator(),
+						msg.getDate(), msg.getDate(), msg.getText() );
+				list.add( incomingSms );
+				// Delete after reading'
 				Service.getInstance().deleteMessage( msg );
 			}
-			incomingSmsService.create( smsList );
-
+			setIncomingMessages( list );
 		} catch( Exception e ) {
 			log.error( e );
 		} finally {
 			Service.getInstance().stopService();
 		}
+	}
+
+	/**
+	 * @return the incomingmessages
+	 */
+	public List<IncomingSms> getIncomingMessages() {
+		return incomingMessages;
+	}
+
+	/**
+	 * @param incomingmessages the incomingmessages to set
+	 */
+	public void setIncomingMessages( List<IncomingSms> incomingMessages ) {
+		this.incomingMessages = incomingMessages;
+		notifyAllObservers();
 	}
 
 	public class InboundNotification implements IInboundMessageNotification {
@@ -125,6 +140,16 @@ public class ReadMessage {
 			log.info( ">>> Orphaned message part detected from: " + gateway.getGatewayId() );
 			log.info( msg );
 			return false;
+		}
+	}
+
+	public void attach( IncomingMessageObserver observer ) {
+		observers.add( observer );
+	}
+
+	public void notifyAllObservers() {
+		for( IncomingMessageObserver observer : observers ) {
+			observer.saveMessage();
 		}
 	}
 }

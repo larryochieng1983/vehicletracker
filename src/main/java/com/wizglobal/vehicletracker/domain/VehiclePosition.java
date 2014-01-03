@@ -40,6 +40,7 @@ public class VehiclePosition extends BaseEntity {
 	@Column(name = "GPS_POSITION")
 	private String gpsPosition;
 
+	
 	/**
 	 * @return the vehicle
 	 */

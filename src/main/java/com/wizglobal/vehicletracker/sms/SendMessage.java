@@ -5,6 +5,8 @@ package com.wizglobal.vehicletracker.sms;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -18,7 +20,7 @@ import org.smslib.TimeoutException;
 import org.smslib.modem.SerialModemGateway;
 
 import com.wizglobal.vehicletracker.domain.OutgoingSms;
-import com.wizglobal.vehicletracker.service.OutgoingSmsService;
+import com.wizglobal.vehicletracker.util.OutgoingMessageObserver;
 
 /**
  * @author Otieno Lawrence
@@ -30,7 +32,9 @@ public class SendMessage {
 
 	/** SMS Gateway Properties */
 	private Properties gatewayProperties = new Properties();
-	private OutgoingSmsService outgoingSmsService;
+
+	private OutgoingSms outgoingSms;
+	private List<OutgoingMessageObserver> observers = new ArrayList<OutgoingMessageObserver>();
 
 	/**
 	 * 
@@ -75,8 +79,8 @@ public class SendMessage {
 		OutboundMessage msg = new OutboundMessage( receiver, message );
 		msg.setStatusReport( true );
 		if( Service.getInstance().sendMessage( msg ) ) {
-			outgoingSmsService.create( new OutgoingSms( Message.MessageTypes.OUTBOUND, msg
-					.getRecipient(), msg.getText(), msg.getDate() ) );
+			outgoingSms = new OutgoingSms( Message.MessageTypes.OUTBOUND, msg.getRecipient(),
+					msg.getText(), msg.getDate() );
 			sent = true;
 		} else {
 			sent = false;
@@ -90,4 +94,29 @@ public class SendMessage {
 			log.info( "Outbound handler called from Gateway: " + gateway.getGatewayId() );
 		}
 	}
+
+	/**
+	 * @return the outgoingSms
+	 */
+	public OutgoingSms getOutgoingSms() {
+		return outgoingSms;
+	}
+
+	/**
+	 * @param outgoingSms the outgoingSms to set
+	 */
+	public void setOutgoingSms( OutgoingSms outgoingSms ) {
+		this.outgoingSms = outgoingSms;
+	}
+
+	public void attach( OutgoingMessageObserver observer ) {
+		observers.add( observer );
+	}
+
+	public void notifyAllObservers() {
+		for( OutgoingMessageObserver observer : observers ) {
+			observer.saveMessage();
+		}
+	}
+
 }
