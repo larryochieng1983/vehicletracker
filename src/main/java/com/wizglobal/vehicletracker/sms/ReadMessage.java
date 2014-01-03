@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.smslib.AGateway;
 import org.smslib.AGateway.GatewayStatuses;
 import org.smslib.AGateway.Protocols;
@@ -33,7 +36,7 @@ import com.wizglobal.vehicletracker.util.IncomingMessageObserver;
  * @author Otieno Lawrence
  * 
  */
-public class ReadMessage {
+public class ReadMessage implements Job {
 
 	private static Logger log = Logger.getLogger( ReadMessage.class );
 
@@ -150,6 +153,23 @@ public class ReadMessage {
 	public void notifyAllObservers() {
 		for( IncomingMessageObserver observer : observers ) {
 			observer.saveMessage();
+		}
+	}
+
+	@Override
+	public void execute( JobExecutionContext context ) throws JobExecutionException {
+		try {
+			receive();
+		} catch( TimeoutException e ) {
+			log.error( e );
+		} catch( GatewayException e ) {
+			log.error( e );
+		} catch( SMSLibException e ) {
+			log.error( e );
+		} catch( IOException e ) {
+			log.error( e );
+		} catch( InterruptedException e ) {
+			log.error( e );
 		}
 	}
 }
