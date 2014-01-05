@@ -6,8 +6,16 @@
            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
            http://www.springframework.org/schema/security
            http://www.springframework.org/schema/security/spring-security-3.1.xsd">
-    <http auto-config="true">
+    <http pattern="/login*" security="none" />
+    <http pattern="/forgot*" security="none" />
+    <http pattern="/javax.faces.resource/**" security="none" />
+    <http pattern="/resources/**" security="none" />
+    
+    <http auto-config="true" >
 	<intercept-url pattern="/**" access="ROLE_USER"/>
+	<access-denied-handler error-page="/login.jsf?denied=1"/>
+	<form-login authentication-failure-url="/login.jsf?denied=2" default-target-url="/home.jsf" login-page="/login.jsf"/>
+	<logout invalidate-session="true" logout-success-url="/login.jsf"/>
     </http>
     
     
