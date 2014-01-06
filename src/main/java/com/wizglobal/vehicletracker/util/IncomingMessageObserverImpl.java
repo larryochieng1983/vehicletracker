@@ -46,7 +46,7 @@ public class IncomingMessageObserverImpl extends IncomingMessageObserver {
 		incomingSmsService.create( readMessage.getIncomingMessages() );
 		// Extract the google map info
 		for( IncomingSms incomingSms : readMessage.getIncomingMessages() ) {
-			if( incomingSms.getText().startsWith( "" ) ) {
+			if( incomingSms.getText().startsWith( "https" ) ) {
 				Map<String, String> parameters = new HashMap<String, String>();
 				parameters.put( "phoneNumber", incomingSms.getOriginator() );
 				VehiclePosition position = new VehiclePosition();
