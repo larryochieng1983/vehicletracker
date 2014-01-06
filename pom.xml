@@ -19,6 +19,16 @@
 			<url>http://repository.primefaces.org</url>
 			<layout>default</layout>
 		</repository>
+		<repository>
+			<releases>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+				<enabled>true</enabled>
+			</releases>
+			<id>geogoogle</id>
+			<name>geogoogle repo</name>
+			<url>http://www.cs.drexel.edu/~zl25/maven2/repo</url>
+		</repository>
 	</repositories>
 	<dependencies>
 		<!-- Tests -->
@@ -191,6 +201,11 @@
 			<groupId>org.apache.directory.studio</groupId>
 			<artifactId>org.apache.commons.logging</artifactId>
 			<version>1.1.1</version>
+		</dependency>		
+		<dependency>
+			<groupId>com.google.code.geocoder-java</groupId>
+			<artifactId>geocoder-java</artifactId>
+			<version>0.9</version>
 		</dependency>
 	</dependencies>
 	<build>

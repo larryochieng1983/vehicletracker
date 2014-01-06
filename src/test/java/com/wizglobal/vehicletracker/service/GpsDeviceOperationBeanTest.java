@@ -93,17 +93,6 @@ public class GpsDeviceOperationBeanTest {
 
 	/**
 	 * Test method for
-	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#resetDevice(javax.faces.event.ActionEvent)}
-	 * .
-	 */
-	@Test
-	public void testRestoreDevice() {
-		operationBean.restoreVehicle();
-		assertEquals( "111111RES", operationBean.getMessage() );
-	}
-
-	/**
-	 * Test method for
 	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#stopVehicle(javax.faces.event.ActionEvent)}
 	 * .
 	 */
@@ -111,7 +100,17 @@ public class GpsDeviceOperationBeanTest {
 	public void testStopVehicle() {
 		operationBean.stopVehicle();
 		assertEquals( "111111STP30", operationBean.getMessage() );
+	}
 
+	/**
+	 * Test method for
+	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#resetDevice(javax.faces.event.ActionEvent)}
+	 * .
+	 */
+	@Test
+	public void testRestoreDevice() {
+		operationBean.restoreVehicle();
+		assertEquals( "111111RES", operationBean.getMessage() );
 	}
 
 	@Test

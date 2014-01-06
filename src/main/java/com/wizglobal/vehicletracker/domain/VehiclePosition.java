@@ -11,9 +11,9 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  * @author Otieno Lawrence
@@ -35,12 +35,9 @@ public class VehiclePosition extends BaseEntity {
 	@Column(name = "TIME_TRACKED")
 	private Date timeTracked;
 
-	@NotNull
-	@Size(max = 100)
-	@Column(name = "GPS_POSITION")
-	private String gpsPosition;
+	@OneToOne
+	private GpsPosition gpsPosition;
 
-	
 	/**
 	 * @return the vehicle
 	 */
@@ -49,10 +46,9 @@ public class VehiclePosition extends BaseEntity {
 	}
 
 	/**
-	 * @param vehicle
-	 *            the vehicle to set
+	 * @param vehicle the vehicle to set
 	 */
-	public void setVehicle(Vehicle vehicle) {
+	public void setVehicle( Vehicle vehicle ) {
 		this.vehicle = vehicle;
 	}
 
@@ -64,25 +60,23 @@ public class VehiclePosition extends BaseEntity {
 	}
 
 	/**
-	 * @param timeTracked
-	 *            the timeTracked to set
+	 * @param timeTracked the timeTracked to set
 	 */
-	public void setTimeTracked(Date timeTracked) {
+	public void setTimeTracked( Date timeTracked ) {
 		this.timeTracked = timeTracked;
 	}
 
 	/**
 	 * @return the gpsPosition
 	 */
-	public String getGpsPosition() {
+	public GpsPosition getGpsPosition() {
 		return gpsPosition;
 	}
 
 	/**
-	 * @param gpsPosition
-	 *            the gpsPosition to set
+	 * @param gpsPosition the gpsPosition to set
 	 */
-	public void setGpsPosition(String gpsPosition) {
+	public void setGpsPosition( GpsPosition gpsPosition ) {
 		this.gpsPosition = gpsPosition;
 	}
 

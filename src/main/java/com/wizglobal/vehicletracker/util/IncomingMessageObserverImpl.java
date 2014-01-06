@@ -58,7 +58,7 @@ public class IncomingMessageObserverImpl extends IncomingMessageObserver {
 				}
 				position.setVehicle( vehicle );
 				position.setTimeTracked( incomingSms.getMessageDate() );
-				position.setGpsPosition( incomingSms.getText() );
+				position.setGpsPosition( GmapUrlHelper.getGpsPostion( incomingSms.getText() ) );
 				positions.add( position );
 			}
 			positionService.create( positions );

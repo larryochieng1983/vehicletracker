@@ -47,7 +47,8 @@ public class ReadMessage implements Job {
 
 	public ReadMessage() {
 		try {
-			gatewayProperties.load( new FileInputStream( "smslib/SMSServer.conf" ) );
+			gatewayProperties.load( getClass().getResourceAsStream( "/smslib/modem.properties" ) );
+			//gatewayProperties.load( new FileInputStream( "smslib/modem.properties" ) );
 		} catch( IOException e ) {
 			log.error( "Failed To Load SMS Server Settings" );
 			throw new IllegalStateException( "Failed To Load SMS Server Settings" );
@@ -56,6 +57,7 @@ public class ReadMessage implements Job {
 
 	public void receive() throws TimeoutException, GatewayException, SMSLibException, IOException,
 			InterruptedException {
+		log.info( "Reading Available Messages" );
 		List<InboundMessage> msgList;
 		InboundNotification inboundNotification = new InboundNotification();
 		CallNotification callNotification = new CallNotification();
@@ -81,14 +83,19 @@ public class ReadMessage implements Job {
 			List<IncomingSms> list = new ArrayList<IncomingSms>();
 			msgList = new ArrayList<InboundMessage>();
 			Service.getInstance().readMessages( msgList, MessageClasses.ALL );
+
 			for( InboundMessage msg : msgList ) {
 				IncomingSms incomingSms = new IncomingSms( msg.getType(), msg.getOriginator(),
 						msg.getDate(), msg.getDate(), msg.getText() );
+				log.info( msg.getText() );
 				list.add( incomingSms );
 				// Delete after reading'
-				Service.getInstance().deleteMessage( msg );
+				if( !Service.getInstance().deleteMessage( msg ) ) {
+					log.warn( "Message Read but could not be deleted" );
+				}
 			}
 			setIncomingMessages( list );
+			log.info( "Finished Reading Available Messages" );
 		} catch( Exception e ) {
 			log.error( e );
 		} finally {
