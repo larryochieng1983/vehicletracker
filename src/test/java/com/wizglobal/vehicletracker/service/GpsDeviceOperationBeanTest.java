@@ -75,6 +75,12 @@ public class GpsDeviceOperationBeanTest {
 	}
 
 	@Test
+	public void testCheckDeviceStatus() throws Exception {
+		operationBean.checkDeviceStatus();
+		assertEquals( "111111CHK", operationBean.getMessage() );
+	}
+
+	@Test
 	public void testCheckGmapLocation() throws Exception {
 		operationBean.checkGmapLocation();
 		assertEquals( "111111MAP", operationBean.getMessage() );

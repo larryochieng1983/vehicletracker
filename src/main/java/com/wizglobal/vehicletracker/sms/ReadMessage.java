@@ -44,26 +44,26 @@ public class ReadMessage implements Job {
 	private Properties gatewayProperties = new Properties();
 	private List<IncomingSms> incomingMessages = new ArrayList<IncomingSms>();
 	private List<IncomingMessageObserver> observers = new ArrayList<IncomingMessageObserver>();
+	private Service service;
 
 	public ReadMessage() {
 		try {
-			gatewayProperties.load( getClass().getResourceAsStream( "/smslib/modem.properties" ) );
-			//gatewayProperties.load( new FileInputStream( "smslib/modem.properties" ) );
+			// gatewayProperties.load( getClass().getResourceAsStream( "/smslib/modem.properties" ) );
+			gatewayProperties.load( new FileInputStream( "smslib/modem.properties" ) );
 		} catch( IOException e ) {
 			log.error( "Failed To Load SMS Server Settings" );
 			throw new IllegalStateException( "Failed To Load SMS Server Settings" );
 		}
 	}
 
-	public void receive() throws TimeoutException, GatewayException, SMSLibException, IOException,
-			InterruptedException {
-		log.info( "Reading Available Messages" );
-		List<InboundMessage> msgList;
-		InboundNotification inboundNotification = new InboundNotification();
-		CallNotification callNotification = new CallNotification();
-		GatewayStatusNotification statusNotification = new GatewayStatusNotification();
-		OrphanedMessageNotification orphanedMessageNotification = new OrphanedMessageNotification();
-		try {
+	private synchronized Service getService() {
+		if( this.service == null ) {
+			this.service = Service.getInstance();
+			InboundNotification inboundNotification = new InboundNotification();
+			CallNotification callNotification = new CallNotification();
+			GatewayStatusNotification statusNotification = new GatewayStatusNotification();
+			OrphanedMessageNotification orphanedMessageNotification = new OrphanedMessageNotification();
+
 			SerialModemGateway gateway = new SerialModemGateway(
 					gatewayProperties.getProperty( "gateway.0" ),
 					gatewayProperties.getProperty( "modem1.port" ), Integer.parseInt( gatewayProperties
@@ -74,33 +74,56 @@ public class ReadMessage implements Job {
 			gateway.setInbound( true );
 			gateway.setOutbound( true );
 			gateway.setSimPin( gatewayProperties.getProperty( "modem1.pin" ) );
-			Service.getInstance().setInboundMessageNotification( inboundNotification );
-			Service.getInstance().setCallNotification( callNotification );
-			Service.getInstance().setGatewayStatusNotification( statusNotification );
-			Service.getInstance().setOrphanedMessageNotification( orphanedMessageNotification );
-			Service.getInstance().addGateway( gateway );
-			Service.getInstance().startService();
-			List<IncomingSms> list = new ArrayList<IncomingSms>();
-			msgList = new ArrayList<InboundMessage>();
-			Service.getInstance().readMessages( msgList, MessageClasses.ALL );
-
-			for( InboundMessage msg : msgList ) {
-				IncomingSms incomingSms = new IncomingSms( msg.getType(), msg.getOriginator(),
-						msg.getDate(), msg.getDate(), msg.getText() );
-				log.info( msg.getText() );
-				list.add( incomingSms );
-				// Delete after reading'
-				if( !Service.getInstance().deleteMessage( msg ) ) {
-					log.warn( "Message Read but could not be deleted" );
+			this.service.setInboundMessageNotification( inboundNotification );
+			this.service.setCallNotification( callNotification );
+			this.service.setGatewayStatusNotification( statusNotification );
+			this.service.setOrphanedMessageNotification( orphanedMessageNotification );
+			try {
+				if( this.service.getServiceStatus() == Service.ServiceStatus.STOPPED ) {
+					this.service.addGateway( gateway );
+					this.service.startService();
 				}
+			} catch( TimeoutException e ) {
+				log.error( e );
+			} catch( SMSLibException e ) {
+				log.error( e );
+			} catch( IOException e ) {
+				log.error( e );
+			} catch( InterruptedException e ) {
+				log.error( e );
 			}
-			setIncomingMessages( list );
-			log.info( "Finished Reading Available Messages" );
-		} catch( Exception e ) {
-			log.error( e );
-		} finally {
-			Service.getInstance().stopService();
 		}
+		return this.service;
+
+	}
+
+	public void receive() throws TimeoutException, GatewayException, SMSLibException, IOException,
+			InterruptedException {
+		log.info( "Reading Available Messages" );
+		List<InboundMessage> msgList;
+
+		List<IncomingSms> list = new ArrayList<IncomingSms>();
+		msgList = new ArrayList<InboundMessage>();
+		getService().readMessages( msgList, MessageClasses.ALL );
+
+		for( InboundMessage msg : msgList ) {
+			IncomingSms incomingSms = new IncomingSms( msg.getType(), msg.getOriginator(),
+					msg.getDate(), msg.getDate(), msg.getText() );
+			log.info( msg.getText() );
+			list.add( incomingSms );
+			// Delete after reading'
+			if( !getService().deleteMessage( msg ) ) {
+				log.warn( "Message Read but could not be deleted" );
+			}
+		}
+		setIncomingMessages( list );
+		log.info( "Finished Reading Available Messages" );
+
+	}
+
+	public void stopService() throws TimeoutException, GatewayException, SMSLibException,
+			IOException, InterruptedException {
+		getService().stopService();
 	}
 
 	/**

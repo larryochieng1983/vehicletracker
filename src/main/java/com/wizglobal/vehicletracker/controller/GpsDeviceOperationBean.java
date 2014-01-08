@@ -101,6 +101,24 @@ public class GpsDeviceOperationBean implements Serializable {
 		}
 	}
 
+	public void checkDeviceStatus() {
+		message = getPassword() + "CHK";
+		try {
+			if( sendMessage.send( getSelectedGpsDevice().getCard().getPhoneNumber(), message ) ) {
+				logger.log( Level.INFO, "DEVICE OPERATION: Check Status OK" );
+				getSelectedGpsDevice().setPassword( getPassword() );
+			}
+		} catch( TimeoutException e ) {
+			logger.log( Level.SEVERE, "SMS ERROR: " + e );
+		} catch( SMSLibException e ) {
+			logger.log( Level.SEVERE, "SMS ERROR: " + e );
+		} catch( IOException e ) {
+			logger.log( Level.SEVERE, "SMS ERROR: " + e );
+		} catch( InterruptedException e ) {
+			logger.log( Level.SEVERE, "SMS ERROR: " + e );
+		}
+	}
+
 	public void checkGmapLocation() {
 		message = getSelectedGpsDevice().getPassword() + "MAP";
 		try {
@@ -196,7 +214,7 @@ public class GpsDeviceOperationBean implements Serializable {
 		message = getSelectedGpsDevice().getPassword() + "ADD";
 		try {
 			if( sendMessage.send( getSelectedGpsDevice().getCard().getPhoneNumber(), message ) ) {
-				logger.log( Level.INFO, "DEVICE OPERATION: Change Operation Mode OK" );
+				logger.log( Level.INFO, "DEVICE OPERATION: Check Physical Address OK" );
 			}
 		} catch( TimeoutException e ) {
 			logger.log( Level.SEVERE, "SMS ERROR: " + e );
@@ -213,7 +231,7 @@ public class GpsDeviceOperationBean implements Serializable {
 		GprsSetting gprsSetting = gprsSettingService
 				.findGprsSettingByServiceProviderName( getSelectedGpsDevice().getCard()
 						.getServiceProviderName() );
-		
+
 		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance();
 		message = getSelectedGpsDevice().getPassword() + "WWW" + ":IPN" + request.getServerName()
 				+ ";" + "COM:" + request.getServerPort() + ";" + "APN:"
