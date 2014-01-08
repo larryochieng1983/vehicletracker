@@ -51,7 +51,7 @@ public class SendMessage {
 		}
 	}
 
-	public Service getService() {
+	public synchronized Service getService() {
 		if( this.service == null ) {
 			this.service = Service.getInstance();
 			OutboundNotification outboundNotification = new OutboundNotification();
