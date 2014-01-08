@@ -48,8 +48,8 @@ public class ReadMessage implements Job {
 
 	public ReadMessage() {
 		try {
-			// gatewayProperties.load( getClass().getResourceAsStream( "/smslib/modem.properties" ) );
-			gatewayProperties.load( new FileInputStream( "smslib/modem.properties" ) );
+			gatewayProperties.load( getClass().getResourceAsStream( "/smslib/modem.properties" ) );
+			//gatewayProperties.load( new FileInputStream( "smslib/modem.properties" ) );
 		} catch( IOException e ) {
 			log.error( "Failed To Load SMS Server Settings" );
 			throw new IllegalStateException( "Failed To Load SMS Server Settings" );
