@@ -10,8 +10,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.inject.Inject;
 
-import com.wizglobal.vehicletracker.service.GpsDeviceService;
-import com.wizglobal.vehicletracker.service.IncomingSmsService;
 import com.wizglobal.vehicletracker.service.VehiclePositionService;
 import com.wizglobal.vehicletracker.service.VehicleService;
 
@@ -32,8 +30,7 @@ public class VehiclePositionBean implements Serializable {
 
 	@Inject
 	private VehiclePositionService vehiclePositionService;
-	@Inject
-	private IncomingSmsService incomingSmsService;
+	
 	@Inject
 	private VehicleService vehicleService;
 

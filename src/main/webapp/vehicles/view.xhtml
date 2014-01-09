@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+<ui:composition xmlns ="http://www.w3.org/1999/xhtml" 
+		xmlns:ui="http://java.sun.com/jsf/facelets"
                 template="./../WEB-INF/templates/master.xhtml"
 		xmlns:p="http://primefaces.org/ui"
 		xmlns:h="http://java.sun.com/jsf/html"
@@ -12,6 +13,7 @@
 
 
     <ui:define name="content">
+	<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"/>
 	<h:form>
 	    <h:link value="Vehicles " outcome="/vehicles/list.jsf?faces-redirect=true"/>
 	    <h:outputText value="/ #{vehicleController.currentVehicle.registrationNumber}"/>
@@ -22,17 +24,24 @@
 	    </h:panelGroup>
 	</h:form>
 	<h:panelGroup style="width: 100%" layout="block">
-	    <fieldset>
-		<legend>Vehicle Detail</legend>
-		<h:outputFormat value="{0} - {1}, ">
-		    <f:param value="#{vehicleController.currentVehicle.registrationNumber}"/>
-		    <f:param value="#{vehicleController.currentVehicle.model}"/>
-		</h:outputFormat>
-	    </fieldset>
-	    <h:outputLabel value="#{vehicleController.currentVehicle.customer}"/>
-	    <h:outputLabel value="#{vehicleController.currentVehicle.color}"/>
-	    <h:outputLabel value="#{vehicleController.currentVehicle.gpsDevice}"/>
-	    <h:outputLabel value="Manufactured by #{vehicleController.currentVehicle.customer}"/>
+	    <p:layout style="min-width: 400px;min-height: 430px">
+		<p:layoutUnit position="west" resizable="true" size="200">
+		    <fieldset>
+			<legend>Vehicle Detail</legend>
+			<h:outputFormat value="{0} - {1} {2}, ">
+			    <f:param value="#{vehicleController.currentVehicle.registrationNumber}"/>
+			    <f:param value="#{vehicleController.currentVehicle.color}"/>
+			    <f:param value="#{vehicleController.currentVehicle.model}"/>
+			</h:outputFormat>
+		    </fieldset>
+		    <h:outputLabel value="#{vehicleController.currentVehicle.customer}"/>
+		    <h:outputLabel value="#{vehicleController.currentVehicle.gpsDevice}"/>
+		    <h:outputLabel value="Manufactured by #{vehicleController.currentVehicle.manufacturer}"/>
+		</p:layoutUnit>
+		<p:layoutUnit position="center" resizable="true" size="200">
+		    <p:gmap center="43.38,2.12" zoom="15" type="road" style="width: 100%;height: 420px"/>
+		</p:layoutUnit>
+	    </p:layout>
 	</h:panelGroup>
     </ui:define>
 
