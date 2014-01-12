@@ -20,6 +20,12 @@
 			<layout>default</layout>
 		</repository>
 		<repository>
+			<id>smslib</id>
+			<name>PrimeFaces Maven Repository</name>
+			<url>http://smslib.org/maven2/v3</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
 			<releases>
 				<updatePolicy>never</updatePolicy>
 				<checksumPolicy>warn</checksumPolicy>

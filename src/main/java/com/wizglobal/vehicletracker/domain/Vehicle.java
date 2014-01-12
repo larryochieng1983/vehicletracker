@@ -25,7 +25,7 @@ import javax.validation.constraints.Size;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NamedQueries({
 		@NamedQuery(name = "Vehicle.findAll", query = "SELECT v FROM Vehicle v ORDER BY v.registrationNumber"),
-		@NamedQuery(name = "GpsDevice.findVehicleByPhoneNumber", query = "SELECT v FROM Vehicle WHERE v.gpsDevice.card.phoneNumber =:phoneNumber") })
+		@NamedQuery(name = "GpsDevice.findVehicleByPhoneNumber", query = "SELECT v FROM Vehicle v WHERE v.gpsDevice.card.phoneNumber =:phoneNumber") })
 public class Vehicle extends BaseEntity {
 	/**
 	 * 
@@ -37,7 +37,7 @@ public class Vehicle extends BaseEntity {
 	@Column(name = "REGISTRATION_NUMBER")
 	private String registrationNumber;
 
-	@ManyToOne(cascade = { CascadeType.REFRESH })
+	@ManyToOne(cascade = { CascadeType.ALL })
 	private Customer customer;
 
 	@ManyToOne(cascade = { CascadeType.ALL })
@@ -45,15 +45,14 @@ public class Vehicle extends BaseEntity {
 
 	@Enumerated
 	@Column(name = "VEHICLE_TYPE")
-	private VehicleType vehicleType;
+	@Size(max = 50)
+	private String vehicleType;
 
 	@Size(max = 50)
-	@NotNull
 	@Column(name = "MANUFACTURER")
 	private String manufacturer;
 
 	@Size(max = 50)
-	@NotNull
 	@Column(name = "MODEL")
 	private String model;
 

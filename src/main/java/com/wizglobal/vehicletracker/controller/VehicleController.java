@@ -59,9 +59,9 @@ public class VehicleController extends BasePage implements Serializable {
 	@PostConstruct
 	public void init() {
 	    vehicleTypes = new ArrayList<>();
-	    for (VehicleType type : VehicleType.values()) {
-		vehicleTypes.add(type.name());
-	    }
+//	    for (VehicleType type : VehicleType.values()) {
+//		vehicleTypes.add(type.name());
+//	    }
 	}
 
 	/**
