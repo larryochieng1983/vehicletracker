@@ -23,7 +23,9 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "VEHICLE")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@NamedQueries({ @NamedQuery(name = "Vehicle.findAll", query = "SELECT v FROM Vehicle v ORDER BY v.registrationNumber") })
+@NamedQueries({
+		@NamedQuery(name = "Vehicle.findAll", query = "SELECT v FROM Vehicle v ORDER BY v.registrationNumber"),
+		@NamedQuery(name = "GpsDevice.findVehicleByPhoneNumber", query = "SELECT v FROM Vehicle WHERE v.gpsDevice.card.phoneNumber =:phoneNumber") })
 public class Vehicle extends BaseEntity {
 	/**
 	 * 
@@ -56,7 +58,6 @@ public class Vehicle extends BaseEntity {
 	private String model;
 
 	@Size(max = 50)
-	@NotNull
 	@Column(name = "VEHICLE_COLOR")
 	private String color;
 
@@ -105,14 +106,14 @@ public class Vehicle extends BaseEntity {
 	/**
 	 * @return the vehicleType
 	 */
-	public VehicleType getVehicleType() {
+	public String getVehicleType() {
 		return vehicleType;
 	}
 
 	/**
 	 * @param vehicleType the vehicleType to set
 	 */
-	public void setVehicleType( VehicleType vehicleType ) {
+	public void setVehicleType( String vehicleType ) {
 		this.vehicleType = vehicleType;
 	}
 

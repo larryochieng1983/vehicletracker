@@ -3,10 +3,8 @@
  */
 package com.wizglobal.vehicletracker.service;
 
-import static org.junit.Assert.*;
-
-import javax.faces.component.UIComponent;
-import javax.faces.event.ActionEvent;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 import org.junit.After;
 import org.junit.Before;
@@ -15,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean;
+import com.wizglobal.vehicletracker.domain.GprsSetting;
 import com.wizglobal.vehicletracker.domain.GpsDevice;
 import com.wizglobal.vehicletracker.domain.SimCard;
 
@@ -27,23 +26,34 @@ public class GpsDeviceOperationBeanTest {
 	private GpsDeviceOperationBean operationBean;
 	private GpsDevice device;
 	private SimCard card;
+	private GprsSetting gprsSetting;
+
 	@Mock
-	private UIComponent ui;
+	private GprsSettingService gprsSettingService;
 
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
-		 MockitoAnnotations.initMocks(this);
-		 
+		MockitoAnnotations.initMocks( this );
+
 		operationBean = new GpsDeviceOperationBean();
 		card = new SimCard();
-		card.setPhoneNumber("0705609864");
+		card.setServiceProviderName( "Safaricom" );
+		card.setPhoneNumber( "0705609864" );
 		device = new GpsDevice();
-		device.setCard(card);
-		operationBean.setSelectedGpsDevice(device);
-		operationBean.setPassword("111111");
+		device.setCard( card );
+		device.setPassword( "111111" );
+		operationBean.setSelectedGpsDevice( device );
+		operationBean.setPassword( "111111" );
+		operationBean.setStopDuration( 30 );
+
+		gprsSetting = new GprsSetting();
+		gprsSetting.setServiceProviderName( "Safaricom" );
+		when( gprsSettingService.findGprsSettingByServiceProviderName( "Safaricom" ) ).thenReturn(
+				gprsSetting );
+
 	}
 
 	/**
@@ -51,6 +61,8 @@ public class GpsDeviceOperationBeanTest {
 	 */
 	@After
 	public void tearDown() throws Exception {
+		operationBean = null;
+		card = null;
 	}
 
 	/**
@@ -58,7 +70,20 @@ public class GpsDeviceOperationBeanTest {
 	 */
 	@Test
 	public void testInitDevice() {
-		operationBean.initDevice(new ActionEvent(ui));
+		operationBean.initDevice();
+		assertEquals( "111111PSW111111", operationBean.getMessage() );
+	}
+
+	@Test
+	public void testCheckDeviceStatus() throws Exception {
+		operationBean.checkDeviceStatus();
+		assertEquals( "111111CHK", operationBean.getMessage() );
+	}
+
+	@Test
+	public void testCheckGmapLocation() throws Exception {
+		operationBean.checkGmapLocation();
+		assertEquals( "111111MAP", operationBean.getMessage() );
 	}
 
 	/**
@@ -68,17 +93,8 @@ public class GpsDeviceOperationBeanTest {
 	 */
 	@Test
 	public void testChangePassword() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for
-	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#resetDevice(javax.faces.event.ActionEvent)}
-	 * .
-	 */
-	@Test
-	public void testResetDevice() {
-		fail("Not yet implemented");
+		operationBean.changePassword();
+		assertEquals( "111111PSW111111", operationBean.getMessage() );
 	}
 
 	/**
@@ -88,57 +104,25 @@ public class GpsDeviceOperationBeanTest {
 	 */
 	@Test
 	public void testStopVehicle() {
-		operationBean.stopVehicle(new ActionEvent(ui));
+		operationBean.stopVehicle();
+		assertEquals( "111111STP30", operationBean.getMessage() );
 	}
 
 	/**
 	 * Test method for
-	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#setAuthorizedNumber(javax.faces.event.ActionEvent)}
+	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#resetDevice(javax.faces.event.ActionEvent)}
 	 * .
 	 */
 	@Test
-	public void testSetAuthorizedNumberActionEvent() {
-		fail("Not yet implemented");
+	public void testRestoreDevice() {
+		operationBean.restoreVehicle();
+		assertEquals( "111111RES", operationBean.getMessage() );
 	}
 
-	/**
-	 * Test method for
-	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#deleteAuthorizedNumber(javax.faces.event.ActionEvent)}
-	 * .
-	 */
 	@Test
-	public void testDeleteAuthorizedNumber() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for
-	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#setAuthorizedNumbers(javax.faces.event.ActionEvent)}
-	 * .
-	 */
-	@Test
-	public void testSetAuthorizedNumbersActionEvent() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for
-	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#rebootDevice(javax.faces.event.ActionEvent)}
-	 * .
-	 */
-	@Test
-	public void testRebootDevice() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for
-	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#changeOperationMode(javax.faces.event.ActionEvent)}
-	 * .
-	 */
-	@Test
-	public void testChangeOperationMode() {
-		fail("Not yet implemented");
+	public void testRequestVehicleAddress() throws Exception {
+		operationBean.requestVehicleAddress();
+		assertEquals( "111111ADD", operationBean.getMessage() );
 	}
 
 	/**
@@ -148,7 +132,8 @@ public class GpsDeviceOperationBeanTest {
 	 */
 	@Test
 	public void testSetGprsSetting() {
-		fail("Not yet implemented");
+		// operationBean.setGprsSetting();
+		// assertEquals( "", operationBean.getMessage() );
 	}
 
 }

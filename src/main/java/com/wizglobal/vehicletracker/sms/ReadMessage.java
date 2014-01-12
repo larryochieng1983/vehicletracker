@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.smslib.AGateway;
 import org.smslib.AGateway.GatewayStatuses;
 import org.smslib.AGateway.Protocols;
@@ -26,34 +29,41 @@ import org.smslib.Service;
 import org.smslib.TimeoutException;
 import org.smslib.modem.SerialModemGateway;
 
+import com.wizglobal.vehicletracker.domain.IncomingSms;
+import com.wizglobal.vehicletracker.util.IncomingMessageObserver;
+
 /**
  * @author Otieno Lawrence
  * 
  */
-public class ReadMessage {
+public class ReadMessage implements Job {
 
 	private static Logger log = Logger.getLogger( ReadMessage.class );
 
 	/** SMS Gateway Properties */
 	private Properties gatewayProperties = new Properties();
+	private List<IncomingSms> incomingMessages = new ArrayList<IncomingSms>();
+	private List<IncomingMessageObserver> observers = new ArrayList<IncomingMessageObserver>();
+	private Service service;
 
 	public ReadMessage() {
 		try {
-			gatewayProperties.load( new FileInputStream( "smslib/SMSServer.conf" ) );
+			gatewayProperties.load( getClass().getResourceAsStream( "/smslib/modem.properties" ) );
+			//gatewayProperties.load( new FileInputStream( "smslib/modem.properties" ) );
 		} catch( IOException e ) {
 			log.error( "Failed To Load SMS Server Settings" );
 			throw new IllegalStateException( "Failed To Load SMS Server Settings" );
 		}
 	}
 
-	public void receive() throws TimeoutException, GatewayException, SMSLibException, IOException,
-			InterruptedException {
-		List<InboundMessage> msgList;
-		InboundNotification inboundNotification = new InboundNotification();
-		CallNotification callNotification = new CallNotification();
-		GatewayStatusNotification statusNotification = new GatewayStatusNotification();
-		OrphanedMessageNotification orphanedMessageNotification = new OrphanedMessageNotification();
-		try {
+	private synchronized Service getService() {
+		if( this.service == null ) {
+			this.service = Service.getInstance();
+			InboundNotification inboundNotification = new InboundNotification();
+			CallNotification callNotification = new CallNotification();
+			GatewayStatusNotification statusNotification = new GatewayStatusNotification();
+			OrphanedMessageNotification orphanedMessageNotification = new OrphanedMessageNotification();
+
 			SerialModemGateway gateway = new SerialModemGateway(
 					gatewayProperties.getProperty( "gateway.0" ),
 					gatewayProperties.getProperty( "modem1.port" ), Integer.parseInt( gatewayProperties
@@ -64,22 +74,71 @@ public class ReadMessage {
 			gateway.setInbound( true );
 			gateway.setOutbound( true );
 			gateway.setSimPin( gatewayProperties.getProperty( "modem1.pin" ) );
-			Service.getInstance().setInboundMessageNotification( inboundNotification );
-			Service.getInstance().setCallNotification( callNotification );
-			Service.getInstance().setGatewayStatusNotification( statusNotification );
-			Service.getInstance().setOrphanedMessageNotification( orphanedMessageNotification );
-			Service.getInstance().addGateway( gateway );
-			Service.getInstance().startService();
-			msgList = new ArrayList<InboundMessage>();
-			Service.getInstance().readMessages( msgList, MessageClasses.ALL );
-			for( InboundMessage msg : msgList ) {
-
+			this.service.setInboundMessageNotification( inboundNotification );
+			this.service.setCallNotification( callNotification );
+			this.service.setGatewayStatusNotification( statusNotification );
+			this.service.setOrphanedMessageNotification( orphanedMessageNotification );
+			try {
+				if( this.service.getServiceStatus() == Service.ServiceStatus.STOPPED ) {
+					this.service.addGateway( gateway );
+					this.service.startService();
+				}
+			} catch( TimeoutException e ) {
+				log.error( e );
+			} catch( SMSLibException e ) {
+				log.error( e );
+			} catch( IOException e ) {
+				log.error( e );
+			} catch( InterruptedException e ) {
+				log.error( e );
 			}
-		} catch( Exception e ) {
-			log.error( e );
-		} finally {
-			Service.getInstance().stopService();
 		}
+		return this.service;
+
+	}
+
+	public void receive() throws TimeoutException, GatewayException, SMSLibException, IOException,
+			InterruptedException {
+		log.info( "Reading Available Messages" );
+		List<InboundMessage> msgList;
+
+		List<IncomingSms> list = new ArrayList<IncomingSms>();
+		msgList = new ArrayList<InboundMessage>();
+		getService().readMessages( msgList, MessageClasses.ALL );
+
+		for( InboundMessage msg : msgList ) {
+			IncomingSms incomingSms = new IncomingSms( msg.getType(), msg.getOriginator(),
+					msg.getDate(), msg.getDate(), msg.getText() );
+			log.info( msg.getText() );
+			list.add( incomingSms );
+			// Delete after reading'
+			if( !getService().deleteMessage( msg ) ) {
+				log.warn( "Message Read but could not be deleted" );
+			}
+		}
+		setIncomingMessages( list );
+		log.info( "Finished Reading Available Messages" );
+
+	}
+
+	public void stopService() throws TimeoutException, GatewayException, SMSLibException,
+			IOException, InterruptedException {
+		getService().stopService();
+	}
+
+	/**
+	 * @return the incomingmessages
+	 */
+	public List<IncomingSms> getIncomingMessages() {
+		return incomingMessages;
+	}
+
+	/**
+	 * @param incomingmessages the incomingmessages to set
+	 */
+	public void setIncomingMessages( List<IncomingSms> incomingMessages ) {
+		this.incomingMessages = incomingMessages;
+		notifyAllObservers();
 	}
 
 	public class InboundNotification implements IInboundMessageNotification {
@@ -114,6 +173,33 @@ public class ReadMessage {
 			log.info( ">>> Orphaned message part detected from: " + gateway.getGatewayId() );
 			log.info( msg );
 			return false;
+		}
+	}
+
+	public void attach( IncomingMessageObserver observer ) {
+		observers.add( observer );
+	}
+
+	public void notifyAllObservers() {
+		for( IncomingMessageObserver observer : observers ) {
+			observer.saveMessage();
+		}
+	}
+
+	@Override
+	public void execute( JobExecutionContext context ) throws JobExecutionException {
+		try {
+			receive();
+		} catch( TimeoutException e ) {
+			log.error( e );
+		} catch( GatewayException e ) {
+			log.error( e );
+		} catch( SMSLibException e ) {
+			log.error( e );
+		} catch( IOException e ) {
+			log.error( e );
+		} catch( InterruptedException e ) {
+			log.error( e );
 		}
 	}
 }

@@ -16,7 +16,6 @@ import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
 import com.wizglobal.vehicletracker.domain.Vehicle;
-import com.wizglobal.vehicletracker.domain.VehicleType;
 import com.wizglobal.vehicletracker.service.VehicleService;
 import com.wizglobal.vehicletracker.util.LazySorter;
 import com.wizglobal.vehicletracker.util.StringUtils;
