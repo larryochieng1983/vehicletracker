@@ -123,7 +123,7 @@ public class SendMessage {
 	 */
 	public void stopService() throws TimeoutException, GatewayException, SMSLibException,
 			IOException, InterruptedException {
-		getService().startService();
+		getService().stopService();
 	}
 
 	public class OutboundNotification implements IOutboundMessageNotification {
@@ -144,13 +144,14 @@ public class SendMessage {
 	 */
 	public void setOutgoingSms( OutgoingSms outgoingSms ) {
 		this.outgoingSms = outgoingSms;
+		notifyAllObservers();
 	}
 
 	public void attach( OutgoingMessageObserver observer ) {
 		observers.add( observer );
 	}
 
-	public void notifyAllObservers() {
+	public void notifyAllObservers() {		
 		for( OutgoingMessageObserver observer : observers ) {
 			observer.saveMessage();
 		}

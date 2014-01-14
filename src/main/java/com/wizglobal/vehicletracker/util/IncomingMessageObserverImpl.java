@@ -16,7 +16,7 @@ import com.wizglobal.vehicletracker.domain.VehiclePosition;
 import com.wizglobal.vehicletracker.service.IncomingSmsService;
 import com.wizglobal.vehicletracker.service.VehiclePositionService;
 import com.wizglobal.vehicletracker.service.VehicleService;
-import com.wizglobal.vehicletracker.sms.ReadMessage;
+import com.wizglobal.vehicletracker.sms.IncomingMessage;
 
 /**
  * @author Otieno Lawrence
@@ -33,19 +33,28 @@ public class IncomingMessageObserverImpl extends IncomingMessageObserver {
 	@Inject
 	private VehicleService vehicleService;
 
-	private ReadMessage readMessage;
+	private IncomingMessage incomingMessage;
+	
 
-	public IncomingMessageObserverImpl( ReadMessage readMessage ) {
-		this.readMessage = readMessage;
-		this.readMessage.attach( this );
+	public IncomingMessageObserverImpl( IncomingMessage incomingMessage ) {
+		this.incomingMessage = incomingMessage;
+		this.incomingMessage.attach( this );
+	}
+
+	/**
+	 * @param incomingMessage the incomingMessage to set
+	 */
+	public void setIncomingMessage( IncomingMessage incomingMessage ) {
+		this.incomingMessage = incomingMessage;
 	}
 
 	@Override
 	public void saveMessage() {
+		System.out.println( "Saving Called......>>>>>>"+incomingSmsService );
 		List<VehiclePosition> positions = new ArrayList<VehiclePosition>();
-		incomingSmsService.create( readMessage.getIncomingMessages() );
+		incomingSmsService.create( incomingMessage.getIncomingMessages() );
 		// Extract the google map info
-		for( IncomingSms incomingSms : readMessage.getIncomingMessages() ) {
+		for( IncomingSms incomingSms : incomingMessage.getIncomingMessages() ) {
 			if( incomingSms.getText().startsWith( "https" ) ) {
 				Map<String, String> parameters = new HashMap<String, String>();
 				parameters.put( "phoneNumber", incomingSms.getOriginator() );

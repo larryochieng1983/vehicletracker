@@ -5,6 +5,8 @@ package com.wizglobal.vehicletracker.util;
 
 import javax.inject.Inject;
 
+import org.apache.log4j.Logger;
+
 import com.wizglobal.vehicletracker.service.OutgoingSmsService;
 import com.wizglobal.vehicletracker.sms.SendMessage;
 
@@ -13,6 +15,8 @@ import com.wizglobal.vehicletracker.sms.SendMessage;
  * 
  */
 public class OutgoingMessageObserverImpl extends OutgoingMessageObserver {
+	
+	private static Logger log = Logger.getLogger( OutgoingMessageObserverImpl.class );
 
 	private SendMessage sendMessage;
 
@@ -31,6 +35,7 @@ public class OutgoingMessageObserverImpl extends OutgoingMessageObserver {
 	 */
 	@Override
 	public void saveMessage() {
+		log.info( "Informing Guys!>>>>>>>>>" );
 		outgoingSmsService.create( sendMessage.getOutgoingSms() );
 	}
 

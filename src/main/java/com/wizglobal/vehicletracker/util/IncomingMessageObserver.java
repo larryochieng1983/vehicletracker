@@ -3,6 +3,8 @@
  */
 package com.wizglobal.vehicletracker.util;
 
+import java.util.List;
+
 import com.wizglobal.vehicletracker.domain.IncomingSms;
 
 /**
@@ -11,7 +13,7 @@ import com.wizglobal.vehicletracker.domain.IncomingSms;
  */
 public abstract class IncomingMessageObserver {
 
-	protected IncomingSms incomingSms;
+	protected List<IncomingSms> incomingSms;
 
 	public abstract void saveMessage();
 

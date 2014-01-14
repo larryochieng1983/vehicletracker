@@ -3,7 +3,6 @@
  */
 package com.wizglobal.vehicletracker.sms;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,7 @@ import org.smslib.TimeoutException;
 import org.smslib.modem.SerialModemGateway;
 
 import com.wizglobal.vehicletracker.domain.IncomingSms;
-import com.wizglobal.vehicletracker.util.IncomingMessageObserver;
+import com.wizglobal.vehicletracker.util.IncomingMessageObserverImpl;
 
 /**
  * @author Otieno Lawrence
@@ -42,14 +41,13 @@ public class ReadMessage implements Job {
 
 	/** SMS Gateway Properties */
 	private Properties gatewayProperties = new Properties();
-	private List<IncomingSms> incomingMessages = new ArrayList<IncomingSms>();
-	private List<IncomingMessageObserver> observers = new ArrayList<IncomingMessageObserver>();
 	private Service service;
+	private IncomingMessage incomingMessage = new IncomingMessage();
 
 	public ReadMessage() {
 		try {
 			gatewayProperties.load( getClass().getResourceAsStream( "/smslib/modem.properties" ) );
-			//gatewayProperties.load( new FileInputStream( "smslib/modem.properties" ) );
+			// gatewayProperties.load( new FileInputStream( "smslib/modem.properties" ) );
 		} catch( IOException e ) {
 			log.error( "Failed To Load SMS Server Settings" );
 			throw new IllegalStateException( "Failed To Load SMS Server Settings" );
@@ -102,6 +100,8 @@ public class ReadMessage implements Job {
 		log.info( "Reading Available Messages" );
 		List<InboundMessage> msgList;
 
+		incomingMessage = new IncomingMessage();
+
 		List<IncomingSms> list = new ArrayList<IncomingSms>();
 		msgList = new ArrayList<InboundMessage>();
 		getService().readMessages( msgList, MessageClasses.ALL );
@@ -109,36 +109,21 @@ public class ReadMessage implements Job {
 		for( InboundMessage msg : msgList ) {
 			IncomingSms incomingSms = new IncomingSms( msg.getType(), msg.getOriginator(),
 					msg.getDate(), msg.getDate(), msg.getText() );
-			log.info( msg.getText() );
 			list.add( incomingSms );
 			// Delete after reading'
 			if( !getService().deleteMessage( msg ) ) {
 				log.warn( "Message Read but could not be deleted" );
 			}
 		}
-		setIncomingMessages( list );
-		log.info( "Finished Reading Available Messages" );
+		new IncomingMessageObserverImpl( incomingMessage );
+		incomingMessage.setIncomingMessages( list );
+		log.info( "Finished Reading Available Messages " + list.size() );
 
 	}
 
 	public void stopService() throws TimeoutException, GatewayException, SMSLibException,
 			IOException, InterruptedException {
 		getService().stopService();
-	}
-
-	/**
-	 * @return the incomingmessages
-	 */
-	public List<IncomingSms> getIncomingMessages() {
-		return incomingMessages;
-	}
-
-	/**
-	 * @param incomingmessages the incomingmessages to set
-	 */
-	public void setIncomingMessages( List<IncomingSms> incomingMessages ) {
-		this.incomingMessages = incomingMessages;
-		notifyAllObservers();
 	}
 
 	public class InboundNotification implements IInboundMessageNotification {
@@ -173,16 +158,6 @@ public class ReadMessage implements Job {
 			log.info( ">>> Orphaned message part detected from: " + gateway.getGatewayId() );
 			log.info( msg );
 			return false;
-		}
-	}
-
-	public void attach( IncomingMessageObserver observer ) {
-		observers.add( observer );
-	}
-
-	public void notifyAllObservers() {
-		for( IncomingMessageObserver observer : observers ) {
-			observer.saveMessage();
 		}
 	}
 
