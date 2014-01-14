@@ -29,7 +29,7 @@ import org.smslib.TimeoutException;
 import org.smslib.modem.SerialModemGateway;
 
 import com.wizglobal.vehicletracker.domain.IncomingSms;
-import com.wizglobal.vehicletracker.util.IncomingMessageObserverImpl;
+import com.wizglobal.vehicletracker.util.IncomingMessageObserver;
 
 /**
  * @author Otieno Lawrence
@@ -114,8 +114,8 @@ public class ReadMessage implements Job {
 			if( !getService().deleteMessage( msg ) ) {
 				log.warn( "Message Read but could not be deleted" );
 			}
-		}
-		new IncomingMessageObserverImpl( incomingMessage );
+		}		
+		new IncomingMessageObserver( ).setIncomingMessage( incomingMessage );
 		incomingMessage.setIncomingMessages( list );
 		log.info( "Finished Reading Available Messages " + list.size() );
 

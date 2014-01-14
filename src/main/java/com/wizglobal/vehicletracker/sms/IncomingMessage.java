@@ -42,7 +42,7 @@ public class IncomingMessage {
 		System.out.println( "Observers......>>>>>>" + this.observers.size() );
 		for( IncomingMessageObserver observer : this.observers ) {
 			System.out.println( "Notifying Observers One by One......>>>>>>" );
-			observer.saveMessage();
+			observer.saveMessage(getIncomingMessages());
 		}
 	}
 }
