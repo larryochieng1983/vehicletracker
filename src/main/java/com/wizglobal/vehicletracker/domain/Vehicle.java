@@ -6,6 +6,7 @@ package com.wizglobal.vehicletracker.domain;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
@@ -24,7 +25,7 @@ import javax.validation.constraints.Size;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NamedQueries({
 		@NamedQuery(name = "Vehicle.findAll", query = "SELECT v FROM Vehicle v ORDER BY v.registrationNumber"),
-		@NamedQuery(name = "GpsDevice.findVehicleByPhoneNumber", query = "SELECT v FROM Vehicle WHERE v.gpsDevice.card.phoneNumber =:phoneNumber") })
+		@NamedQuery(name = "GpsDevice.findVehicleByPhoneNumber", query = "SELECT v FROM Vehicle v WHERE v.gpsDevice.card.phoneNumber =:phoneNumber") })
 public class Vehicle extends BaseEntity {
 	/**
 	 * 
@@ -42,6 +43,7 @@ public class Vehicle extends BaseEntity {
 	@ManyToOne(cascade = { CascadeType.ALL })
 	private GpsDevice gpsDevice;
 
+	@Enumerated
 	@Column(name = "VEHICLE_TYPE")
 	@Size(max = 50)
 	private String vehicleType;

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <f:view>
+	<h:body>
+	    <p:commandButton id="user-account" value="User Details"/>
+	    <p:overlayPanel dynamic="true" for="user-account" >
+		<p:panel header="User">
+		    Kenny
+		</p:panel>
+	    </p:overlayPanel>
+	</h:body>
+    </f:view>
+</html>

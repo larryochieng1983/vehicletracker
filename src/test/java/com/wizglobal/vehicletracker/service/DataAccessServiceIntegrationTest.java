@@ -77,7 +77,7 @@ public class DataAccessServiceIntegrationTest {
 	 */
 	@Test
 	public void testFind() {
-		testCustomer = creatDummyCustomer();
+	    testCustomer = creatDummyCustomer();
 		Customer created = customerService.create(testCustomer);
 		assertNotNull("Entity customer not persisted", customerService.find(created.getId()));
 		deleteCustomer(created);
