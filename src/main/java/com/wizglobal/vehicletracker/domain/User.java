@@ -9,18 +9,26 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 /**
  * @author Otieno Lawrence
  * 
  */
-@Entity(name = "App_User")
-public class User extends BaseEntity implements Serializable {
+@Entity
+@Table(name = "APP_USER")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class User extends BaseEntity {
 
-	private static final long serialVersionUID = 3571343460175211199L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public final static String ALL = "User.populateUsers";
 	public final static String TOTAL = "User.countUsersTotal";
@@ -36,6 +44,7 @@ public class User extends BaseEntity implements Serializable {
 
 	@Column(length = 50)
 	private String lastName;
+
 	@ManyToMany
 	@JoinTable(name = "user_roles", joinColumns = { @JoinColumn(name = "User_userid") }, inverseJoinColumns = { @JoinColumn(name = "UserRole_roleid") })
 	private List<UserRole> userRoles = new ArrayList<UserRole>();;
