@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.wizglobal.vehicletracker.service;
+package com.wizglobal.vehicletracker.web;
 
 
 import junit.framework.TestCase;

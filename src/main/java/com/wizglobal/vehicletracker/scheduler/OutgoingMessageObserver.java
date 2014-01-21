@@ -1,12 +1,13 @@
 /**
  * 
  */
-package com.wizglobal.vehicletracker.util;
+package com.wizglobal.vehicletracker.scheduler;
 
 import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
+import com.wizglobal.vehicletracker.domain.OutgoingSms;
 import com.wizglobal.vehicletracker.service.OutgoingSmsService;
 import com.wizglobal.vehicletracker.sms.SendMessage;
 
@@ -14,16 +15,16 @@ import com.wizglobal.vehicletracker.sms.SendMessage;
  * @author Otieno Lawrence
  * 
  */
-public class OutgoingMessageObserverImpl extends OutgoingMessageObserver {
+public class OutgoingMessageObserver implements MessageObserver<OutgoingSms> {
 	
-	private static Logger log = Logger.getLogger( OutgoingMessageObserverImpl.class );
+	private static Logger log = Logger.getLogger( OutgoingMessageObserver.class );
 
 	private SendMessage sendMessage;
 
 	@Inject
 	private OutgoingSmsService outgoingSmsService;
 
-	public OutgoingMessageObserverImpl( SendMessage sendMessage ) {
+	public OutgoingMessageObserver( SendMessage sendMessage ) {
 		this.sendMessage = sendMessage;
 		this.sendMessage.attach( this );
 	}
@@ -33,9 +34,7 @@ public class OutgoingMessageObserverImpl extends OutgoingMessageObserver {
 	 * 
 	 * @see com.wizglobal.vehicletracker.util.OutgoingMessageObserver#saveMessage()
 	 */
-	@Override
-	public void saveMessage() {
-		log.info( "Informing Guys!>>>>>>>>>" );
+	public void saveMessage(OutgoingSms outgoingSms) {
 		outgoingSmsService.create( sendMessage.getOutgoingSms() );
 	}
 

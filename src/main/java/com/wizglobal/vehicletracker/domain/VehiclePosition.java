@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -22,6 +24,9 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "VEHICLE_POSITION")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@NamedQueries({
+		@NamedQuery(name = "VehiclePosition.findAll", query = "SELECT p FROM VehiclePosition p ORDER BY p.timeTracked DESC"),
+		@NamedQuery(name = "Vehicle.findVehiclePositionByVehicle", query = "SELECT p FROM VehiclePosition p WHERE p.vehicle = :vehicle") })
 public class VehiclePosition extends BaseEntity {
 	/**
 	 * 
@@ -78,6 +83,17 @@ public class VehiclePosition extends BaseEntity {
 	 */
 	public void setGpsPosition( GpsPosition gpsPosition ) {
 		this.gpsPosition = gpsPosition;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "VehiclePosition [vehicle=" + vehicle + ", timeTracked=" + timeTracked
+				+ ", gpsPosition=" + gpsPosition + "]";
 	}
 
 }

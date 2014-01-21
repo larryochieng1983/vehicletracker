@@ -1,53 +1,60 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <h:head>
+<h:head>
 	<title>Vehicle Tracker</title>
-	<link href="#{request.contextPath}/resources/css/default.css" rel="stylesheet" type="text/css" />
-	<link href="#{request.contextPath}/resources/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
-    </h:head>
-    <h:body>
+	<link href="#{request.contextPath}/resources/css/default.css"
+		rel="stylesheet" type="text/css" />
+	<link
+		href="#{request.contextPath}/resources/bootstrap/css/bootstrap.css"
+		rel="stylesheet" type="text/css" />
+</h:head>
+<h:body>
 	<h:panelGroup layout="block" style="width: 100%; height: 300px">
-	    <p:graphicImage value="#{resource['images/gps-track.jpg']}" height="393px" width="548px"/>
+		<p:graphicImage value="#{resource['images/gps-track.jpg']}"
+			height="393px" width="548px" />
 
-	    <h:panelGroup id="login-panel" layout="block" style="float: right; margin-top: 30px; margin-right: 45px">
-		<h3>Login</h3>
-		<form method="post" action="j_spring_security_check">
-		    <p:panelGrid>
-			<h:outputText value="Access Denied." rendered="#{not empty param['denied']}" style="color: red"/>
-		    </p:panelGrid>
-		    <h:panelGrid border="0" columns="1"  id="panel">
-			<h:outputLabel for="j_username" value="Username:" styleClass="legend-label"/>
-			<h:panelGroup>
-			    <h:inputText id="j_username" required="true"
-					 requiredMessage="Please enter your Username">
-				<h:message errorClass="error" for="userName"/>
-			    </h:inputText>
-			</h:panelGroup>
+		<h:panelGroup id="login-panel" layout="block"
+			style="float: right; margin-top: 30px; margin-right: 45px">
+			<h3>Login</h3>
+			<form method="post" action="j_spring_security_check">
+				<p:panelGrid>
+					<h:outputText value="Access Denied."
+						rendered="#{not empty param['denied']}" style="color: red" />
+				</p:panelGrid>
+				<h:panelGrid border="0" columns="1" id="panel">
+					<h:outputLabel for="j_username" value="Username:"
+						styleClass="legend-label" />
+					<h:panelGroup>
+						<h:inputText id="j_username" required="true"
+							requiredMessage="Please enter your Username">
+							<h:message errorClass="error" for="userName" />
+						</h:inputText>
+					</h:panelGroup>
 
-			<h:outputLabel for="j_password" value="Password:" styleClass="legend-label"/>
-			<h:panelGroup>
-			    <h:inputSecret id="j_password" required="true"
-					   requiredMessage="Value is required">
-			    </h:inputSecret>
-			    <h:message errorClass="error" for="j_password"/>
-			</h:panelGroup>
-			<h:commandButton class="btn" value="Login"/>
-		    </h:panelGrid>
-		</form>
-	    </h:panelGroup>
-	    <div id="bottom" style="text-align: left">
-		<ui:include src="/WEB-INF/templates/bottom.xhtml"/>
-	    </div>
+					<h:outputLabel for="j_password" value="Password:"
+						styleClass="legend-label" />
+					<h:panelGroup>
+						<h:inputSecret id="j_password" required="true"
+							requiredMessage="Value is required">
+						</h:inputSecret>
+						<h:message errorClass="error" for="j_password" />
+					</h:panelGroup>
+					<h:commandButton class="btn" value="Login" />					
+				</h:panelGrid>
+			</form>
+		</h:panelGroup>
+		<div id="bottom" style="text-align: left">
+			<ui:include src="/WEB-INF/templates/bottom.xhtml" />
+		</div>
 	</h:panelGroup>
 
 
 
-    </h:body>
+</h:body>
 
 </html>

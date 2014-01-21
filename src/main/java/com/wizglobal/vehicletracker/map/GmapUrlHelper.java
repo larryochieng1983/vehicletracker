@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.wizglobal.vehicletracker.util;
+package com.wizglobal.vehicletracker.map;
 
 import java.net.MalformedURLException;
 import java.net.URL;

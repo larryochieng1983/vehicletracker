@@ -3,17 +3,13 @@
  */
 package com.wizglobal.vehicletracker.domain;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -23,6 +19,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "APP_USER")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@NamedQueries({ @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u ORDER BY u.userName") })
 public class User extends BaseEntity {
 
 	/**
@@ -45,68 +42,105 @@ public class User extends BaseEntity {
 	@Column(length = 50)
 	private String lastName;
 
-	@ManyToMany
-	@JoinTable(name = "user_roles", joinColumns = { @JoinColumn(name = "User_userid") }, inverseJoinColumns = { @JoinColumn(name = "UserRole_roleid") })
-	private List<UserRole> userRoles = new ArrayList<UserRole>();;
+	@Enumerated
+	private UserRole userRole;
 
 	public User( String userName, String password, String firstName, String lastName,
-			List<UserRole> userRoles ) {
+			UserRole userRole ) {
 		super();
 		this.userName = userName;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.userRoles = userRoles;
+		this.userRole = userRole;
 	}
 
+	/**
+	 * 
+	 */
 	public User() {
 
 	}
 
+	/**
+	 * @return the userName
+	 */
 	public String getUserName() {
 		return userName;
 	}
 
+	/**
+	 * @param userName the userName to set
+	 */
 	public void setUserName( String userName ) {
 		this.userName = userName;
 	}
 
+	/**
+	 * @return the password
+	 */
 	public String getPassword() {
 		return password;
 	}
 
+	/**
+	 * @param password the password to set
+	 */
 	public void setPassword( String password ) {
 		this.password = password;
 	}
 
+	/**
+	 * @return the firstName
+	 */
 	public String getFirstName() {
 		return firstName;
 	}
 
+	/**
+	 * @param firstName the firstName to set
+	 */
 	public void setFirstName( String firstName ) {
 		this.firstName = firstName;
 	}
 
+	/**
+	 * @return the lastName
+	 */
 	public String getLastName() {
 		return lastName;
 	}
 
+	/**
+	 * @param lastName the lastName to set
+	 */
 	public void setLastName( String lastName ) {
 		this.lastName = lastName;
 	}
 
 	/**
-	 * @return the userRoles
+	 * @return the userRole
 	 */
-	public List<UserRole> getUserRoles() {
-		return userRoles;
+	public UserRole getUserRole() {
+		return userRole;
 	}
 
 	/**
-	 * @param userRoles the userRoles to set
+	 * @param userRole the userRole to set
 	 */
-	public void setUserRoles( List<UserRole> userRoles ) {
-		this.userRoles = userRoles;
+	public void setUserRole( UserRole userRole ) {
+		this.userRole = userRole;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "User [userName=" + userName + ", firstName=" + firstName + ", lastName=" + lastName
+				+ "]";
 	}
 
 }

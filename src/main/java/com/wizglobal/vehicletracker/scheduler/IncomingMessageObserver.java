@@ -1,19 +1,18 @@
 /**
  * 
  */
-package com.wizglobal.vehicletracker.util;
+package com.wizglobal.vehicletracker.scheduler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-
 import com.wizglobal.vehicletracker.domain.IncomingSms;
 import com.wizglobal.vehicletracker.domain.Vehicle;
 import com.wizglobal.vehicletracker.domain.VehiclePosition;
+import com.wizglobal.vehicletracker.map.GmapUrlHelper;
 import com.wizglobal.vehicletracker.service.IncomingSmsService;
 import com.wizglobal.vehicletracker.service.VehiclePositionService;
 import com.wizglobal.vehicletracker.service.VehicleService;
@@ -34,12 +33,7 @@ public class IncomingMessageObserver implements MessageListObserver<IncomingSms>
 	@Inject
 	private VehicleService vehicleService;
 
-	private IncomingMessage incomingMessage;
-
-	@PostConstruct
-	public void init() throws Exception {
-		System.out.println( "<<<<<<<<<" + incomingSmsService );
-	}
+	private IncomingMessage incomingMessage;	
 
 	/**
 	 * @param incomingMessage the incomingMessage to set
@@ -57,8 +51,7 @@ public class IncomingMessageObserver implements MessageListObserver<IncomingSms>
 	}
 
 	@Override
-	public void saveMessage( List<IncomingSms> messages ) {
-		System.out.println( "Saving Called......>>>>>>" + incomingSmsService );
+	public void saveMessage( List<IncomingSms> messages ) {		
 		List<VehiclePosition> positions = new ArrayList<VehiclePosition>();
 		incomingSmsService.create( messages );
 		// Extract the google map info

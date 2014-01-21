@@ -12,6 +12,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -24,8 +25,9 @@ import javax.validation.constraints.Size;
 @Table(name = "VEHICLE")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NamedQueries({
-		@NamedQuery(name = "Vehicle.findAll", query = "SELECT v FROM Vehicle v ORDER BY v.registrationNumber"),
-		@NamedQuery(name = "GpsDevice.findVehicleByPhoneNumber", query = "SELECT v FROM Vehicle v WHERE v.gpsDevice.card.phoneNumber =:phoneNumber") })
+		@NamedQuery(name = "Vehicle.findAll", query = "SELECT v FROM Vehicle v ORDER BY v.registrationNumber ASC"),
+		@NamedQuery(name = "Vehicle.findVehicleByPhoneNumber", query = "SELECT v FROM Vehicle v WHERE v.gpsDevice.phoneNumber =:phoneNumber"),
+		@NamedQuery(name = "Vehicle.findVehicleByCustomer", query = "SELECT v FROM Vehicle v WHERE v.customer =:customer") })
 public class Vehicle extends BaseEntity {
 	/**
 	 * 
@@ -40,13 +42,12 @@ public class Vehicle extends BaseEntity {
 	@ManyToOne(cascade = { CascadeType.ALL })
 	private Customer customer;
 
-	@ManyToOne(cascade = { CascadeType.ALL })
+	@OneToOne(cascade = { CascadeType.ALL })
 	private GpsDevice gpsDevice;
 
 	@Enumerated
 	@Column(name = "VEHICLE_TYPE")
-	@Size(max = 50)
-	private String vehicleType;
+	private VehicleType vehicleType;
 
 	@Size(max = 50)
 	@Column(name = "MANUFACTURER")
@@ -105,14 +106,14 @@ public class Vehicle extends BaseEntity {
 	/**
 	 * @return the vehicleType
 	 */
-	public String getVehicleType() {
+	public VehicleType getVehicleType() {
 		return vehicleType;
 	}
 
 	/**
 	 * @param vehicleType the vehicleType to set
 	 */
-	public void setVehicleType( String vehicleType ) {
+	public void setVehicleType( VehicleType vehicleType ) {
 		this.vehicleType = vehicleType;
 	}
 

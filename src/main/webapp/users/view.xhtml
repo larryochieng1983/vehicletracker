@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns ="http://www.w3.org/1999/xhtml"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../WEB-INF/templates/master.xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="page-title">
+        User Detail
+    </ui:define>
+
+    <ui:define name="content-heading">
+        User Detail
+    </ui:define>
+
+    <ui:define name="content">
+	<h:form>
+	    <h:link value="Customers " outcome="/users/list.jsf?faces-redirect=true"/>
+	    <h:outputText value="/ #{customerController.currentCustomer}"/>
+	    <h:panelGroup style="float: right">
+		<h:commandLink action="#{customerController.editCustomer()}" value="Edit"/>
+		<h:outputText value="  |  "/>
+		<h:commandLink action="#{customerController.deleteCurrentCustomer()}" value="Delete"/>
+	    </h:panelGroup>
+	</h:form>
+	<h:panelGroup style="width: 100%" layout="block" >
+	    <p:layout style="min-width: 400px;min-height: 430px">
+		<p:layoutUnit position="west" resizable="true" size="200">
+		    <fieldset>
+			<legend>Details</legend>
+			<h:panelGrid columns="1">
+			    <h:outputText value="E-Mail" styleClass="legend-label" rendered="#{not empty customerController.currentCustomer.emailAddress}"/>
+			    <h:outputText value="#{customerController.currentCustomer.emailAddress}" rendered="#{not empty customerController.currentCustomer.emailAddress}"/>
+			    <h:outputText value="Id/Passport" styleClass="legend-label"/>
+			    <h:outputText value="#{customerController.currentCustomer.idNumber}" rendered="#{not empty customerController.currentCustomer.idNumber}"/>
+			    <h:outputText value="#{customerController.currentCustomer.passportNumber}" rendered="#{not empty customerController.currentCustomer.passportNumber}"/>
+			    <h:outputText value="Tel./Mobile" styleClass="legend-label"/>
+			    <h:outputText value="#{customerController.currentCustomer.mobilePhoneNumber}" rendered="#{not empty customerController.currentCustomer.mobilePhoneNumber}"/>
+			    <h:outputText value="#{customerController.currentCustomer.phoneNumber}" rendered="#{not empty customerController.currentCustomer.phoneNumber}"/>
+			    <h:outputText value="Address" styleClass="legend-label" rendered="#{not empty customerController.currentCustomer.address}"/>
+			    <h:outputText value="#{customerController.currentCustomer.address}" rendered="#{not empty customerController.currentCustomer.address}"/>
+			</h:panelGrid>
+		    </fieldset>
+		</p:layoutUnit>
+		<p:layoutUnit position="center" resizable="true" size="200">
+		    <h:form>
+			<h:outputText value="Vehicles" style="font-weight: bold; font-size: 1.2em"/>
+			<h:panelGroup style="float: right">
+			    <h:commandLink action="#{customerController.addMoreVehiclesToCustomer()}" value="Add Vehicles" title="Add more vehicles for this customer"/>
+			</h:panelGroup>
+
+			<p:spacer height="10" width="20"/>
+			<p:dataTable value="#{customerController.currentCustomer.vehicles}" var="vehicle">
+			    <p:column headerText="Registration">
+				<h:commandLink action="#{customerController.showVehicle(vehicle)}">
+				    <h:outputText value="#{vehicle.registrationNumber}"/>
+				</h:commandLink>
+			    </p:column>
+			    <p:column headerText="Model">
+				<h:outputFormat value="{0} - {1} {2}, ">
+				    <f:param value="#{vehicle.vehicleType}"/>
+				    <f:param value="#{vehicle.color}"/>
+				    <f:param value="#{vehicle.model}"/>
+				</h:outputFormat>
+			    </p:column>
+			    <p:column>
+				<h:commandLink action="#{customerController.editVehicle(vehicle)}" value="edit"/>
+				<h:outputText value=" | " />
+				<h:commandLink action="#{customerController.deleteVehicle(vehicle)}" value="remove"/>
+			    </p:column>
+			</p:dataTable>
+		    </h:form>
+		</p:layoutUnit>
+	    </p:layout>
+	</h:panelGroup>
+	<h:panelGroup layout="block" style="">
+
+	</h:panelGroup>
+    </ui:define>
+
+</ui:composition>

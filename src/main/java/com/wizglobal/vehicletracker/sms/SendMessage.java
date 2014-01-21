@@ -21,7 +21,7 @@ import org.smslib.TimeoutException;
 import org.smslib.modem.SerialModemGateway;
 
 import com.wizglobal.vehicletracker.domain.OutgoingSms;
-import com.wizglobal.vehicletracker.util.OutgoingMessageObserver;
+import com.wizglobal.vehicletracker.scheduler.OutgoingMessageObserver;
 
 /**
  * @author Otieno Lawrence
@@ -151,9 +151,9 @@ public class SendMessage {
 		observers.add( observer );
 	}
 
-	public void notifyAllObservers() {		
+	public void notifyAllObservers() {
 		for( OutgoingMessageObserver observer : observers ) {
-			observer.saveMessage();
+			observer.saveMessage( getOutgoingSms() );
 		}
 	}
 

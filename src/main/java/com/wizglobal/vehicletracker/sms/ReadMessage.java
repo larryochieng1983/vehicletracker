@@ -4,14 +4,14 @@
 package com.wizglobal.vehicletracker.sms;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.inject.Inject;
+
 import org.apache.log4j.Logger;
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.smslib.AGateway;
 import org.smslib.AGateway.GatewayStatuses;
 import org.smslib.AGateway.Protocols;
@@ -29,25 +29,36 @@ import org.smslib.TimeoutException;
 import org.smslib.modem.SerialModemGateway;
 
 import com.wizglobal.vehicletracker.domain.IncomingSms;
-import com.wizglobal.vehicletracker.util.IncomingMessageObserver;
+import com.wizglobal.vehicletracker.scheduler.IncomingMessageObserver;
+import com.wizglobal.vehicletracker.scheduler.Scheduled;
 
 /**
  * @author Otieno Lawrence
  * 
  */
-public class ReadMessage implements Job {
+@Scheduled("0 0/1 * * * ?")
+public class ReadMessage implements Runnable {
 
 	private static Logger log = Logger.getLogger( ReadMessage.class );
 
 	/** SMS Gateway Properties */
 	private Properties gatewayProperties = new Properties();
 	private Service service;
-	private IncomingMessage incomingMessage = new IncomingMessage();
+
+	@Inject
+	IncomingMessageObserver messageObserver;
+
+	private IncomingMessage incomingMessage;
 
 	public ReadMessage() {
 		try {
-			gatewayProperties.load( getClass().getResourceAsStream( "/smslib/modem.properties" ) );
-			// gatewayProperties.load( new FileInputStream( "smslib/modem.properties" ) );
+			InputStream inputStream = Thread.currentThread().getContextClassLoader()
+					.getResourceAsStream( "smslib/modem.properties" );
+			if( inputStream == null ) {
+				log.error( "Failed To Load SMS Server Settings" );
+				throw new IllegalStateException( "Failed To Load SMS Server Settings" );
+			}
+			gatewayProperties.load( inputStream );
 		} catch( IOException e ) {
 			log.error( "Failed To Load SMS Server Settings" );
 			throw new IllegalStateException( "Failed To Load SMS Server Settings" );
@@ -114,8 +125,8 @@ public class ReadMessage implements Job {
 			if( !getService().deleteMessage( msg ) ) {
 				log.warn( "Message Read but could not be deleted" );
 			}
-		}		
-		new IncomingMessageObserver( ).setIncomingMessage( incomingMessage );
+		}
+		messageObserver.setIncomingMessage( incomingMessage );
 		incomingMessage.setIncomingMessages( list );
 		log.info( "Finished Reading Available Messages " + list.size() );
 
@@ -162,7 +173,7 @@ public class ReadMessage implements Job {
 	}
 
 	@Override
-	public void execute( JobExecutionContext context ) throws JobExecutionException {
+	public void run() {
 		try {
 			receive();
 		} catch( TimeoutException e ) {
@@ -176,5 +187,6 @@ public class ReadMessage implements Job {
 		} catch( InterruptedException e ) {
 			log.error( e );
 		}
+
 	}
 }

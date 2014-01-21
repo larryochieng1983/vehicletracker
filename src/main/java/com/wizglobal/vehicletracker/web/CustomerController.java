@@ -1,4 +1,4 @@
-package com.wizglobal.vehicletracker.controller;
+package com.wizglobal.vehicletracker.web;
 
 import java.io.Serializable;
 import java.util.List;
@@ -10,9 +10,12 @@ import javax.faces.model.ListDataModel;
 import javax.inject.Named;
 
 import com.wizglobal.vehicletracker.domain.Customer;
+import com.wizglobal.vehicletracker.domain.User;
+import com.wizglobal.vehicletracker.domain.UserRole;
 import com.wizglobal.vehicletracker.domain.Vehicle;
 import com.wizglobal.vehicletracker.exception.DataAccessException;
 import com.wizglobal.vehicletracker.service.CustomerService;
+import com.wizglobal.vehicletracker.service.UserService;
 import com.wizglobal.vehicletracker.service.VehicleService;
 import java.util.Map;
 import javax.inject.Inject;
@@ -28,20 +31,28 @@ import org.primefaces.model.SortOrder;
 @SessionScoped
 public class CustomerController extends BasePage implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+
 	private static final org.apache.log4j.Logger LOGGER = Logger
 			.getLogger( CustomerController.class );
 
-	private static final long serialVersionUID = 1L;
 	@Inject
 	private CustomerService customerService;
+
 	@Inject
 	private VehicleController vehicleController;
+
 	@Inject
 	private VehicleService vehicleService;
+
+	@Inject
+	private UserService userService;
+
 	private Customer currentCustomer;
 	private List<Customer> customerList;
 	private LazyCustomersDataModel lazyCustomersDataModel;
 	private Customer newCustomer;
+	private User user;
 
 	/**
 	 * Creates a new instance of CustomerController
@@ -60,6 +71,20 @@ public class CustomerController extends BasePage implements Serializable {
 
 	public Customer getNewCustomer() {
 		return newCustomer;
+	}
+
+	/**
+	 * @return the user
+	 */
+	public User getUser() {
+		return user;
+	}
+
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser( User user ) {
+		this.user = user;
 	}
 
 	public String showVehicle( Vehicle vehicle ) {
@@ -108,7 +133,6 @@ public class CustomerController extends BasePage implements Serializable {
 	@PostConstruct
 	public void init() {
 		getCustomerList();
-
 	}
 
 	public String showCustomerList() {
@@ -128,7 +152,11 @@ public class CustomerController extends BasePage implements Serializable {
 	 */
 	public String addCustomer() {
 		try {
+			user = new User( newCustomer.getFirstName(), newCustomer.getIdNumber(),
+					newCustomer.getFirstName(), newCustomer.getLastName(), UserRole.CUSTOMER );
+			newCustomer.setUser( user );
 			currentCustomer = customerService.create( newCustomer );
+			user = null;
 			newCustomer = null;
 			addInfoMessage( "Customer created.", null );
 			return viewCurrentCustomer();
@@ -139,7 +167,7 @@ public class CustomerController extends BasePage implements Serializable {
 		return null;
 	}
 
-	public String selectAndDeletCurrentCustomer() {
+	public String selectAndDeleteCurrentCustomer() {
 		setCurrentCustomer( getLazyCustomersDataModel().getRowData() );
 		return deleteCurrentCustomer();
 	}
@@ -230,6 +258,11 @@ public class CustomerController extends BasePage implements Serializable {
 
 	public static class LazyCustomersDataModel extends LazyDataModel<Customer> {
 
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
 		private CustomerService customerDataSource;
 
 		public LazyCustomersDataModel( CustomerService customerDataSource ) {
@@ -240,11 +273,6 @@ public class CustomerController extends BasePage implements Serializable {
 		public Object getRowKey( Customer customer ) {
 			return customer.getId();
 		}
-
-		// @Override
-		// public Customer getRowData(String rowKey) {
-		// return super.getRowData(rowKey);
-		// }
 
 		@Override
 		public void setRowIndex( int rowIndex ) {
@@ -263,9 +291,6 @@ public class CustomerController extends BasePage implements Serializable {
 			// setWrappedData(results);
 			// setPageSize(pageSize);
 			super.setPageSize( pageSize );
-			System.out.println( "Rowcount updated to: " + getRowCount() );
-			System.out.println( "supplied page size: " + pageSize );
-			System.out.println( "Size is: " + results.size() );
 			if( results.size() > pageSize ) {
 				try {
 					return results.subList( first, first + pageSize );

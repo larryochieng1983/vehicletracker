@@ -1,4 +1,4 @@
-package com.wizglobal.vehicletracker.controller;
+package com.wizglobal.vehicletracker.web;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,7 +15,9 @@ import org.apache.log4j.Logger;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
+import com.wizglobal.vehicletracker.domain.GpsDevice;
 import com.wizglobal.vehicletracker.domain.Vehicle;
+import com.wizglobal.vehicletracker.domain.VehicleType;
 import com.wizglobal.vehicletracker.service.VehicleService;
 import com.wizglobal.vehicletracker.util.LazySorter;
 import com.wizglobal.vehicletracker.util.StringUtils;
@@ -37,31 +39,31 @@ public class VehicleController extends BasePage implements Serializable {
 	@Inject
 	private VehicleService vehicleService;
 	@Inject
-	private CustomerController customerController;	
+	private CustomerController customerController;
 
 	private Vehicle currentVehicle;
+	private GpsDevice gpsDevice;
 	private Vehicle newVehicle;
 	private LazyVehicleTableModel vehicleTableModel;
 	private List<String> vehicleTypes;
-	
+
 	/**
-	 * Sets a new instance for {@link #currentCustomer} to be used as new
-	 * customer.
-	 *
-	*/
+	 * Sets a new instance for {@link #currentCustomer} to be used as new customer.
+	 * 
+	 */
 	public void preRenderNewVehicle() {
-	    if (!isAjaxRequest() && newVehicle == null) {
-		newVehicle = new Vehicle();
-	    } 
+		if( !isAjaxRequest() && newVehicle == null ) {
+			newVehicle = new Vehicle();
+		}
 	}
 
 	@Override
 	@PostConstruct
 	public void init() {
-	    vehicleTypes = new ArrayList<>();
-//	    for (VehicleType type : VehicleType.values()) {
-//		vehicleTypes.add(type.name());
-//	    }
+		vehicleTypes = new ArrayList<>();
+		for( VehicleType type : VehicleType.values() ) {
+			vehicleTypes.add( type.name() );
+		}
 	}
 
 	/**
@@ -69,12 +71,12 @@ public class VehicleController extends BasePage implements Serializable {
 	 */
 	public VehicleController() {
 	}
-	
+
 	public LazyDataModel<Vehicle> getVehicles() {
-	    if (vehicleTableModel == null) {
-		vehicleTableModel = new LazyVehicleTableModel(vehicleService);
-	    }
-	    return vehicleTableModel;
+		if( vehicleTableModel == null ) {
+			vehicleTableModel = new LazyVehicleTableModel( vehicleService );
+		}
+		return vehicleTableModel;
 	}
 
 	public Vehicle getCurrentVehicle() {
@@ -82,13 +84,13 @@ public class VehicleController extends BasePage implements Serializable {
 	}
 
 	public Vehicle getNewVehicle() {
-	    return newVehicle;
+		return newVehicle;
 	}
 
-	public void setNewVehicle(Vehicle newVehicle) {
-	    this.newVehicle = newVehicle;
+	public void setNewVehicle( Vehicle newVehicle ) {
+		this.newVehicle = newVehicle;
 	}
-    
+
 	/**
 	 * 
 	 * @param currentVehicle set current vehicle.
@@ -116,7 +118,7 @@ public class VehicleController extends BasePage implements Serializable {
 	 */
 	public String viewSelectedVehicle() {
 		currentVehicle = vehicleTableModel.getRowData();
-		return currentVehicle == null ? null : appendFacesRedirectTrue("/vehicles/view.jsf");
+		return currentVehicle == null ? null : appendFacesRedirectTrue( "/vehicles/view.jsf" );
 	}
 
 	/**
@@ -141,38 +143,52 @@ public class VehicleController extends BasePage implements Serializable {
 		}
 		return null;
 	}
-	
+
 	/**
-	 *
+	 * 
 	 * @return vehicle types enum as string.
 	 */
 	public List<String> getVehicleTypes() {
-	    return vehicleTypes;
+		return vehicleTypes;
+	}
+
+	/**
+	 * @return the gpsDevice
+	 */
+	public GpsDevice getGpsDevice() {
+		return gpsDevice;
+	}
+
+	/**
+	 * @param gpsDevice the gpsDevice to set
+	 */
+	public void setGpsDevice( GpsDevice gpsDevice ) {
+		this.gpsDevice = gpsDevice;
 	}
 
 	/**
 	 * 
 	 * @return prepare to add a new vehicle.
 	 */
-	public String createNewVehicle(){
-	    newVehicle = null;
-	    return appendFacesRedirectTrue("/vehicles/new.jsf");
+	public String createNewVehicle() {
+		newVehicle = null;
+		return appendFacesRedirectTrue( "/vehicles/new.jsf" );
 	}
 
 	/**
 	 * 
 	 * @return Performs actual database ADD.
 	 */
-	public String addNewVehicle(){
-	    try {
-		currentVehicle = vehicleService.create(newVehicle);
-		newVehicle = null;
-		return appendFacesRedirectTrue("/vehicles/view.jsf");
-	    } catch (Exception ex) {
-		addErrorgMessage("Unable to create new vehicle. Please try again.", ex.getMessage());
-		LOG.warn("Failed to add new vehicle. " + ex.getMessage());
-	    }
-	    return null;
+	public String addNewVehicle() {
+		try {
+			currentVehicle = vehicleService.create( newVehicle );
+			newVehicle = null;
+			return appendFacesRedirectTrue( "/vehicles/view.jsf" );
+		} catch( Exception ex ) {
+			addErrorgMessage( "Unable to create new vehicle. Please try again.", ex.getMessage() );
+			LOG.warn( "Failed to add new vehicle. " + ex.getMessage() );
+		}
+		return null;
 	}
 
 	/**
@@ -181,9 +197,10 @@ public class VehicleController extends BasePage implements Serializable {
 	 */
 	public String saveCurrentVehicle() {
 		try {
+			currentVehicle.setGpsDevice( gpsDevice );
 			vehicleService.update( currentVehicle );
 			addInfoMessage( "Vehicle info updated", null );
-			return appendFacesRedirectTrue("/vehicles/view.jsf");
+			return appendFacesRedirectTrue( "/vehicles/view.jsf" );
 		} catch( Exception e ) {
 			addErrorgMessage( "Failed to save the new vehicle data. Please try again", null );
 		}
@@ -200,13 +217,23 @@ public class VehicleController extends BasePage implements Serializable {
 			currentVehicle = vehicleService.find( currentVehicle.getId() );
 		}
 		return null;
-	}	
+	}
 
+	/**
+	 * 
+	 * @author Kenny
+	 * 
+	 */
 	public static class LazyVehicleTableModel extends LazyDataModel<Vehicle> {
-		private VehicleService dataSource; 
-		
-		public LazyVehicleTableModel(VehicleService dataSource) {
-		    this.dataSource = dataSource;
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		private VehicleService vehicleService;
+
+		public LazyVehicleTableModel( VehicleService vehicleService ) {
+			this.vehicleService = vehicleService;
 		}
 
 		@Override
@@ -215,24 +242,24 @@ public class VehicleController extends BasePage implements Serializable {
 		}
 
 		@Override
-		public void setRowIndex(int rowIndex) {
-		    if (rowIndex == -1 || getPageSize() == 0) {
-			super.setRowIndex(-1);
-		    } else{
-			super.setRowIndex(rowIndex % getPageSize());
-		    }
+		public void setRowIndex( int rowIndex ) {
+			if( rowIndex == -1 || getPageSize() == 0 ) {
+				super.setRowIndex( -1 );
+			} else {
+				super.setRowIndex( rowIndex % getPageSize() );
+			}
 		}
-		
 
 		@Override
 		public List<Vehicle> load( int first, int pageSize, String sortField, SortOrder sortOrder,
 				Map<String, String> filters ) {
 
-			List<Vehicle> loadVehicles = dataSource.findWithNamedQuery("Vehicle.findAll", first, pageSize + first);
+			List<Vehicle> loadVehicles = vehicleService.findWithNamedQuery( "Vehicle.findAll", first,
+					pageSize + first );
 
 			// sort
-			if (StringUtils.isNonEmptyString(sortField)) {
-			    Collections.sort( loadVehicles, new LazySorter<Vehicle>( sortField, sortOrder ) );
+			if( StringUtils.isNonEmptyString( sortField ) ) {
+				Collections.sort( loadVehicles, new LazySorter<Vehicle>( sortField, sortOrder ) );
 			}
 			// set page size
 			setRowCount( loadVehicles.size() );

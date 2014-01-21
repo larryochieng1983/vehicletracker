@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.wizglobal.vehicletracker.service;
+package com.wizglobal.vehicletracker.web;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -12,10 +12,11 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean;
 import com.wizglobal.vehicletracker.domain.GprsSetting;
 import com.wizglobal.vehicletracker.domain.GpsDevice;
 import com.wizglobal.vehicletracker.domain.SimCard;
+import com.wizglobal.vehicletracker.service.GprsSettingService;
+import com.wizglobal.vehicletracker.web.GpsDeviceOperationBean;
 
 /**
  * @author Otieno Lawrence
@@ -88,7 +89,7 @@ public class GpsDeviceOperationBeanTest {
 
 	/**
 	 * Test method for
-	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#changePassword(javax.faces.event.ActionEvent)}
+	 * {@link com.wizglobal.vehicletracker.web.GpsDeviceOperationBean#changePassword(javax.faces.event.ActionEvent)}
 	 * .
 	 */
 	@Test
@@ -99,7 +100,7 @@ public class GpsDeviceOperationBeanTest {
 
 	/**
 	 * Test method for
-	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#stopVehicle(javax.faces.event.ActionEvent)}
+	 * {@link com.wizglobal.vehicletracker.web.GpsDeviceOperationBean#stopVehicle(javax.faces.event.ActionEvent)}
 	 * .
 	 */
 	@Test
@@ -110,7 +111,7 @@ public class GpsDeviceOperationBeanTest {
 
 	/**
 	 * Test method for
-	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#resetDevice(javax.faces.event.ActionEvent)}
+	 * {@link com.wizglobal.vehicletracker.web.GpsDeviceOperationBean#resetDevice(javax.faces.event.ActionEvent)}
 	 * .
 	 */
 	@Test
@@ -127,7 +128,7 @@ public class GpsDeviceOperationBeanTest {
 
 	/**
 	 * Test method for
-	 * {@link com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean#setGprsSetting(javax.faces.event.ActionEvent)}
+	 * {@link com.wizglobal.vehicletracker.web.GpsDeviceOperationBean#setGprsSetting(javax.faces.event.ActionEvent)}
 	 * .
 	 */
 	@Test

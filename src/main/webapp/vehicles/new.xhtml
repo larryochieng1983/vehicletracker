@@ -1,57 +1,76 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns ="http://www.w3.org/1999/xhtml"
-	        xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="./../WEB-INF/templates/master.xhtml"
-		xmlns:h="http://java.sun.com/jsf/html"
-		xmlns:p="http://primefaces.org/ui"
-		xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="./../WEB-INF/templates/master.xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
 
-    <ui:define name="content-heading">
+	<ui:define name="content-heading">
         Add New Vehicle
     </ui:define>
 
-    <ui:define name="content">
-       <f:metadata>
-	    <!-- Create new vehicle -->
-	    <f:event type="preRenderView" listener="#{vehicleController.preRenderNewVehicle()}"/>
-       </f:metadata>
-	
-        <h:form>
-	    <h:link value="Back to Vehicle List " outcome="/vehicles/list.jsf?faces-redirect=true" style="float: right"/>
-	    <p:messages id="messages" />
-	    <h:panelGroup layout="block">
-		<p:spacer width="15" height="50"/>
-		<fieldset>
-		    <p:outputLabel value="Customer:" styleClass="legend-label" for="target-customer"/>
-		    <h:selectOneMenu id="target-customer" value="#{vehicleController.newVehicle.customer}" required="true" converter="customerConverter" styleClass="dropdown-toggle">
-			<f:selectItem itemLabel="Select Customer"/>
-			<f:selectItems value="#{customerController.customerList}" var="customer" itemValue="#{customer}" 
-				       itemLabel="#{customer.lastName}  #{customer.firstName} #{customer.middleName eq null ? '' : customer.middleName}"/>
-		    </h:selectOneMenu>
-		    <p:outputLabel value="Registration:" styleClass="legend-label" for="registration"/>
-		    <h:inputText id="registration" value="#{vehicleController.newVehicle.registrationNumber}" required="true"/>
-		    <p:outputLabel value="Type" styleClass="legend-label" for="vehicle-type"/>
-		    <h:selectOneMenu value="#{vehicleController.newVehicle.vehicleType}" id="vehicle-type" required="true" styleClass="dropdown-toggle">
-			<f:selectItems value="#{vehicleController.vehicleTypes}" var="vehicleType" />
-		    </h:selectOneMenu>
-			
-		    <p:outputLabel value="Manufacturer:" styleClass="legend-label" for="manufacturer"/>
-		    <h:inputText value="#{vehicleController.newVehicle.manufacturer}" id="manufacturer" required="true" >
-		
-		    </h:inputText>
-		    <p:outputLabel value="Model:" styleClass="legend-label" for="model"/>
-		    <h:inputText id="model" value="#{vehicleController.newVehicle.model}" required="true" >
-		    </h:inputText>
-		    <p:outputLabel value="Color:" styleClass="legend-label" for="color"/>
-		    <h:inputText value="#{vehicleController.newVehicle.color}" id="color" required="true" >
-		    </h:inputText>
-		</fieldset>
-		<h:commandButton id="save-button" action="#{vehicleController.addNewVehicle()}" value="Save"/>
-		<p:spacer width="20"/>
-		<h:button outcome="/vehicles/list.jsf" value="Cancel"/>
-	    </h:panelGroup>
-	</h:form>
-    </ui:define>
+	<ui:define name="content">
+		<f:metadata>
+			<!-- Create new vehicle -->
+			<f:event type="preRenderView"
+				listener="#{vehicleController.preRenderNewVehicle()}" />
+		</f:metadata>
+
+		<h:form>
+			<h:link value="Back to Vehicle List "
+				outcome="/vehicles/list.jsf?faces-redirect=true"
+				style="float: right" />
+			<p:messages id="messages" />
+			<h:panelGroup layout="block">
+				<p:spacer width="15" height="50" />
+				<fieldset>
+					<p:outputLabel value="Customer:" styleClass="legend-label"
+						for="target-customer" />
+					<h:selectOneMenu id="target-customer"
+						value="#{vehicleController.newVehicle.customer}" required="true"
+						converter="customerConverter" styleClass="dropdown-toggle">
+						<f:selectItem itemLabel="Select Customer" />
+						<f:selectItems value="#{customerController.customerList}"
+							var="customer" itemValue="#{customer}"
+							itemLabel="#{customer.lastName}  #{customer.firstName} #{customer.middleName eq null ? '' : customer.middleName}" />
+					</h:selectOneMenu>
+					<p:outputLabel value="Registration:" styleClass="legend-label"
+						for="registration" />
+					<h:inputText id="registration"
+						value="#{vehicleController.newVehicle.registrationNumber}"
+						required="true" />
+					<p:outputLabel value="Type" styleClass="legend-label"
+						for="vehicle-type" />
+					<h:selectOneMenu
+						value="#{vehicleController.newVehicle.vehicleType}"
+						id="vehicle-type" required="true" styleClass="dropdown-toggle">
+						<f:selectItems value="#{vehicleController.vehicleTypes}"
+							var="vehicleType" />
+					</h:selectOneMenu>
+
+					<p:outputLabel value="Manufacturer:" styleClass="legend-label"
+						for="manufacturer" />
+					<h:inputText value="#{vehicleController.newVehicle.manufacturer}"
+						id="manufacturer" required="true">
+
+					</h:inputText>
+					<p:outputLabel value="Model:" styleClass="legend-label" for="model" />
+					<h:inputText id="model"
+						value="#{vehicleController.newVehicle.model}" required="true">
+					</h:inputText>
+					<p:outputLabel value="Color:" styleClass="legend-label" for="color" />
+					<h:inputText value="#{vehicleController.newVehicle.color}"
+						id="color" required="true">
+					</h:inputText>
+				</fieldset>
+				<h:commandButton id="save-button"
+					action="#{vehicleController.addNewVehicle()}" value="Save" />
+				<p:spacer width="20" />
+				<h:button outcome="/vehicles/list.jsf" value="Cancel" />
+			</h:panelGroup>
+		</h:form>
+	</ui:define>	
 
 </ui:composition>

@@ -9,6 +9,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.wizglobal.vehicletracker.map.GmapUrlHelper;
+
 /**
  * @author USER
  * 
@@ -36,7 +38,7 @@ public class GmapUrlHelperTest extends TestCase {
 	}
 
 	/**
-	 * Test method for {@link com.wizglobal.vehicletracker.util.GmapUrlHelper#getGpsPostion()}.
+	 * Test method for {@link com.wizglobal.vehicletracker.map.GmapUrlHelper#getGpsPostion()}.
 	 */
 	@Test
 	public void testGetGpsPostion() {

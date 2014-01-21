@@ -4,16 +4,17 @@
 package com.wizglobal.vehicletracker.domain;
 
 import java.util.Collection;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -25,54 +26,56 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "CUSTOMER")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@NamedQueries({
-    @NamedQuery(name = "Customer.findAll", query = "SELECT c FROM Customer c ORDER BY c.lastName")})
+@NamedQueries({ @NamedQuery(name = "Customer.findAll", query = "SELECT c FROM Customer c ORDER BY c.lastName ASC") })
 public class Customer extends BaseEntity {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@Column(name = "FIRST_NAME")
 	@Size(max = 40)
 	@NotNull
 	private String firstName;
-	
+
 	@Column(name = "MIDDLE_NAME")
 	@Size(max = 40)
 	private String middleName;
-	
+
 	@Column(name = "LAST_NAME")
 	@Size(max = 40)
 	@NotNull
 	private String lastName;
-	
+
 	@Column(name = "ID_NUMBER")
 	@Size(max = 20)
 	private String idNumber;
-	
+
 	@Column(name = "PASSPORT_NUMBER")
 	@Size(max = 20)
 	private String passportNumber;
-	
+
 	@Column(name = "EMAIL_ADDRESS")
 	@Size(max = 25)
 	private String emailAddress;
-	
+
 	@Column(name = "PHONE_NUMBER")
 	@Size(max = 15)
 	private String phoneNumber;
-	
+
 	@Column(name = "ADDRESS")
 	@Size(max = 100)
 	private String address;
-	
+
 	@Column(name = "MOBILE_PHONE_NUMBER")
 	@Size(max = 15)
 	private String mobilePhoneNumber;
 
-	@OneToMany(cascade= CascadeType.ALL, fetch= FetchType.LAZY, mappedBy="customer")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "customer")
 	private Collection<Vehicle> vehicles;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	private User user;
 
 	/**
 	 * @return the firstName
@@ -82,10 +85,9 @@ public class Customer extends BaseEntity {
 	}
 
 	/**
-	 * @param firstName
-	 *            the firstName to set
+	 * @param firstName the firstName to set
 	 */
-	public void setFirstName(String firstName) {
+	public void setFirstName( String firstName ) {
 		this.firstName = firstName;
 	}
 
@@ -97,10 +99,9 @@ public class Customer extends BaseEntity {
 	}
 
 	/**
-	 * @param middleName
-	 *            the middleName to set
+	 * @param middleName the middleName to set
 	 */
-	public void setMiddleName(String middleName) {
+	public void setMiddleName( String middleName ) {
 		this.middleName = middleName;
 	}
 
@@ -112,10 +113,9 @@ public class Customer extends BaseEntity {
 	}
 
 	/**
-	 * @param lastName
-	 *            the lastName to set
+	 * @param lastName the lastName to set
 	 */
-	public void setLastName(String lastName) {
+	public void setLastName( String lastName ) {
 		this.lastName = lastName;
 	}
 
@@ -127,10 +127,9 @@ public class Customer extends BaseEntity {
 	}
 
 	/**
-	 * @param idNumber
-	 *            the idNumber to set
+	 * @param idNumber the idNumber to set
 	 */
-	public void setIdNumber(String idNumber) {
+	public void setIdNumber( String idNumber ) {
 		this.idNumber = idNumber;
 	}
 
@@ -142,10 +141,9 @@ public class Customer extends BaseEntity {
 	}
 
 	/**
-	 * @param passportNumber
-	 *            the passportNumber to set
+	 * @param passportNumber the passportNumber to set
 	 */
-	public void setPassportNumber(String passportNumber) {
+	public void setPassportNumber( String passportNumber ) {
 		this.passportNumber = passportNumber;
 	}
 
@@ -157,10 +155,9 @@ public class Customer extends BaseEntity {
 	}
 
 	/**
-	 * @param emailAddress
-	 *            the emailAddress to set
+	 * @param emailAddress the emailAddress to set
 	 */
-	public void setEmailAddress(String emailAddress) {
+	public void setEmailAddress( String emailAddress ) {
 		this.emailAddress = emailAddress;
 	}
 
@@ -172,10 +169,9 @@ public class Customer extends BaseEntity {
 	}
 
 	/**
-	 * @param phoneNumber
-	 *            the phoneNumber to set
+	 * @param phoneNumber the phoneNumber to set
 	 */
-	public void setPhoneNumber(String phoneNumber) {
+	public void setPhoneNumber( String phoneNumber ) {
 		this.phoneNumber = phoneNumber;
 	}
 
@@ -187,10 +183,9 @@ public class Customer extends BaseEntity {
 	}
 
 	/**
-	 * @param address
-	 *            the address to set
+	 * @param address the address to set
 	 */
-	public void setAddress(String address) {
+	public void setAddress( String address ) {
 		this.address = address;
 	}
 
@@ -202,34 +197,45 @@ public class Customer extends BaseEntity {
 	}
 
 	/**
-	 * @param mobilePhoneNumber
-	 *            the mobilePhoneNumber to set
+	 * @param mobilePhoneNumber the mobilePhoneNumber to set
 	 */
-	public void setMobilePhoneNumber(String mobilePhoneNumber) {
+	public void setMobilePhoneNumber( String mobilePhoneNumber ) {
 		this.mobilePhoneNumber = mobilePhoneNumber;
 	}
 
 	/**
-	 *
+	 * 
 	 * @return Vehicles associated with this customer.
 	 */
 	public Collection<Vehicle> getVehicles() {
-	    return vehicles;
+		return vehicles;
 	}
 
 	/**
-	 *
+	 * 
 	 * @param vehicles list of vehicles.
 	 */
-	public void setVehicles(Collection<Vehicle> vehicles) {
-	    this.vehicles = vehicles;
+	public void setVehicles( Collection<Vehicle> vehicles ) {
+		this.vehicles = vehicles;
 	}
 
-	
-	
+	/**
+	 * @return the user
+	 */
+	public User getUser() {
+		return user;
+	}
+
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser( User user ) {
+		this.user = user;
+	}
+
 	@Override
 	public String toString() {
-	    return firstName + " " + lastName + (middleName == null ? "" : ", " + middleName);
+		return firstName + " " + lastName + (middleName == null ? "" : ", " + middleName);
 	}
-	
+
 }

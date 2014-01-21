@@ -1,4 +1,4 @@
-package com.wizglobal.vehicletracker.util;
+package com.wizglobal.vehicletracker.scheduler;
 
 import org.junit.After;
 import org.junit.Before;

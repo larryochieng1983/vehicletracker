@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.wizglobal.vehicletracker.domain.IncomingSms;
-import com.wizglobal.vehicletracker.util.IncomingMessageObserver;
+import com.wizglobal.vehicletracker.scheduler.IncomingMessageObserver;
 
 /**
  * @author Otieno Lawrence

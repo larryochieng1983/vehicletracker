@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.wizglobal.vehicletracker.util;
+package com.wizglobal.vehicletracker.scheduler;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,7 +32,7 @@ public class OutgoingMessageObserverImplTest extends TestCase {
 	}
 
 	/**
-	 * Test method for {@link com.wizglobal.vehicletracker.util.OutgoingMessageObserverImpl#saveMessage()}.
+	 * Test method for {@link com.wizglobal.vehicletracker.scheduler.OutgoingMessageObserverImpl#saveMessage()}.
 	 */
 	@Test
 	public void testSaveMessage() {

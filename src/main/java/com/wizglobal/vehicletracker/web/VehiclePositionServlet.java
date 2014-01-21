@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.wizglobal.vehicletracker.controller;
+package com.wizglobal.vehicletracker.web;
 
 import java.io.IOException;
 

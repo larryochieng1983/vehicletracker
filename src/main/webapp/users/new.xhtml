@@ -1,10 +1,66 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="./../WEB-INF/templates/master.xhtml">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="./../WEB-INF/templates/master.xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
 
-    <ui:define name="content">
-        content
+	<ui:define name="page-title">
+        New User
     </ui:define>
+
+	<ui:define name="content-heading">
+        New User
+    </ui:define>
+
+	<f:metadata>
+		<!--Create new user -->
+		<f:event type="preRenderView"
+			listener="#{userBean.preRenderNewUser()}" />
+	</f:metadata>
+
+	<ui:define name="content">
+		<p:messages />
+		<h:form id="new-user-form">
+			<h:panelGroup layout="block" rendered="#{not empty userBean.newUser}"
+				style="width: 50%">
+				<p:outputLabel value="First Name:" for="firstName"
+					styleClass="legend-label" />
+				<h:inputText id="firstName" value="#{userBean.newUser.firstName}"
+					required="true" />
+				<p:outputLabel value="Last Name:" for="lastName"
+					styleClass="legend-label" />
+				<h:inputText id="lastName" value="#{userBean.newUser.lastName}"
+					required="true" />
+				<p:outputLabel value="Role Name:" for="selectRoleMenu"
+					styleClass="legend-label" />
+				<p:selectOneMenu id="selectRoleMenu"
+					value="#{userBean.newUser.userRole}">
+					<f:selectItem itemLabel="Click to Select" itemValue="" />
+					<f:selectItems value="#{userBean.roleList}" />
+					<p:ajax process="selectRoleMenu" update="@(form)" />
+				</p:selectOneMenu>
+				<h:outputLabel value="Password:" for="password"
+					styleClass="legend-label" />
+				<h:inputSecret id="password" value="#{userBean.newUser.password}"
+					required="true" />
+				<h:outputLabel value="Confirm Password:" for="confirmpassword"
+					styleClass="legend-label" />
+				<h:inputSecret id="confirmpassword"
+					value="#{userBean.confirmPassword}" required="true" />
+			</h:panelGroup>
+			<br />
+			<h:panelGroup>
+				<h:commandButton id="save-button"
+					action="#{userBean.doCreateUser()}" value="Add" />
+				<p:spacer width="15" />
+				<h:commandButton id="cancel-button"
+					action="#{userBean.showUserList()}" value="cancel" immediate="true" />
+			</h:panelGroup>
+		</h:form>
+
+	</ui:define>
 
 </ui:composition>

@@ -1,10 +1,13 @@
 /**
  * 
  */
-package com.wizglobal.vehicletracker.controller;
+package com.wizglobal.vehicletracker.web;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,14 +18,15 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import org.primefaces.model.LazyDataModel;
 import org.smslib.SMSLibException;
 import org.smslib.TimeoutException;
 
+import com.wizglobal.vehicletracker.domain.Customer;
 import com.wizglobal.vehicletracker.domain.GprsSetting;
 import com.wizglobal.vehicletracker.domain.GpsDevice;
+import com.wizglobal.vehicletracker.domain.Vehicle;
 import com.wizglobal.vehicletracker.service.GprsSettingService;
-import com.wizglobal.vehicletracker.service.GpsDeviceService;
+import com.wizglobal.vehicletracker.service.VehicleService;
 import com.wizglobal.vehicletracker.sms.SendMessage;
 
 /**
@@ -39,28 +43,27 @@ public class GpsDeviceOperationBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private static Logger logger = Logger
-			.getLogger( "com.wizglobal.vehicletracker.controller.GpsDeviceOperationBean" );
+			.getLogger( "com.wizglobal.vehicletracker.web.GpsDeviceOperationBean" );
 
 	@Inject
-	private GpsDeviceService gpsDeviceService;
+	private GprsSettingService gprsSettingService;
+
+	@Inject
+	private VehicleService vehicleService;
+
+	private Customer currentCustomer;
 
 	private GpsDevice selectedGpsDevice;
 
 	private String password;
 
-	private String authorizedNumber;
-
-	private String[] authorizedNumbers;
-
 	private String selectedOperationMode;
-
-	private String[] operationModes = { "telephone", "web" };
 
 	private String ipAddress;
 
 	private String ipPort;
 
-	private LazyDataModel<GpsDevice> lazyModel;
+	private List<Vehicle> customersVehicles;
 
 	private SendMessage sendMessage = new SendMessage();
 
@@ -70,23 +73,33 @@ public class GpsDeviceOperationBean implements Serializable {
 	/** The duration over which to stop the vehicle */
 	private int stopDuration;
 
-	@Inject
-	private GprsSettingService gprsSettingService;
-
+	/**
+	 * 
+	 */
 	public GpsDeviceOperationBean() {
 
+	}
+
+	/**
+	 * @return the customersVehicles
+	 */
+	public List<Vehicle> getCustomersVehicles() {
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put( "customer", currentCustomer );
+		customersVehicles = vehicleService.findWithNamedQuery( "Vehicle.findVehicleByCustomer",
+				parameters );
+		return customersVehicles;
 	}
 
 	@PostConstruct
 	public void init() {
 		logger.log( Level.INFO, "gpsDeviceOperationBean is initializing" );
-		lazyModel = new LazyGpsDeviceDataModel( gpsDeviceService );
 	}
 
 	public void initDevice() {
 		message = "111111PSW" + getPassword();
 		try {
-			if( sendMessage.send( getSelectedGpsDevice().getCard().getPhoneNumber(), message ) ) {
+			if( sendMessage.send( getSelectedGpsDevice().getPhoneNumber(), message ) ) {
 				logger.log( Level.INFO, "DEVICE OPERATION: Initialization OK" );
 				getSelectedGpsDevice().setPassword( getPassword() );
 			}
@@ -104,7 +117,7 @@ public class GpsDeviceOperationBean implements Serializable {
 	public void checkDeviceStatus() {
 		message = getPassword() + "CHK";
 		try {
-			if( sendMessage.send( getSelectedGpsDevice().getCard().getPhoneNumber(), message ) ) {
+			if( sendMessage.send( getSelectedGpsDevice().getPhoneNumber(), message ) ) {
 				logger.log( Level.INFO, "DEVICE OPERATION: Check Status OK" );
 				getSelectedGpsDevice().setPassword( getPassword() );
 			}
@@ -122,7 +135,7 @@ public class GpsDeviceOperationBean implements Serializable {
 	public void checkGmapLocation() {
 		message = getSelectedGpsDevice().getPassword() + "MAP";
 		try {
-			if( sendMessage.send( getSelectedGpsDevice().getCard().getPhoneNumber(), message ) ) {
+			if( sendMessage.send( getSelectedGpsDevice().getPhoneNumber(), message ) ) {
 				logger.log( Level.INFO, "DEVICE OPERATION: CHECK GOOGLE MAP LOCATION OK" );
 			}
 		} catch( TimeoutException e ) {
@@ -139,7 +152,7 @@ public class GpsDeviceOperationBean implements Serializable {
 	public void changePassword() {
 		message = getSelectedGpsDevice().getPassword() + "PSW" + getPassword();
 		try {
-			if( sendMessage.send( getSelectedGpsDevice().getCard().getPhoneNumber(), message ) ) {
+			if( sendMessage.send( getSelectedGpsDevice().getPhoneNumber(), message ) ) {
 				logger.log( Level.INFO, "DEVICE OPERATION: Change Password OK" );
 				getSelectedGpsDevice().setPassword( getPassword() );
 			}
@@ -160,7 +173,7 @@ public class GpsDeviceOperationBean implements Serializable {
 	public void restoreVehicle() {
 		message = getSelectedGpsDevice().getPassword() + "RES";
 		try {
-			if( sendMessage.send( getSelectedGpsDevice().getCard().getPhoneNumber(), message ) ) {
+			if( sendMessage.send( getSelectedGpsDevice().getPhoneNumber(), message ) ) {
 				logger.log( Level.INFO, "DEVICE OPERATION: Restore Vehicle OK" );
 				getSelectedGpsDevice().setPassword( null );
 			}
@@ -178,8 +191,7 @@ public class GpsDeviceOperationBean implements Serializable {
 	public void stopVehicle() {
 		message = getSelectedGpsDevice().getPassword() + "STP" + getStopDuration();
 		try {
-			if( sendMessage.send( getSelectedGpsDevice().getCard().getPhoneNumber(), getPassword()
-					+ "STP" ) ) {
+			if( sendMessage.send( getSelectedGpsDevice().getPhoneNumber(), getPassword() + "STP" ) ) {
 				logger.log( Level.INFO, "DEVICE OPERATION: Stop Vehicle OK" );
 			}
 		} catch( TimeoutException e ) {
@@ -195,8 +207,8 @@ public class GpsDeviceOperationBean implements Serializable {
 
 	public void changeOperationMode() {
 		try {
-			if( sendMessage.send( getSelectedGpsDevice().getCard().getPhoneNumber(),
-					getSelectedOperationMode() + getSelectedGpsDevice().getPassword() ) ) {
+			if( sendMessage.send( getSelectedGpsDevice().getPhoneNumber(), getSelectedOperationMode()
+					+ getSelectedGpsDevice().getPassword() ) ) {
 				logger.log( Level.INFO, "DEVICE OPERATION: Change Operation Mode OK" );
 			}
 		} catch( TimeoutException e ) {
@@ -213,7 +225,7 @@ public class GpsDeviceOperationBean implements Serializable {
 	public void requestVehicleAddress() {
 		message = getSelectedGpsDevice().getPassword() + "ADD";
 		try {
-			if( sendMessage.send( getSelectedGpsDevice().getCard().getPhoneNumber(), message ) ) {
+			if( sendMessage.send( getSelectedGpsDevice().getPhoneNumber(), message ) ) {
 				logger.log( Level.INFO, "DEVICE OPERATION: Check Physical Address OK" );
 			}
 		} catch( TimeoutException e ) {
@@ -229,8 +241,7 @@ public class GpsDeviceOperationBean implements Serializable {
 
 	public void setGprsSetting() {
 		GprsSetting gprsSetting = gprsSettingService
-				.findGprsSettingByServiceProviderName( getSelectedGpsDevice().getCard()
-						.getServiceProviderName() );
+				.findGprsSettingByServiceProviderName( getSelectedGpsDevice().getServiceProviderName() );
 
 		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance();
 		message = getSelectedGpsDevice().getPassword() + "WWW" + ":IPN" + request.getServerName()
@@ -238,7 +249,7 @@ public class GpsDeviceOperationBean implements Serializable {
 				+ gprsSetting.getAccessPointName() + ";" + gprsSetting.getUserName() + ";"
 				+ gprsSetting.getPassword();
 		try {
-			if( sendMessage.send( getSelectedGpsDevice().getCard().getPhoneNumber(), message ) ) {
+			if( sendMessage.send( getSelectedGpsDevice().getPhoneNumber(), message ) ) {
 				logger.log( Level.INFO, "DEVICE OPERATION: Setup GPRS OK" );
 			}
 		} catch( TimeoutException e ) {
@@ -250,6 +261,20 @@ public class GpsDeviceOperationBean implements Serializable {
 		} catch( InterruptedException e ) {
 			logger.log( Level.SEVERE, "SMS ERROR: " + e );
 		}
+	}
+
+	/**
+	 * @return the currentCustomer
+	 */
+	public Customer getCurrentCustomer() {
+		return currentCustomer;
+	}
+
+	/**
+	 * @param currentCustomer the currentCustomer to set
+	 */
+	public void setCurrentCustomer( Customer currentCustomer ) {
+		this.currentCustomer = currentCustomer;
 	}
 
 	/**
@@ -281,34 +306,6 @@ public class GpsDeviceOperationBean implements Serializable {
 	}
 
 	/**
-	 * @return the authorizedNumber
-	 */
-	public String getAuthorizedNumber() {
-		return authorizedNumber;
-	}
-
-	/**
-	 * @param authorizedNumber the authorizedNumber to set
-	 */
-	public void setAuthorizedNumber( String authorizedNumber ) {
-		this.authorizedNumber = authorizedNumber;
-	}
-
-	/**
-	 * @return the authorizedNumbers
-	 */
-	public String[] getAuthorizedNumbers() {
-		return authorizedNumbers;
-	}
-
-	/**
-	 * @param authorizedNumbers the authorizedNumbers to set
-	 */
-	public void setAuthorizedNumbers( String[] authorizedNumbers ) {
-		this.authorizedNumbers = authorizedNumbers;
-	}
-
-	/**
 	 * @return the selectedOperationMode
 	 */
 	public String getSelectedOperationMode() {
@@ -320,13 +317,6 @@ public class GpsDeviceOperationBean implements Serializable {
 	 */
 	public void setSelectedOperationMode( String selectedOperationMode ) {
 		this.selectedOperationMode = selectedOperationMode;
-	}
-
-	/**
-	 * @return the operationModes
-	 */
-	public String[] getOperationModes() {
-		return operationModes;
 	}
 
 	/**

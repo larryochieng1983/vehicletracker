@@ -1,4 +1,4 @@
-package com.wizglobal.vehicletracker.controller;
+package com.wizglobal.vehicletracker.web;
 
 import com.wizglobal.vehicletracker.util.StringUtils;
 import java.util.Map;
