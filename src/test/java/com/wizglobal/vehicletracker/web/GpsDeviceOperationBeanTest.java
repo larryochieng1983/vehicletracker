@@ -14,9 +14,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.wizglobal.vehicletracker.domain.GprsSetting;
 import com.wizglobal.vehicletracker.domain.GpsDevice;
-import com.wizglobal.vehicletracker.domain.SimCard;
 import com.wizglobal.vehicletracker.service.GprsSettingService;
-import com.wizglobal.vehicletracker.web.GpsDeviceOperationBean;
 
 /**
  * @author Otieno Lawrence
@@ -26,7 +24,6 @@ public class GpsDeviceOperationBeanTest {
 
 	private GpsDeviceOperationBean operationBean;
 	private GpsDevice device;
-	private SimCard card;
 	private GprsSetting gprsSetting;
 
 	@Mock
@@ -39,12 +36,10 @@ public class GpsDeviceOperationBeanTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks( this );
 
-		operationBean = new GpsDeviceOperationBean();
-		card = new SimCard();
-		card.setServiceProviderName( "Safaricom" );
-		card.setPhoneNumber( "0705609864" );
 		device = new GpsDevice();
-		device.setCard( card );
+		operationBean = new GpsDeviceOperationBean();
+		device.setServiceProviderName( "Safaricom" );
+		device.setPhoneNumber( "0705609864" );		
 		device.setPassword( "111111" );
 		operationBean.setSelectedGpsDevice( device );
 		operationBean.setPassword( "111111" );
@@ -63,7 +58,6 @@ public class GpsDeviceOperationBeanTest {
 	@After
 	public void tearDown() throws Exception {
 		operationBean = null;
-		card = null;
 	}
 
 	/**
