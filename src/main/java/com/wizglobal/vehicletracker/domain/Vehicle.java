@@ -3,6 +3,8 @@
  */
 package com.wizglobal.vehicletracker.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,8 +29,9 @@ import javax.validation.constraints.Size;
 @NamedQueries({
 		@NamedQuery(name = "Vehicle.findAll", query = "SELECT v FROM Vehicle v ORDER BY v.registrationNumber ASC"),
 		@NamedQuery(name = "Vehicle.findVehicleByPhoneNumber", query = "SELECT v FROM Vehicle v WHERE v.gpsDevice.phoneNumber =:phoneNumber"),
-		@NamedQuery(name = "Vehicle.findVehicleByCustomer", query = "SELECT v FROM Vehicle v WHERE v.customer =:customer") })
-public class Vehicle extends BaseEntity {
+		@NamedQuery(name = "Vehicle.findVehicleByCustomer", query = "SELECT v FROM Vehicle v WHERE v.customer =:customer"),
+		@NamedQuery(name = "vehicle.findVehicleByUser", query = "SELECT v FROM Vehicle v WHERE v.customer.user =:user") })
+public class Vehicle extends BaseEntity implements Serializable {
 	/**
 	 * 
 	 */

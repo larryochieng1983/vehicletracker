@@ -19,8 +19,7 @@ import com.wizglobal.vehicletracker.util.LazySorter;
  * @author Otieno Lawrence
  * 
  */
-public class LazyUserDataModel extends LazyDataModel<User> implements
-		Serializable {
+public class LazyUserDataModel extends LazyDataModel<User> implements Serializable {
 
 	/**
 	 * 
@@ -41,7 +40,7 @@ public class LazyUserDataModel extends LazyDataModel<User> implements
 	 * 
 	 * @param crudService
 	 */
-	public LazyUserDataModel(DataAccessService crudService) {
+	public LazyUserDataModel( DataAccessService crudService ) {
 		this.crudService = crudService;
 	}
 
@@ -56,16 +55,15 @@ public class LazyUserDataModel extends LazyDataModel<User> implements
 	 * @return List<User>
 	 */
 	@Override
-	public List<User> load(int first, int pageSize, String sortField,
-			SortOrder sortOrder, Map<String, String> filters) {
-		datasource = crudService.findWithNamedQuery(User.ALL, first, first
-				+ pageSize);
+	public List<User> load( int first, int pageSize, String sortField, SortOrder sortOrder,
+			Map<String, String> filters ) {
+		datasource = crudService.findWithNamedQuery( "User.findAll", first, first + pageSize );
 		// if sort field is not null then we sort the field according to
 		// sortfield and sortOrder parameter
-		if (sortField != null) {
-			Collections.sort(datasource, new LazySorter(sortField, sortOrder));
+		if( sortField != null ) {
+			Collections.sort( datasource, new LazySorter( sortField, sortOrder ) );
 		}
-		setRowCount(crudService.countTotalRecord(User.TOTAL));
+		setRowCount( crudService.countTotalRecord( "User.findTotal" ) );
 		return datasource;
 	}
 
@@ -76,7 +74,7 @@ public class LazyUserDataModel extends LazyDataModel<User> implements
 	 */
 	@Override
 	public boolean isRowAvailable() {
-		if (datasource == null)
+		if( datasource == null )
 			return false;
 		int index = rowIndex % pageSize;
 		return index >= 0 && index < datasource.size();
@@ -89,7 +87,7 @@ public class LazyUserDataModel extends LazyDataModel<User> implements
 	 * @return Object
 	 */
 	@Override
-	public Object getRowKey(User user) {
+	public Object getRowKey( User user ) {
 		return ((Long) user.getId()).toString();
 	}
 
@@ -100,13 +98,13 @@ public class LazyUserDataModel extends LazyDataModel<User> implements
 	 */
 	@Override
 	public User getRowData() {
-		if (datasource == null)
+		if( datasource == null )
 			return null;
 		int index = rowIndex % pageSize;
-		if (index > datasource.size()) {
+		if( index > datasource.size() ) {
 			return null;
 		}
-		return datasource.get(index);
+		return datasource.get( index );
 	}
 
 	/**
@@ -116,11 +114,11 @@ public class LazyUserDataModel extends LazyDataModel<User> implements
 	 * @return
 	 */
 	@Override
-	public User getRowData(String rowKey) {
-		if (datasource == null)
+	public User getRowData( String rowKey ) {
+		if( datasource == null )
 			return null;
-		for (User user : datasource) {
-			if (((Long) user.getId()).toString().equals(rowKey))
+		for( User user : datasource ) {
+			if( ((Long) user.getId()).toString().equals( rowKey ) )
 				return user;
 		}
 		return null;
@@ -135,7 +133,7 @@ public class LazyUserDataModel extends LazyDataModel<User> implements
 	 * @param pageSize
 	 */
 	@Override
-	public void setPageSize(int pageSize) {
+	public void setPageSize( int pageSize ) {
 		this.pageSize = pageSize;
 	}
 
@@ -165,7 +163,7 @@ public class LazyUserDataModel extends LazyDataModel<User> implements
 	 * @param rowIndex
 	 */
 	@Override
-	public void setRowIndex(int rowIndex) {
+	public void setRowIndex( int rowIndex ) {
 		this.rowIndex = rowIndex;
 	}
 
@@ -175,7 +173,7 @@ public class LazyUserDataModel extends LazyDataModel<User> implements
 	 * @param rowCount
 	 */
 	@Override
-	public void setRowCount(int rowCount) {
+	public void setRowCount( int rowCount ) {
 		this.rowCount = rowCount;
 	}
 
@@ -195,7 +193,7 @@ public class LazyUserDataModel extends LazyDataModel<User> implements
 	 * @param list
 	 */
 	@Override
-	public void setWrappedData(Object list) {
+	public void setWrappedData( Object list ) {
 		this.datasource = (List<User>) list;
 	}
 

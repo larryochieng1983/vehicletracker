@@ -5,10 +5,20 @@
 package com.wizglobal.vehicletracker.web;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import org.primefaces.event.SlideEndEvent;
+
+import com.wizglobal.vehicletracker.domain.User;
+import com.wizglobal.vehicletracker.domain.Vehicle;
+import com.wizglobal.vehicletracker.service.UserService;
+import com.wizglobal.vehicletracker.service.VehicleService;
 
 /**
  * Events at homepage are handled here mainly.
@@ -19,8 +29,20 @@ import org.primefaces.event.SlideEndEvent;
 @SessionScoped
 public class DashboardController extends BasePage implements Serializable {
 
+	@Inject
+	private VehicleService vehicleService;
+
+	@Inject
+	private UserService userService;
+
 	private final int defaultReshRate = 2; // 2 seconds
 	private int refreshRate;
+
+	/** The vehicles owned by this user/customer */
+	private List<Vehicle> vehicles;
+
+	/** Currently logged in user */
+	private User currentUser;
 
 	/**
 	 * Creates a new instance of DashboardController
@@ -32,6 +54,8 @@ public class DashboardController extends BasePage implements Serializable {
 	@PostConstruct
 	public void init() {
 		refreshRate = defaultReshRate;
+		getCurrentUser();
+		getVehicles();
 	}
 
 	public int getRefreshRate() {
@@ -45,5 +69,46 @@ public class DashboardController extends BasePage implements Serializable {
 	public void slideEndEvent( SlideEndEvent slideEndEvent ) {
 		setRefreshRate( slideEndEvent.getValue() );
 	}
+
+	/**
+	 * @return the vehicles
+	 */
+	public List<Vehicle> getVehicles() {		
+		Map<String, Object> vehicleQueryParams = new HashMap<String, Object>();
+		vehicleQueryParams.put( "user",  currentUser);
+		vehicles = vehicleService
+				.findWithNamedQuery( "vehicle.findVehicleByUser", vehicleQueryParams );
+		return vehicles;
+	}
+
+	/**
+	 * @param vehicles the vehicles to set
+	 */
+	public void setVehicles( List<Vehicle> vehicles ) {
+		this.vehicles = vehicles;
+	}
+
+	/**
+	 * @return the currentUser
+	 */
+	public User getCurrentUser() {
+		String userName = "";
+		Map<String, String> userQueryParams = new HashMap<String, String>();
+		userQueryParams.put( "userName", userName );
+		List<User> list = userService.findWithNamedQuery( "User.findByUserName", userQueryParams );
+		if( !list.isEmpty() ) {
+			currentUser = list.get( 0 );
+		}
+		return currentUser;
+	}
+
+	/**
+	 * @param currentUser the currentUser to set
+	 */
+	public void setCurrentUser( User currentUser ) {
+		this.currentUser = currentUser;
+	}
+	
+	
 
 }

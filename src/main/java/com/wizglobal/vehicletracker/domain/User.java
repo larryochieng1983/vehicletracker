@@ -3,6 +3,8 @@
  */
 package com.wizglobal.vehicletracker.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
@@ -11,6 +13,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
 
 /**
  * @author Otieno Lawrence
@@ -19,27 +23,35 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "APP_USER")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@NamedQueries({ @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u ORDER BY u.userName") })
-public class User extends BaseEntity {
+@NamedQueries({
+		@NamedQuery(name = "User.findAll", query = "SELECT u FROM User u ORDER BY u.userName ASC"),
+		@NamedQuery(name = "User.findTotal", query = "SELECT count(u) FROM User u "),
+		@NamedQuery(name = "User.findByUserName", query = "SELECT u FROM User u WHERE u.userName = :userName") })
+public class User extends BaseEntity implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public final static String ALL = "User.populateUsers";
-	public final static String TOTAL = "User.countUsersTotal";
-
-	@Column(nullable = false, length = 50)
+	@Null
+	@Column(name = "USER_NAME")
+	@Size(max = 45)
 	private String userName;
 
-	@Column(length = 64)
+	@Null
+	@Column(name = "USER_PASSWORD")
+	@Size(max = 45)
 	private String password;
 
-	@Column(length = 50)
+	@Null
+	@Column(name = "FIRST_NAME")
+	@Size(max = 45)
 	private String firstName;
 
-	@Column(length = 50)
+	@Null
+	@Column(name = "LAST_NAME")
+	@Size(max = 45)
 	private String lastName;
 
 	@Enumerated
