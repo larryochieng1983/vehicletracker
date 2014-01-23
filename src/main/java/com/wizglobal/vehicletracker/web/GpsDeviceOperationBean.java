@@ -12,8 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -28,12 +26,14 @@ import com.wizglobal.vehicletracker.domain.Vehicle;
 import com.wizglobal.vehicletracker.service.GprsSettingService;
 import com.wizglobal.vehicletracker.service.VehicleService;
 import com.wizglobal.vehicletracker.sms.SendMessage;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Named;
 
 /**
  * @author Otieno Lawrence
  * 
  */
-@ManagedBean(name = "gpsDeviceOperationBean")
+@Named
 @SessionScoped
 public class GpsDeviceOperationBean implements Serializable {
 

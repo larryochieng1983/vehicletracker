@@ -48,66 +48,7 @@
 				</p:layoutUnit>
 				<p:layoutUnit position="center" resizable="true" size="200">
 					<h:panelGrid columns="2">
-						<!-- panel for GPS device for the vehicle -->
-						<h:panelGrid id="gpsDevicePanel" columns="2">
-							<f:facet name="header">
-								<h:panelGroup>
-									<h:outputText value="GPS Device" />
-								</h:panelGroup>
-							</f:facet>
-							<h:panelGrid columns="2">
-								<p:outputLabel for="devicetype" value="Device Type" />
-								<p:inputText id="devicetype"
-									value="#{vehicleController.currentVehicle.gpsDevice.gpsType}"
-									required="true" />
-								<p:outputLabel for="idn" value="Device Number" />
-								<p:inputText id="idn"
-									value="#{vehicleController.currentVehicle.gpsDevice.idn}"
-									required="true" />
-								<p:outputLabel for="password" value="Password" />
-								<p:inputText id="password"
-									value="#{vehicleController.currentVehicle.gpsDevice.password}"
-									required="true" />
-								<p:outputLabel for="phonenumber" value="Phone Number" />
-								<p:inputText id="phonenumber"
-									value="#{vehicleController.currentVehicle.gpsDevice.phoneNumber}"
-									required="true" />
-								<p:outputLabel for="serviceprovidername"
-									value="Service Provider Name" />
-								<p:inputText id="serviceprovidername"
-									value="#{vehicleController.currentVehicle.gpsDevice.serviceProviderName}"
-									required="true" />
-								<p:outputLabel for="pin1" value="PIN 1" />
-								<p:inputText id="pin1"
-									value="#{vehicleController.currentVehicle.gpsDevice.pin1}"
-									required="true" />
-								<p:outputLabel for="pin2" value="PIN 2" />
-								<p:inputText id="pin2"
-									value="#{vehicleController.currentVehicle.gpsDevice.pin2}"
-									required="true" />
-								<p:outputLabel for="puk1" value="PUK 1" />
-								<p:inputText id="puk1"
-									value="#{vehicleController.currentVehicle.gpsDevice.puk1}"
-									required="true" />
-								<p:outputLabel for="puk2" value="PUK 2" />
-								<p:inputText id="puk2"
-									value="#{vehicleController.currentVehicle.gpsDevice.puk2}"
-									required="true" />
-								<p:outputLabel for="imsi" value="IMSI" />
-								<p:inputText id="imsi"
-									value="#{vehicleController.currentVehicle.gpsDevice.imsi}"
-									required="true" />
-							</h:panelGrid>
-							<f:facet name="footer">
-								<p:commandButton value="Cancel" update="@(form)">
-								</p:commandButton>
-							</f:facet>
-							<f:facet name="footer">
-								<p:commandButton value="Save"
-									action="#{vehicleController.saveCurrentVehicle()}">
-								</p:commandButton>
-							</f:facet>
-						</h:panelGrid>
+						
 					</h:panelGrid>
 				</p:layoutUnit>
 			</p:layout>

@@ -248,6 +248,7 @@
 		</dependency>		
 	</dependencies>
 	<build>
+            <!--<outputDirectory>${basedir}/target</outputDirectory>-->
 		<finalName>vehicletracker</finalName>
 		<plugins>
 			<plugin>
