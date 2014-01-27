@@ -13,6 +13,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 
@@ -34,26 +35,28 @@ public class User extends BaseEntity implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Null
+	@NotNull
 	@Column(name = "USER_NAME")
 	@Size(max = 45)
 	private String userName;
 
-	@Null
+	@NotNull
 	@Column(name = "USER_PASSWORD")
 	@Size(max = 45)
 	private String password;
 
-	@Null
+	@NotNull
 	@Column(name = "FIRST_NAME")
 	@Size(max = 45)
 	private String firstName;
 
-	@Null
+	@NotNull
 	@Column(name = "LAST_NAME")
 	@Size(max = 45)
 	private String lastName;
 
+	
+	@NotNull
 	@Enumerated
 	private UserRole userRole;
 
