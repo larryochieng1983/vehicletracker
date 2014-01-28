@@ -1,47 +1,50 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	template="./WEB-INF/templates/master.xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui">
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./WEB-INF/templates/master.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
 
-	<ui:define name="page-title">
+    <ui:define name="page-title">
         Welcome - WizGlobal Vehicle Tracker
     </ui:define>
 
-	<ui:define name="content-heading">
+    <ui:define name="content-heading">
         Dashboard
     </ui:define>
 
-	<ui:define name="content">
-		<ui:include src="/WEB-INF/templates/google-map-api.xhtml" />
+    <ui:define name="content">
+        <ui:include src="/WEB-INF/templates/google-map-api.xhtml" />
 
-		<h:form id="dashboard-form">
-			<h:panelGroup style="float: right;padding-bottom: 5px;">
-				<h:panelGrid columns="1">
-					<h:panelGroup>
-						<h:outputText id="output"
-							value="Refresh rate #{dashboardController.refreshRate}s" />
-						<h:inputHidden id="txt2"
-							value="#{dashboardController.refreshRate}" />
-						<p:slider for="txt2" display="output" style="width:200px"
-							displayTemplate="Refresh rate {value}s" minValue="10"
-							maxValue="120" />
-					</h:panelGroup>
-				</h:panelGrid>
-			</h:panelGroup>
-			<h:panelGroup style="float: left;padding-bottom: 5px;">
-				<h:panelGrid columns="1">
-                    Latest Vehicle Positions
-				</h:panelGrid>
-			</h:panelGroup>
+        <h:form id="dashboard-form">
+            <h:panelGroup id="map-dashboard-panel" layout="block">
+                <h:panelGroup id="headerGroup">
+                    <h:panelGroup style="float: right;padding-bottom: 5px;">
+                        <h:panelGrid columns="1">
+                            <h:panelGroup>
+                                <h:outputText id="output"
+                                              value="Refresh rate #{dashboardController.refreshRate}s" />
+                                <h:inputHidden id="txt2"
+                                               value="#{dashboardController.refreshRate}" />
+                                <p:slider for="txt2" display="output" style="width:200px"
+                                          displayTemplate="Refresh rate {value}s" minValue="10"
+                                          maxValue="120" />
+                            </h:panelGroup>
+                        </h:panelGrid>
+                    </h:panelGroup>
+                    <h:panelGroup style="float: left;padding-bottom: 5px;">
+                        <h:panelGrid columns="1">
+                            Latest Vehicle Positions
+                        </h:panelGrid>
+                    </h:panelGroup>
+                </h:panelGroup>
+                <br></br>
 
-			<h:panelGroup id="map-dashboard-panel">
-				<p:gmap id="map-dashboard" widgetVar="map" type="ROAD" center="1,36"
-					zoom="8" style="width: 100%; height: 425px" />
-			</h:panelGroup>
-		</h:form>
-	</ui:define>
+                <p:gmap id="map-dashboard" widgetVar="map" type="ROAD" center="1,36"
+                        zoom="8" style="width: 100%; height: 425px" />
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
 
 </ui:composition>
