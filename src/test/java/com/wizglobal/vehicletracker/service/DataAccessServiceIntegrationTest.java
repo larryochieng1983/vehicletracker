@@ -32,7 +32,7 @@ public class DataAccessServiceIntegrationTest {
 	/**
 	 * @throws java.lang.Exception
 	 */
-	@After
+//	@After
 	public void tearDown() throws Exception {
 	    try {
 		EntityManager entityManager = Dba.getInstance().getEntityManager();
