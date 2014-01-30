@@ -5,12 +5,14 @@ package com.wizglobal.vehicletracker.service;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.wizglobal.vehicletracker.domain.Customer;
+import com.wizglobal.vehicletracker.domain.User;
+import com.wizglobal.vehicletracker.domain.UserRole;
 import javax.persistence.EntityManager;
+import org.junit.After;
 
 /**
  * @author Otieno Lawrence
@@ -32,7 +34,7 @@ public class DataAccessServiceIntegrationTest {
 	/**
 	 * @throws java.lang.Exception
 	 */
-//	@After
+	@After
 	public void tearDown() throws Exception {
 	    try {
 		EntityManager entityManager = Dba.getInstance().getEntityManager();
@@ -69,6 +71,18 @@ public class DataAccessServiceIntegrationTest {
 		testCustomer = creatDummyCustomer();
 		Customer createdCustomer = customerService.create(testCustomer);
 		assertNotNull(createdCustomer);
+		deleteCustomer(testCustomer);
+	}
+        
+	@Test
+	public void testCreateWithUser() {
+		System.out.println("Creating with user.");
+		testCustomer = creatDummyCustomer();
+                User user = new User(testCustomer.getFirstName(), testCustomer.getIdNumber(), testCustomer.getFirstName(), testCustomer.getLastName(), UserRole.ADMIN);
+                testCustomer.setUser(user);
+		Customer createdCustomer = customerService.create(testCustomer);
+		assertNotNull(createdCustomer);
+                assertNotNull("User not persisted with customer.", testCustomer.getUser());
 		deleteCustomer(testCustomer);
 	}
 

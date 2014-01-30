@@ -51,15 +51,16 @@ public abstract class DataAccessService<T> {
 			this.em.refresh( t );
 			em.getTransaction().commit();
 		} catch( Exception e ) {
+			LOGGER.error("Failed to persist entity. " + t + ", \n" + e.getMessage() +  ", transaction will be rolled back" );
+		} finally {
 			try {
-				LOGGER.warn( "Failed to persist entity. " + t + ", transaction will be rolled back" );
 				if( em.getTransaction().isActive() ) {
 					em.getTransaction().rollback();
 				}
 			} catch( Exception exception ) {
 				LOGGER.error( "Fatal error in closing transaction.", exception );
-			}
-		}
+			}                    
+                }
 
 		return t;
 	}
