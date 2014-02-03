@@ -13,6 +13,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Size;
 
 import org.smslib.Message;
 
@@ -47,7 +48,7 @@ public class OutgoingSms extends BaseEntity {
 	private Date wapExpiryDate;
 
 	@Column(name = "WAP_SIGNAL")
-	private char wapSignal;
+	private String wapSignal;
 
 	@Column(name = "CREATE_DATE")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -56,8 +57,9 @@ public class OutgoingSms extends BaseEntity {
 	@Column(name = "ORIGINATOR")
 	private String originator;
 
+	@Size(max=1)
 	@Column(name = "ENCODING")
-	private char encoding;
+	private String encoding;
 
 	@Column(name = "STATUS_REPORT")
 	private int statusReport;
@@ -74,14 +76,16 @@ public class OutgoingSms extends BaseEntity {
 	@Column(name = "SENT_DATE")
 	private Date sentDate;
 
+	@Size(max=1)
 	@Column(name = "REF_NO")
 	private String refNumber;
 
 	@Column(name = "PRIORITY")
 	private int priority;
 
+	@Size(max=1)
 	@Column(name = "STATUS")
-	private char status;
+	private String status;
 
 	@Column(name = "ERRORS")
 	private int errors;
@@ -173,14 +177,14 @@ public class OutgoingSms extends BaseEntity {
 	/**
 	 * @return the wapSignal
 	 */
-	public char getWapSignal() {
+	public String getWapSignal() {
 		return wapSignal;
 	}
 
 	/**
 	 * @param wapSignal the wapSignal to set
 	 */
-	public void setWapSignal( char wapSignal ) {
+	public void setWapSignal( String wapSignal ) {
 		this.wapSignal = wapSignal;
 	}
 
@@ -215,14 +219,14 @@ public class OutgoingSms extends BaseEntity {
 	/**
 	 * @return the encoding
 	 */
-	public char getEncoding() {
+	public String getEncoding() {
 		return encoding;
 	}
 
 	/**
 	 * @param encoding the encoding to set
 	 */
-	public void setEncoding( char encoding ) {
+	public void setEncoding( String encoding ) {
 		this.encoding = encoding;
 	}
 
@@ -327,14 +331,14 @@ public class OutgoingSms extends BaseEntity {
 	/**
 	 * @return the status
 	 */
-	public char getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
 	/**
 	 * @param status the status to set
 	 */
-	public void setStatus( char status ) {
+	public void setStatus( String status ) {
 		this.status = status;
 	}
 

@@ -44,7 +44,7 @@ public class IncomingSms extends BaseEntity {
 
 	@Size(max = 1)
 	@Column(name = "ENCODING")
-	private char encoding;
+	private String encoding;
 
 	@Column(name = "MESSAGEDATE")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -127,14 +127,14 @@ public class IncomingSms extends BaseEntity {
 	/**
 	 * @return the encoding
 	 */
-	public char getEncoding() {
+	public String getEncoding() {
 		return encoding;
 	}
 
 	/**
 	 * @param encoding the encoding to set
 	 */
-	public void setEncoding( char encoding ) {
+	public void setEncoding( String encoding ) {
 		this.encoding = encoding;
 	}
 

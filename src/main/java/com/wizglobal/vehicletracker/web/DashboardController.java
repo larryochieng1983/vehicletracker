@@ -100,7 +100,7 @@ public class DashboardController extends BasePage implements Serializable {
 	 */
 	public User getCurrentUser() {
 		Map<Object, Object> attr = getContext().getAttributes();
-		String userName = (String) attr.get( "userName" );
+		String userName = (String) attr.get( "user" );
 		Map<String, String> userQueryParams = new HashMap<String, String>();
 		userQueryParams.put( "userName", userName );
 		List<User> list = userService.findWithNamedQuery( "User.findByUserName", userQueryParams );

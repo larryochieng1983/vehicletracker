@@ -245,7 +245,7 @@
 			<groupId>com.google.code.geocoder-java</groupId>
 			<artifactId>geocoder-java</artifactId>
 			<version>0.9</version>
-		</dependency>		
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>vehicletracker</finalName>
@@ -269,6 +269,6 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
+		<!-- <outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory> -->
 	</build>
 </project>
