@@ -1,6 +1,5 @@
 package com.wizglobal.vehicletracker.service;
 
-import com.wizglobal.vehicletracker.exception.DataAccessException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +7,10 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+
 import org.apache.log4j.Logger;
+
+import com.wizglobal.vehicletracker.exception.DataAccessException;
 
 /**
  * Implementation of the generic Data Access Service All CRUD (create, read, update, delete) basic data access

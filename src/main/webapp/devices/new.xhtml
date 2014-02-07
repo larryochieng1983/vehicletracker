@@ -23,7 +23,7 @@
                 <p:spacer width="15" height="50" />
                 <h:outputText value="GPS Device Setting Wizard" />
                 <h:panelGrid id="gpsDevicePanel" style="width:100%">
-                    <p:wizard showNavBar="true" showStepStatus="false" style="width: 100%">
+                    <p:wizard showNavBar="true" showStepStatus="false" style="width: 100%" flowListener="#{gpsDeviceOperationBean.onWizardFlow}">
                         <p:tab id="general" title="General">
                             <p:messages />
                             <p:panel header="General" style="width: 100%">

@@ -18,6 +18,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+import org.primefaces.event.FlowEvent;
 import org.smslib.SMSLibException;
 import org.smslib.TimeoutException;
 
@@ -92,7 +93,7 @@ public class GpsDeviceOperationBean extends BasePage implements Serializable {
 	}
 
 	@PostConstruct
-        @Override
+	@Override
 	public void init() {
 		logger.log( Level.INFO, "gpsDeviceOperationBean is initializing" );
 	}
@@ -376,4 +377,7 @@ public class GpsDeviceOperationBean extends BasePage implements Serializable {
 		this.stopDuration = stopDuration;
 	}
 
+	public String onWizardFlow( FlowEvent event ) {
+		return event.getNewStep();
+	}
 }
