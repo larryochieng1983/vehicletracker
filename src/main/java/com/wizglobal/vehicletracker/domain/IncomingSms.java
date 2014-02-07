@@ -24,6 +24,11 @@ import javax.validation.constraints.Size;
 public class IncomingSms extends BaseEntity {
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Size(max = 16)
 	@Column(name = "ORIGINATOR")	
 	private String originator;
