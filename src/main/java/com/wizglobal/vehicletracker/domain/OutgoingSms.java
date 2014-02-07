@@ -22,7 +22,7 @@ import org.smslib.Message;
  * 
  */
 @Entity
-@Table(name = "SMSSERVER_OUT")
+@Table(name = "OUTGOINGSMS")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class OutgoingSms extends BaseEntity {
 	/**

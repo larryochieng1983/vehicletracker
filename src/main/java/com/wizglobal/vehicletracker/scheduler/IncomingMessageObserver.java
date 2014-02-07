@@ -56,7 +56,7 @@ public class IncomingMessageObserver implements MessageListObserver<IncomingSms>
 		incomingSmsService.create( messages );
 		// Extract the google map info
 		for( IncomingSms incomingSms : messages ) {
-			if( incomingSms.getText().startsWith( "https" ) ) {
+			if( incomingSms.getMessage().startsWith( "https" ) ) {
 				Map<String, String> parameters = new HashMap<String, String>();
 				parameters.put( "phoneNumber", incomingSms.getOriginator() );
 				VehiclePosition position = new VehiclePosition();
@@ -68,7 +68,7 @@ public class IncomingMessageObserver implements MessageListObserver<IncomingSms>
 				}
 				position.setVehicle( vehicle );
 				position.setTimeTracked( incomingSms.getMessageDate() );
-				position.setGpsPosition( GmapUrlHelper.getGpsPostion( incomingSms.getText() ) );
+				position.setGpsPosition( GmapUrlHelper.getGpsPostion( incomingSms.getMessage() ) );
 				positions.add( position );
 			}
 			positionService.create( positions );

@@ -3,7 +3,6 @@
  */
 package com.wizglobal.vehicletracker.sms;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

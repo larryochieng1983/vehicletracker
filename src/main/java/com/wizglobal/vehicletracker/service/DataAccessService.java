@@ -51,7 +51,6 @@ public abstract class DataAccessService<T> {
 			this.em.refresh( t );
 			em.getTransaction().commit();
 		} catch( Exception e ) {
-			e.printStackTrace();
 			try {
 				LOGGER.warn( "Failed to persist entity. " + t + ", transaction will be rolled back" );
 				if( em.getTransaction().isActive() ) {
@@ -70,8 +69,6 @@ public abstract class DataAccessService<T> {
 			em.getTransaction().begin();
 			for( T t : list ) {
 				this.em.persist( t );
-				this.em.flush();
-				this.em.refresh( t );
 			}
 			em.getTransaction().commit();
 		} catch( Exception e ) {

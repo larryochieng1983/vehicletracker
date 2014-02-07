@@ -118,8 +118,8 @@ public class ReadMessage implements Runnable {
 		getService().readMessages( msgList, MessageClasses.ALL );
 
 		for( InboundMessage msg : msgList ) {
-			IncomingSms incomingSms = new IncomingSms( msg.getType(), msg.getOriginator(),
-					msg.getDate(), msg.getDate(), msg.getText() );
+			IncomingSms incomingSms = new IncomingSms( msg.getOriginator(), msg.getDate(),
+					msg.getDate(), msg.getText() );
 			list.add( incomingSms );
 			// Delete after reading'
 			if( !getService().deleteMessage( msg ) ) {

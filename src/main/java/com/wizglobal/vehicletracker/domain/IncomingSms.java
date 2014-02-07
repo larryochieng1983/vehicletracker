@@ -7,7 +7,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
@@ -15,32 +14,19 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
-import org.smslib.Message;
-
 /**
  * @author Otieno Lawrence
  * 
  */
 @Entity
-@Table(name = "SMSSERVER_IN")
+@Table(name = "INCOMINGSMS")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class IncomingSms extends BaseEntity {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7243910353101669800L;
 
-	@Column(name = "PROCESSOR")
-	private int process;
-
-	@Column(name = "ORIGINATOR")
 	@Size(max = 16)
+	@Column(name = "ORIGINATOR")	
 	private String originator;
-
-	@Enumerated
-	@Column(name = "TYPE")
-	private Message.MessageTypes type;
 
 	@Size(max = 1)
 	@Column(name = "ENCODING")
@@ -54,15 +40,16 @@ public class IncomingSms extends BaseEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date receiveDate;
 
-	@Column(name = "TEXT")
-	@Size(max = 1024)
-	private String text;
+	@Size(max = 255)
+	@Column(name = "MESSAGE")	
+	private String message;
 
-	@Column(name = "ORIGINAL_REF_NO")
 	@Size(max = 64)
+	@Column(name = "ORIGINAL_REF_NO")	
 	private String originalRefNumber;
 
 	@Column(name = "ORGINAL_RECEIVE_DATE")
+	@Temporal(TemporalType.DATE)
 	private Date originalReceiveDate;
 
 	@Size(max = 64)
@@ -73,28 +60,13 @@ public class IncomingSms extends BaseEntity {
 
 	}
 
-	public IncomingSms( Message.MessageTypes type, String originator, Date messageDate,
-			Date receiveDate, String text ) {
-		this.type = type;
+	public IncomingSms( String originator, Date messageDate,
+			Date receiveDate, String message ) {
 		this.originator = originator;
 		this.messageDate = messageDate;
 		this.receiveDate = receiveDate;
-		this.text = text;
-	}
-
-	/**
-	 * @return the process
-	 */
-	public int getProcess() {
-		return process;
-	}
-
-	/**
-	 * @param process the process to set
-	 */
-	public void setProcess( int process ) {
-		this.process = process;
-	}
+		this.message = message;
+	}	
 
 	/**
 	 * @return the originator
@@ -108,21 +80,7 @@ public class IncomingSms extends BaseEntity {
 	 */
 	public void setOriginator( String originator ) {
 		this.originator = originator;
-	}
-
-	/**
-	 * @return the type
-	 */
-	public Message.MessageTypes getType() {
-		return type;
-	}
-
-	/**
-	 * @param type the type to set
-	 */
-	public void setType( Message.MessageTypes type ) {
-		this.type = type;
-	}
+	}	
 
 	/**
 	 * @return the encoding
@@ -167,17 +125,17 @@ public class IncomingSms extends BaseEntity {
 	}
 
 	/**
-	 * @return the text
+	 * @return the message
 	 */
-	public String getText() {
-		return text;
+	public String getMessage() {
+		return message;
 	}
 
 	/**
-	 * @param text the text to set
+	 * @param message the message to set
 	 */
-	public void setText( String text ) {
-		this.text = text;
+	public void setMessage( String message ) {
+		this.message = message;
 	}
 
 	/**

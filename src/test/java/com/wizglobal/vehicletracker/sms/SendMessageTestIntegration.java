@@ -16,7 +16,7 @@ import junit.framework.TestCase;
 public class SendMessageTestIntegration extends TestCase {
 
 	private SendMessage sendMessage;
-	private String receiver = "0720465844";
+	private String receiver = "0705609864";
 	private String message = "Test: From WizGlobal";
 
 	/*
