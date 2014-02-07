@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../WEB-INF/templates/master.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html">
+
+    <ui:define name="page-title">
+        page-title
+    </ui:define>
+
+    <ui:define name="content-heading">
+        content-heading
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="add-device-form">
+            <h:link value="Back to Device List "
+                    outcome="/devices/list.jsf?faces-redirect=true"
+                    style="float: right" />
+            <p:messages id="messages" />
+            <h:panelGroup layout="block" style="width: 60%">
+                <p:spacer width="15" height="50" />
+                <h:outputText value="GPS Device Setting Wizard" />
+                <h:panelGrid id="gpsDevicePanel" style="width:100%">
+                    <p:wizard showNavBar="true" showStepStatus="false" style="width: 100%">
+                        <p:tab id="general" title="General">
+                            <p:messages />
+                            <p:panel header="General" style="width: 100%">
+                               
+                                <h:outputLabel for="devicetype" value="Device Type" />
+                                <h:inputText id="devicetype"
+                                             value="#{vehicleController.currentVehicle.gpsDevice.gpsType}"
+                                             required="true" />
+                                <h:outputLabel for="idn" value="Device Number" />
+                                <h:inputText id="idn"
+                                             value="#{vehicleController.currentVehicle.gpsDevice.idn}"
+                                             required="true" />
+                                <h:outputLabel for="password" value="Password" />
+                                <h:inputText id="password"
+                                             value="#{vehicleController.currentVehicle.gpsDevice.password}"
+                                             required="true" />
+                                <h:outputLabel for="phonenumber" value="Phone Number" />
+                                <h:inputText id="phonenumber"
+                                             value="#{vehicleController.currentVehicle.gpsDevice.phoneNumber}"
+                                             required="true" />
+                                <h:outputLabel for="serviceprovidername"
+                                               value="Service Provider Name" />
+                                <h:inputText id="serviceprovidername"
+                                             value="#{vehicleController.currentVehicle.gpsDevice.serviceProviderName}"
+                                             required="true" />
+                            </p:panel>
+                        </p:tab>
+                        <p:tab id="access_codes" title="Security Codes">
+                            <p:messages />
+                            <h:panelGrid>
+                                <h:outputLabel for="pin1" value="PIN 1" />
+                                <h:inputText id="pin1"
+                                             value="#{vehicleController.currentVehicle.gpsDevice.pin1}"
+                                             required="true" />
+                                <h:outputLabel for="pin2" value="PIN 2" />
+                                <h:inputText id="pin2"
+                                             value="#{vehicleController.currentVehicle.gpsDevice.pin2}"
+                                             required="true" />
+                                <h:outputLabel for="puk1" value="PUK 1" />
+                                <h:inputText id="puk1"
+                                             value="#{vehicleController.currentVehicle.gpsDevice.puk1}"
+                                             required="true" />
+                                <h:outputLabel for="puk2" value="PUK 2" />
+                                <h:inputText id="puk2"
+                                             value="#{vehicleController.currentVehicle.gpsDevice.puk2}"
+                                             required="true" />
+                                <h:outputLabel for="imsi" value="IMSI" />
+                                <h:inputText id="imsi"
+                                             value="#{vehicleController.currentVehicle.gpsDevice.imsi}"
+                                             required="true" />
+                            </h:panelGrid>                           
+                        </p:tab>
+                        <p:tab id="comfirm" title="Confirm">
+                            <p:commandButton value="Cancel" update="@(form)">
+                            </p:commandButton>
+                            <p:commandButton value="Save"
+                                             action="#{vehicleController.saveCurrentVehicle()}">
+                            </p:commandButton>
+                        </p:tab>
+                    </p:wizard>
+                </h:panelGrid>
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

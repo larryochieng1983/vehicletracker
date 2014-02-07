@@ -96,6 +96,15 @@ public class CustomerController extends BasePage implements Serializable {
 		vehicleController.setCurrentVehicle( vehicle );
 		return vehicleController.editVehicle();
 	}
+        
+        /**
+	 * Sets current customer from the current row in the lazy dat
+	 *
+	 */
+        public String selectAndViewCurrentCustomer() {
+	    setCurrentCustomer(getCustomersListDataModel().getRowData());
+	    return viewCurrentCustomer();
+	}
 
 	public String deleteVehicle( Vehicle vehicle ) {
 		if( vehicle == null ) {

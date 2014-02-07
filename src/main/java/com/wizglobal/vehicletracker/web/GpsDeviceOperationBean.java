@@ -35,14 +35,14 @@ import com.wizglobal.vehicletracker.sms.SendMessage;
  */
 @ManagedBean(name = "gpsDeviceOperationBean")
 @SessionScoped
-public class GpsDeviceOperationBean implements Serializable {
+public class GpsDeviceOperationBean extends BasePage implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger
+	private static final Logger logger = Logger
 			.getLogger( "com.wizglobal.vehicletracker.web.GpsDeviceOperationBean" );
 
 	@Inject
@@ -92,6 +92,7 @@ public class GpsDeviceOperationBean implements Serializable {
 	}
 
 	@PostConstruct
+        @Override
 	public void init() {
 		logger.log( Level.INFO, "gpsDeviceOperationBean is initializing" );
 	}
