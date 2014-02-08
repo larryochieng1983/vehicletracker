@@ -51,9 +51,9 @@
 			    <h:inputText value="#{vehicleController.currentVehicle.color}" id="color" required="true" >
 			    </h:inputText>
 			</fieldset>
-			<h:commandButton id="save-button" action="#{vehicleController.saveCurrentVehicle()}" value="Update"/>
+			<h:commandButton id="save-button" action="#{vehicleController.saveCurrentVehicle()}" value="Update" styleClass="btn"/>
 			<p:spacer width="20"/>
-			<h:button outcome="/vehicles/list.jsf" value="Cancel"/>
+                        <h:button outcome="/vehicles/list.jsf" value="Cancel" styleClass="btn"/>
 		    </h:form>
 		</h:panelGroup>
 	    </fieldset>

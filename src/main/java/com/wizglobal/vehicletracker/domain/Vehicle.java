@@ -30,6 +30,7 @@ import javax.validation.constraints.Size;
 		@NamedQuery(name = "Vehicle.findAll", query = "SELECT v FROM Vehicle v ORDER BY v.registrationNumber ASC"),
 		@NamedQuery(name = "Vehicle.findVehicleByPhoneNumber", query = "SELECT v FROM Vehicle v WHERE v.gpsDevice.phoneNumber =:phoneNumber"),
 		@NamedQuery(name = "Vehicle.findVehicleByCustomer", query = "SELECT v FROM Vehicle v WHERE v.customer =:customer"),
+		@NamedQuery(name = "Vehicle.findVehicleByDevice", query = "SELECT v FROM Vehicle v WHERE v.gpsDevice =:gpsDevice"),
 		@NamedQuery(name = "vehicle.findVehicleByUser", query = "SELECT v FROM Vehicle v WHERE v.customer.user =:user") })
 public class Vehicle extends BaseEntity implements Serializable {
 	/**

@@ -34,7 +34,7 @@
                         <p:commandButton id="user-account" value="User" style="float: right;  margin-top: -28px;"/>
                         <p:overlayPanel dynamic="true" for="user-account" >
                             <p:panel>
-                                <h:outputLink  value="j_spring_security_logout" style="color: black">
+                                <h:outputLink  value="#{request.contextPath}/j_spring_security_logout" style="color: black">
                                     Logout
                                 </h:outputLink> 
                             </p:panel>

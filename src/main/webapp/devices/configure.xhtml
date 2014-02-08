@@ -1,87 +1,118 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
                 template="./../WEB-INF/templates/master.xhtml"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:h="http://java.sun.com/jsf/html">
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:define name="page-title">
         page-title
     </ui:define>
 
     <ui:define name="content-heading">
-        content-heading
+        Configure GPS Device
     </ui:define>
 
     <ui:define name="content">
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{devicesController.preRenderView()}"/>
+        </f:metadata>
+
         <h:form id="add-device-form">
             <h:link value="Back to Device List "
                     outcome="/devices/list.jsf?faces-redirect=true"
                     style="float: right" />
-            <p:messages id="messages" />
             <h:panelGroup layout="block" style="width: 60%">
                 <p:spacer width="15" height="50" />
                 <h:outputText value="GPS Device Setting Wizard" />
                 <h:panelGrid id="gpsDevicePanel" style="width:100%">
-                    <p:wizard showNavBar="true" showStepStatus="false" style="width: 100%" flowListener="#{gpsDeviceOperationBean.onWizardFlow}">
+                    <p:wizard showStepStatus="false" style="width: 100%" flowListener="#{devicesController.onWizardFlow}">
                         <p:tab id="general" title="General">
                             <p:messages />
                             <p:panel header="General" style="width: 100%">
-                               
-                                <h:outputLabel for="devicetype" value="Device Type" />
-                                <h:inputText id="devicetype"
-                                             value="#{vehicleController.currentVehicle.gpsDevice.gpsType}"
-                                             required="true" />
-                                <h:outputLabel for="idn" value="Device Number" />
+                                <h:outputLabel for="idn" value="Device Number" styleClass="legend-label"/>
+                                <pe:tooltip for="idn" value="The tracker's unique ID"/>
                                 <h:inputText id="idn"
-                                             value="#{vehicleController.currentVehicle.gpsDevice.idn}"
+                                             value="#{devicesController.currentDevice.idn}"
                                              required="true" />
-                                <h:outputLabel for="password" value="Password" />
+                                <h:outputLabel for="password" value="Password" styleClass="legend-label" />
+                                <pe:tooltip for="password" value="Secret access key for performing geo-location requests on the GPS device"/>
                                 <h:inputText id="password"
-                                             value="#{vehicleController.currentVehicle.gpsDevice.password}"
+                                             value="#{devicesController.currentDevice.password}"
                                              required="true" />
-                                <h:outputLabel for="phonenumber" value="Phone Number" />
+                                <h:outputLabel for="phonenumber" value="Phone Number" styleClass="legend-label"/>
+                                <pe:tooltip for="phonenumber" value="Phone number associated with the GPS device."/>
                                 <h:inputText id="phonenumber"
-                                             value="#{vehicleController.currentVehicle.gpsDevice.phoneNumber}"
+                                             value="#{devicesController.currentDevice.phoneNumber}"
                                              required="true" />
-                                <h:outputLabel for="serviceprovidername"
-                                               value="Service Provider Name" />
-                                <h:inputText id="serviceprovidername"
-                                             value="#{vehicleController.currentVehicle.gpsDevice.serviceProviderName}"
-                                             required="true" />
+                                 <h:outputLabel for="serviceprovidername" value="Service Provider" styleClass="legend-label" />
+                                <pe:tooltip for="serviceprovidername" value="The Mobile operator for the phone number specificied above"/>
+                                <br></br>
+                                <h:selectOneMenu id="serviceprovidername"
+                                                 value="#{devicesController.currentDevice.serviceProviderName}" required="true"
+                                                 styleClass="dropdown-toggle">
+                                    <f:selectItem itemLabel="Service Provider Name" />
+                                    <f:selectItem itemLabel="Safaricom" itemValue="Safaricom"/>
+                                    <f:selectItem itemLabel="Airtel" itemValue="Airtel"/>
+                                    <f:selectItem itemLabel="YU (Essar)" itemValue="YU,Essar"/>
+                                    <f:selectItem itemLabel="Orange" itemValue="Orange"/>
+                                </h:selectOneMenu>
+
                             </p:panel>
                         </p:tab>
-                        <p:tab id="access_codes" title="Security Codes">
+                        <p:tab id="access_codes">
                             <p:messages />
-                            <h:panelGrid>
-                                <h:outputLabel for="pin1" value="PIN 1" />
+                            <p:panel header="Security Codes">
+                                <h:outputLabel for="pin1" value="PIN 1" styleClass="legend-label"/>
                                 <h:inputText id="pin1"
-                                             value="#{vehicleController.currentVehicle.gpsDevice.pin1}"
+                                             value="#{devicesController.currentDevice.pin1}"
                                              required="true" />
-                                <h:outputLabel for="pin2" value="PIN 2" />
+                                <h:outputLabel for="pin2" value="PIN 2" styleClass="legend-label"/>
                                 <h:inputText id="pin2"
-                                             value="#{vehicleController.currentVehicle.gpsDevice.pin2}"
+                                             value="#{devicesController.currentDevice.pin2}"
                                              required="true" />
-                                <h:outputLabel for="puk1" value="PUK 1" />
+                                <h:outputLabel for="puk1" value="PUK 1" styleClass="legend-label"/>
                                 <h:inputText id="puk1"
-                                             value="#{vehicleController.currentVehicle.gpsDevice.puk1}"
+                                             value="#{devicesController.currentDevice.puk1}"
                                              required="true" />
-                                <h:outputLabel for="puk2" value="PUK 2" />
+                                <h:outputLabel for="puk2" value="PUK 2" styleClass="legend-label"/>
                                 <h:inputText id="puk2"
-                                             value="#{vehicleController.currentVehicle.gpsDevice.puk2}"
+                                             value="#{devicesController.currentDevice.puk2}"
                                              required="true" />
-                                <h:outputLabel for="imsi" value="IMSI" />
+                                <h:outputLabel for="imsi" value="IMSI" styleClass="legend-label"/>
                                 <h:inputText id="imsi"
-                                             value="#{vehicleController.currentVehicle.gpsDevice.imsi}"
+                                             value="#{devicesController.currentDevice.imsi}"
                                              required="true" />
-                            </h:panelGrid>                           
+                            </p:panel>                           
                         </p:tab>
-                        <p:tab id="comfirm" title="Confirm">
-                            <p:commandButton value="Cancel" update="@(form)">
-                            </p:commandButton>
-                            <p:commandButton value="Save"
-                                             action="#{vehicleController.saveCurrentVehicle()}">
-                            </p:commandButton>
+                        <p:tab id="add_to_vehicle" title="Confirm">
+                            <p:messages />
+                            <p:panel header="Select Vehicle">
+                                <h:panelGroup layout="block">
+                                    <h:outputLabel for="target-vehicle" value="Vehicle to Carry Device" styleClass="legend-label"/>
+                                    <h:selectOneMenu id="target-vehicle"
+                                                     value="#{devicesController.currentVehicle}" required="false"
+                                                     converter="vehicleConverter" styleClass="dropdown-toggle">
+                                        <f:selectItem itemLabel="Select Vehicle" />
+                                        <f:selectItems value="#{devicesController.availableVehicles}"
+                                                       var="vehicle" itemValue="#{vehicle}"
+                                                       itemLabel="#{vehicle.registrationNumber}" />
+                                    </h:selectOneMenu>
+                                    <br></br>
+                                    <p:spacer width="20" height="20"/>
+                                    <br></br>
+                                    <h:commandButton id="save-button"
+                                                     action="#{devicesController.saveDeviceConfiguration()}" value="Save" styleClass="btn" />
+                                    <p:spacer width="20" />
+                                    <h:button outcome="/devices/list.jsf" value="Cancel" styleClass="btn"/>
+                                    <br></br>
+                                    <p:spacer width="20" height="20"/>
+                                    <br></br>
+                                </h:panelGroup>
+                            </p:panel>                           
                         </p:tab>
                     </p:wizard>
                 </h:panelGrid>

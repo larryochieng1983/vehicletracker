@@ -25,14 +25,7 @@ import javax.validation.constraints.Size;
 })
 public class GpsDevice extends BaseEntity {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-
-	@Size(max = 50)
-	@Column(name = "gPS_TYPE")
-	private String gpsType;
 
 	@NotNull
 	@Size(max = 14)
@@ -72,20 +65,6 @@ public class GpsDevice extends BaseEntity {
 	@Size(max = 15)
 	@Column(name = "IMSI")
 	private String imsi;
-
-	/**
-	 * @return the gpsType
-	 */
-	public String getGpsType() {
-		return gpsType;
-	}
-
-	/**
-	 * @param gpsType the gpsType to set
-	 */
-	public void setGpsType( String gpsType ) {
-		this.gpsType = gpsType;
-	}
 
 	/**
 	 * @return the idn

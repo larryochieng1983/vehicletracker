@@ -3,27 +3,31 @@
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
                 template="./../WEB-INF/templates/master.xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:define name="page-title">
-        page-title
+        Vehicle Tracker
     </ui:define>
 
     <ui:define name="content-heading">
-        content-heading
+        GPS Devices
     </ui:define>
 
     <ui:define name="content">
         <h:form>
             <h:panelGroup style="float: right">
                 <h:commandLink action="/devices/configure.jsf"
-                               value="Configure New" />
+                               value="Configure New">
+                    <f:param name="new"/>
+                </h:commandLink>
             </h:panelGroup>
         </h:form>
         <p:spacer height="15" width="20" />
         <h:form id="device-list-form">
+            <p:messages/>
             <p:dataTable value="#{devicesController.gpsDevicesModel}" var="device"
-                         lazy="true" rows="20">
+                         lazy="true" rows="20" paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom">
                 <p:column headerText="Device Number">
                     <h:outputText value="#{device.idn}" />
                 </p:column>
@@ -33,8 +37,13 @@
                 <p:column headerText="Device Imsi">
                     <h:outputText value="#{device.imsi}" />
                 </p:column>
-                <p:column headerText="Device Imsi">
+                <p:column headerText="Mobile Operator">
                     <h:outputText value="#{device.serviceProviderName}" />
+                </p:column>
+                <p:column>
+                    <h:commandLink action="#{devicesController.configureDevice()}" value="Configure"/>
+                    <h:outputText value=" | " />
+                    <h:commandLink action="#{devicesController.deleteDevice()}" value="Delete"/>
                 </p:column>
             </p:dataTable>
         </h:form>
