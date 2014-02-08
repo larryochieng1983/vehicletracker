@@ -15,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 import com.wizglobal.vehicletracker.domain.GprsSetting;
 import com.wizglobal.vehicletracker.domain.GpsDevice;
 import com.wizglobal.vehicletracker.service.GprsSettingService;
+import com.wizglobal.vehicletracker.sms.GatewayService;
 
 /**
  * @author Otieno Lawrence
@@ -35,7 +36,7 @@ public class GpsDeviceOperationBeanTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks( this );
-
+		GatewayService.startService();
 		device = new GpsDevice();
 		operationBean = new GpsDeviceOperationBean();
 		device.setServiceProviderName( "Safaricom" );
@@ -58,6 +59,7 @@ public class GpsDeviceOperationBeanTest {
 	@After
 	public void tearDown() throws Exception {
 		operationBean = null;
+		GatewayService.stopService();
 	}
 
 	/**

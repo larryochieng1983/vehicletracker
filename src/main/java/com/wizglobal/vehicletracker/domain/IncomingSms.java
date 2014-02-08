@@ -23,19 +23,14 @@ import javax.validation.constraints.Size;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class IncomingSms extends BaseEntity {
 
-
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
 	@Size(max = 16)
-	@Column(name = "ORIGINATOR")	
+	@Column(name = "ORIGINATOR")
 	private String originator;
-
-	@Size(max = 1)
-	@Column(name = "ENCODING")
-	private String encoding;
 
 	@Column(name = "MESSAGEDATE")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -46,32 +41,19 @@ public class IncomingSms extends BaseEntity {
 	private Date receiveDate;
 
 	@Size(max = 255)
-	@Column(name = "MESSAGE")	
+	@Column(name = "MESSAGE")
 	private String message;
-
-	@Size(max = 64)
-	@Column(name = "ORIGINAL_REF_NO")	
-	private String originalRefNumber;
-
-	@Column(name = "ORGINAL_RECEIVE_DATE")
-	@Temporal(TemporalType.DATE)
-	private Date originalReceiveDate;
-
-	@Size(max = 64)
-	@Column(name = "GATEWAY_ID")
-	private String gatewayId;
 
 	public IncomingSms() {
 
 	}
 
-	public IncomingSms( String originator, Date messageDate,
-			Date receiveDate, String message ) {
+	public IncomingSms( String originator, Date messageDate, Date receiveDate, String message ) {
 		this.originator = originator;
 		this.messageDate = messageDate;
 		this.receiveDate = receiveDate;
 		this.message = message;
-	}	
+	}
 
 	/**
 	 * @return the originator
@@ -85,20 +67,6 @@ public class IncomingSms extends BaseEntity {
 	 */
 	public void setOriginator( String originator ) {
 		this.originator = originator;
-	}	
-
-	/**
-	 * @return the encoding
-	 */
-	public String getEncoding() {
-		return encoding;
-	}
-
-	/**
-	 * @param encoding the encoding to set
-	 */
-	public void setEncoding( String encoding ) {
-		this.encoding = encoding;
 	}
 
 	/**
@@ -141,48 +109,6 @@ public class IncomingSms extends BaseEntity {
 	 */
 	public void setMessage( String message ) {
 		this.message = message;
-	}
-
-	/**
-	 * @return the originalRefNumber
-	 */
-	public String getOriginalRefNumber() {
-		return originalRefNumber;
-	}
-
-	/**
-	 * @param originalRefNumber the originalRefNumber to set
-	 */
-	public void setOriginalRefNumber( String originalRefNumber ) {
-		this.originalRefNumber = originalRefNumber;
-	}
-
-	/**
-	 * @return the originalReceiveDate
-	 */
-	public Date getOriginalReceiveDate() {
-		return originalReceiveDate;
-	}
-
-	/**
-	 * @param originalReceiveDate the originalReceiveDate to set
-	 */
-	public void setOriginalReceiveDate( Date originalReceiveDate ) {
-		this.originalReceiveDate = originalReceiveDate;
-	}
-
-	/**
-	 * @return the gatewayId
-	 */
-	public String getGatewayId() {
-		return gatewayId;
-	}
-
-	/**
-	 * @param gatewayId the gatewayId to set
-	 */
-	public void setGatewayId( String gatewayId ) {
-		this.gatewayId = gatewayId;
 	}
 
 }
