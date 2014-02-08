@@ -377,7 +377,4 @@ public class GpsDeviceOperationBean extends BasePage implements Serializable {
 		this.stopDuration = stopDuration;
 	}
 
-	public String onWizardFlow( FlowEvent event ) {
-		return event.getNewStep();
-	}
 }
