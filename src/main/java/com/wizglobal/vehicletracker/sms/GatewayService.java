@@ -81,7 +81,9 @@ public class GatewayService {
 			IOException, InterruptedException {
 		getService().addGateway( getGateway() );
 		log.info( "Starting SMS service" );
-		getService().startService();
+		if( getService().getServiceStatus() != Service.ServiceStatus.STARTED ) {
+			getService().startService();
+		}
 		log.info( "SMS service successfully Started!" );
 	}
 }
