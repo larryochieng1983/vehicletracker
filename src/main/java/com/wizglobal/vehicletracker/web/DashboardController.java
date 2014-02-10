@@ -13,6 +13,8 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
+
 import org.primefaces.event.SlideEndEvent;
 
 import com.wizglobal.vehicletracker.domain.User;
@@ -28,6 +30,11 @@ import com.wizglobal.vehicletracker.service.VehicleService;
 @Named(value = "dashboardController")
 @SessionScoped
 public class DashboardController extends BasePage implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Inject
 	private VehicleService vehicleService;
@@ -73,9 +80,9 @@ public class DashboardController extends BasePage implements Serializable {
 	/**
 	 * @return the vehicles
 	 */
-	public List<Vehicle> getVehicles() {		
+	public List<Vehicle> getVehicles() {
 		Map<String, Object> vehicleQueryParams = new HashMap<String, Object>();
-		vehicleQueryParams.put( "user",  currentUser);
+		vehicleQueryParams.put( "user", currentUser );
 		vehicles = vehicleService
 				.findWithNamedQuery( "vehicle.findVehicleByUser", vehicleQueryParams );
 		return vehicles;
@@ -92,7 +99,8 @@ public class DashboardController extends BasePage implements Serializable {
 	 * @return the currentUser
 	 */
 	public User getCurrentUser() {
-		String userName = "";
+		Map<Object, Object> attr = getContext().getAttributes();
+		String userName = (String) attr.get( "user" );
 		Map<String, String> userQueryParams = new HashMap<String, String>();
 		userQueryParams.put( "userName", userName );
 		List<User> list = userService.findWithNamedQuery( "User.findByUserName", userQueryParams );
@@ -108,7 +116,9 @@ public class DashboardController extends BasePage implements Serializable {
 	public void setCurrentUser( User currentUser ) {
 		this.currentUser = currentUser;
 	}
-	
-	
+
+	protected FacesContext getContext() {
+		return FacesContext.getCurrentInstance();
+	}
 
 }

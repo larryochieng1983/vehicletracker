@@ -40,7 +40,7 @@ public class VehiclePosition extends BaseEntity {
 	@Column(name = "TIME_TRACKED")
 	private Date timeTracked;
 
-	@OneToOne
+	@OneToOne(cascade = { CascadeType.ALL })
 	private GpsPosition gpsPosition;
 
 	/**

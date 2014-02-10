@@ -14,6 +14,11 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class GprsSettingService extends DataAccessService<GprsSetting> implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public GprsSettingService() {
 		super( GprsSetting.class );
 	}

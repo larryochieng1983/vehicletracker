@@ -40,9 +40,7 @@
 							<f:param value="#{vehicleController.currentVehicle.model}" />
 						</h:outputFormat>
 					</fieldset>
-					<h:outputLabel value="#{vehicleController.currentVehicle.customer}" />
-					<h:outputLabel
-						value="#{vehicleController.currentVehicle.gpsDevice}" />
+					<h:outputLabel value="#{vehicleController.currentVehicle.customer}" />					
 					<h:outputLabel
 						value="Manufactured by #{vehicleController.currentVehicle.manufacturer}" />
 				</p:layoutUnit>
@@ -51,6 +49,7 @@
 						<!-- panel for GPS device for the vehicle -->
 						
 					</h:panelGrid>
+
 				</p:layoutUnit>
 			</p:layout>
 		</h:panelGroup>

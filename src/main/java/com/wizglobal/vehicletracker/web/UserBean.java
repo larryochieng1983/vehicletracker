@@ -7,22 +7,19 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
-import javax.management.relation.Role;
 
+import org.apache.log4j.Logger;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
 import com.wizglobal.vehicletracker.domain.User;
 import com.wizglobal.vehicletracker.domain.UserRole;
-import com.wizglobal.vehicletracker.domain.VehicleType;
 import com.wizglobal.vehicletracker.exception.DataAccessException;
 import com.wizglobal.vehicletracker.service.UserService;
 
@@ -39,7 +36,7 @@ public class UserBean extends BasePage implements Serializable {
      */
 	private static final long serialVersionUID = 1L;
 
-	private transient Logger logger;
+	private static Logger logger = Logger.getLogger( UserBean.class );
 
 	@Inject
 	private UserService userService;
@@ -71,7 +68,7 @@ public class UserBean extends BasePage implements Serializable {
 	@PostConstruct
 	@Override
 	public void init() {
-		logger.log( Level.INFO, "UserBean is initializing" );
+		logger.info( "UserBean is initializing" );
 		lazyUsersDataModel = new LazyUsersDataModel( userService );
 		roleList = new ArrayList<>();
 		for( UserRole userRole : UserRole.values() ) {

@@ -55,6 +55,8 @@ public class User extends BaseEntity implements Serializable {
 	@Size(max = 45)
 	private String lastName;
 
+	
+	@NotNull
 	@Enumerated
 	private UserRole userRole;
 

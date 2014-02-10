@@ -197,9 +197,13 @@ public class VehicleController extends BasePage implements Serializable {
 	 */
 	public String saveCurrentVehicle() {
 		try {
-			currentVehicle.setGpsDevice( gpsDevice );
-			vehicleService.update( currentVehicle );
-			addInfoMessage( "Vehicle info updated", null );
+			if( this.gpsDevice != null ) {
+				currentVehicle.setGpsDevice( getGpsDevice() );
+				vehicleService.update( currentVehicle );
+				addInfoMessage( "Vehicle info updated", null );
+			}else{
+				System.out.println("GPS Device Null!");				
+			}
 			return appendFacesRedirectTrue( "/vehicles/view.jsf" );
 		} catch( Exception e ) {
 			addErrorgMessage( "Failed to save the new vehicle data. Please try again", null );

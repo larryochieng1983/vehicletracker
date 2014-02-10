@@ -26,6 +26,10 @@
 		<h:form id="new-user-form">
 			<h:panelGroup layout="block" rendered="#{not empty userBean.newUser}"
 				style="width: 50%">
+				<p:outputLabel value="User Name:" for="userName"
+					styleClass="legend-label" />
+				<h:inputText id="userName" value="#{userBean.newUser.userName}"
+					required="true" />
 				<p:outputLabel value="First Name:" for="firstName"
 					styleClass="legend-label" />
 				<h:inputText id="firstName" value="#{userBean.newUser.firstName}"
@@ -40,7 +44,6 @@
 					value="#{userBean.newUser.userRole}">
 					<f:selectItem itemLabel="Click to Select" itemValue="" />
 					<f:selectItems value="#{userBean.roleList}" />
-					<p:ajax process="selectRoleMenu" update="@(form)" />
 				</p:selectOneMenu>
 				<h:outputLabel value="Password:" for="password"
 					styleClass="legend-label" />

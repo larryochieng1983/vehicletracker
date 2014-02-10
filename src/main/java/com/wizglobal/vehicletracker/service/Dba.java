@@ -10,6 +10,8 @@ import javax.persistence.Persistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.wizglobal.vehicletracker.sms.GatewayService;
+
 /**
  * @author Otieno Lawrence
  * 
@@ -30,6 +32,7 @@ public class Dba {
 		emf = Persistence.createEntityManagerFactory("vehicleTrackerPU");
 		entityManager = emf.createEntityManager();
 		logger.info("Persistence Context initialized");
+		GatewayService.startService();
 	    } catch (Exception e) {
 		logger.error("Failed to initialize persistence context. Application will not work as expected", e);
 	    }
