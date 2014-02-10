@@ -48,6 +48,7 @@ public class InboundNotification implements IInboundMessageNotification, Seriali
 	@Inject
 	private VehiclePositionService vehiclePositionService;
 
+        @Override
 	public void process( AGateway gateway, MessageTypes msgType, InboundMessage msg ) {
 		if( msgType == MessageTypes.INBOUND ) {
 			log.info( ">>> New Inbound message " + msg.getMessageId() + "detected from Gateway: "
@@ -60,7 +61,7 @@ public class InboundNotification implements IInboundMessageNotification, Seriali
 			incomingSmsService.create( incomingSms );
 
 			// create the vehicle position
-			Map<String, String> parameters = new HashMap<String, String>();
+			Map<String, String> parameters = new HashMap<>();
 			parameters.put( "phoneNumber", incomingSms.getOriginator() );
 			if( incomingSms.getMessage().startsWith( "http" ) ) {
 				VehiclePosition position = new VehiclePosition();
