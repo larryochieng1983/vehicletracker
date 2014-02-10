@@ -4,7 +4,9 @@
 package com.wizglobal.vehicletracker.sms;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -45,7 +47,6 @@ public class InboundNotification implements IInboundMessageNotification, Seriali
 	private VehicleService vehicleService;
 	@Inject
 	private VehiclePositionService vehiclePositionService;
-	
 
 	public void process( AGateway gateway, MessageTypes msgType, InboundMessage msg ) {
 		if( msgType == MessageTypes.INBOUND ) {
@@ -57,18 +58,23 @@ public class InboundNotification implements IInboundMessageNotification, Seriali
 			incomingSms.setReceiveDate( msg.getDate() );
 			incomingSms.setMessage( msg.getText() );
 			incomingSmsService.create( incomingSms );
-			
-			//create the vehicle position
-			VehiclePosition position = new VehiclePosition();
-			Vehicle vehicle = null;
-			List<Vehicle> list = vehicleService.findWithNamedQuery( "findVehicleByPhoneNumber",
-					parameters );
-			if( !list.isEmpty() ) {
-				vehicle = list.get( 0 );
+
+			// create the vehicle position
+			Map<String, String> parameters = new HashMap<String, String>();
+			parameters.put( "phoneNumber", incomingSms.getOriginator() );
+			if( incomingSms.getMessage().startsWith( "http" ) ) {
+				VehiclePosition position = new VehiclePosition();
+				Vehicle vehicle = null;
+				List<Vehicle> list = vehicleService.findWithNamedQuery( "findVehicleByPhoneNumber",
+						parameters );
+				if( !list.isEmpty() ) {
+					vehicle = list.get( 0 );
+				}
+				position.setVehicle( vehicle );
+				position.setTimeTracked( incomingSms.getMessageDate() );
+				position.setGpsPosition( GmapUrlHelper.getGpsPostion( incomingSms.getMessage() ) );
+				vehiclePositionService.create( position );
 			}
-			position.setVehicle( vehicle );
-			position.setTimeTracked( incomingSms.getMessageDate() );
-			position.setGpsPosition( GmapUrlHelper.getGpsPostion( incomingSms.getMessage() ) );
 		} else if( msgType == MessageTypes.STATUSREPORT ) {
 			log.info( ">>> New Inbound Status Report message detected from Gateway: "
 					+ gateway.getGatewayId() );
