@@ -3,6 +3,8 @@
  */
 package com.wizglobal.vehicletracker.sms;
 
+import java.io.Serializable;
+
 import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
@@ -17,7 +19,12 @@ import com.wizglobal.vehicletracker.service.OutgoingSmsService;
  * @author Otieno Lawrence
  * 
  */
-public class OutboundNotification implements IOutboundMessageNotification {
+public class OutboundNotification implements IOutboundMessageNotification,Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private static Logger log = Logger.getLogger( SendMessage.class );
 	

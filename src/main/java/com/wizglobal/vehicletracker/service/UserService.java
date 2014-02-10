@@ -14,7 +14,12 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class UserService extends DataAccessService<User> implements Serializable {
 
-    public UserService() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public UserService() {
 	super(User.class);
     }
 }

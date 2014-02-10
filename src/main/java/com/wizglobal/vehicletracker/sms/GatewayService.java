@@ -82,6 +82,6 @@ public class GatewayService {
 		getService().addGateway( getGateway() );
 		log.info( "Starting SMS service" );
 		getService().startService();
-		log.info( "SMS service successfully" );
+		log.info( "SMS service successfully Started!" );
 	}
 }
