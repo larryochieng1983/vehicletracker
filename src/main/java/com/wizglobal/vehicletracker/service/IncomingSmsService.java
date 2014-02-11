@@ -23,6 +23,5 @@ public class IncomingSmsService extends DataAccessService<IncomingSms> implement
 
 	public IncomingSmsService() {
 		super( IncomingSms.class );
-		System.out.println("IncomingSmsService Started");
 	}
 }
