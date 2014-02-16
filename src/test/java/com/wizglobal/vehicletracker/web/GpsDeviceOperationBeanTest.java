@@ -36,7 +36,7 @@ public class GpsDeviceOperationBeanTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks( this );
-		GatewayService.startService();
+		GatewayService.getGatewayService().startService();
 		device = new GpsDevice();
 		operationBean = new GpsDeviceOperationBean();
 		device.setServiceProviderName( "Safaricom" );
@@ -59,7 +59,7 @@ public class GpsDeviceOperationBeanTest {
 	@After
 	public void tearDown() throws Exception {
 		operationBean = null;
-		GatewayService.stopService();
+		GatewayService.getGatewayService().stopService();
 	}
 
 	/**

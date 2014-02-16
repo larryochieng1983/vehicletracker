@@ -1,58 +1,65 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	template="./../WEB-INF/templates/master.xhtml"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../WEB-INF/templates/master.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/extensions"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:beacon="http://java.sun.com/jsf/composite/beacon"
+                xmlns:poue="http://primefaces.org/ui/extensions">
 
-	<ui:define name="content-heading">
+    <ui:define name="content-heading">
         Vehicle Detail
     </ui:define>
 
 
-	<ui:define name="content">
-		<script src="http://maps.google.com/maps/api/js?sensor=false"
-			type="text/javascript" />
-		<h:form>
-			<h:link value="Vehicles "
-				outcome="/vehicles/list.jsf?faces-redirect=true" />
-			<h:outputText
-				value="/ #{vehicleController.currentVehicle.registrationNumber}" />
-			<h:panelGroup style="float: right">
-				<h:commandLink action="#{vehicleController.editVehicle}"
-					value="Edit" />
-				<h:outputText value="  |  " />
-				<h:commandLink action="#{vehicleController.deleteCurrentVehicle}"
-					value="Delete" />
-			</h:panelGroup>
-		</h:form>
-		<h:panelGroup style="width: 100%" layout="block">
-			<p:layout style="min-width: 400px;min-height: 430px">
-				<p:layoutUnit position="west" resizable="true" size="200">
-					<fieldset>
-						<legend>Vehicle Detail</legend>
-						<h:outputFormat value="{0} - {1} {2}, ">
-							<f:param
-								value="#{vehicleController.currentVehicle.registrationNumber}" />
-							<f:param value="#{vehicleController.currentVehicle.color}" />
-							<f:param value="#{vehicleController.currentVehicle.model}" />
-						</h:outputFormat>
-					</fieldset>
-					<h:outputLabel value="#{vehicleController.currentVehicle.customer}" />					
-					<h:outputLabel
-						value="Manufactured by #{vehicleController.currentVehicle.manufacturer}" />
-				</p:layoutUnit>
-				<p:layoutUnit position="center" resizable="true" size="200">
-					<h:panelGrid columns="2">
-						<!-- panel for GPS device for the vehicle -->
-						
-					</h:panelGrid>
+    <ui:define name="content">
+        <ui:include src="/WEB-INF/templates/google-map-api.xhtml" />
+        <h:form>
+            <h:link value="Vehicles "
+                    outcome="/vehicles/list.jsf?faces-redirect=true" />
+            <h:outputText
+                value="/ #{vehicleController.currentVehicle.registrationNumber}" />
+            <h:panelGroup style="float: right">
+                <h:commandLink action="#{vehicleController.editVehicle}"
+                               value="Edit" />
+                <h:outputText value="  |  " />
+                <h:commandLink action="#{vehicleController.deleteCurrentVehicle}"
+                               value="Delete" />
+            </h:panelGroup>
+        </h:form>
 
-				</p:layoutUnit>
-			</p:layout>
-		</h:panelGroup>
-	</ui:define>
+        <p:layout style="width: 100%;">
+            <p:layoutUnit position="west">
+                <h:panelGroup layout="block">
+                    <fieldset>
+                        <legend>Vehicle Detail</legend>
+                        <h:outputFormat value="{0} - {1} {2}, ">
+                            <f:param
+                                value="#{vehicleController.currentVehicle.registrationNumber}" />
+                            <f:param value="#{vehicleController.currentVehicle.color}" />
+                            <f:param value="#{vehicleController.currentVehicle.model}" />
+                        </h:outputFormat>
+                    </fieldset>
+                    <h:link outcome="/customers/view.jsf">
+                        <h:outputLabel value="#{vehicleController.currentVehicle.customer}" />	
+                    </h:link>				
+                    <h:outputLabel
+                        value="Manufactured by #{vehicleController.currentVehicle.manufacturer}" />
+                    <!-- panel for GPS device for the vehicle -->
+                    <beacon:gpsActions device="#{vehicleController.currentVehicle.gpsDevice}"/>
+                </h:panelGroup>
+            </p:layoutUnit>
+            <p:layoutUnit position="center">
+                <h:panelGroup id="content_left" class="content_left" style="width: 80%">
+                    <p:gmap id="map-dashboard" widgetVar="map" type="ROAD" center="1,36"
+                            zoom="8" style="width: 100%; height: 425px" />
+                </h:panelGroup>
+            </p:layoutUnit>
+        </p:layout>
+
+    </ui:define>
 
 </ui:composition>

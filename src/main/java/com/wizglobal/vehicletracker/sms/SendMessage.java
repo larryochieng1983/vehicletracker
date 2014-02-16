@@ -34,7 +34,7 @@ public class SendMessage {
 		// Send a message synchronously.
 		OutboundMessage msg = new OutboundMessage( receiver, message );
 		msg.setStatusReport( true );
-		return GatewayService.getService().sendMessage( msg );
+		return GatewayService.getGatewayService().getService().sendMessage( msg );
 	}
 
 }

@@ -11,6 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wizglobal.vehicletracker.sms.GatewayService;
+import com.wizglobal.vehicletracker.web.GatewayServiceMonitor;
+import java.io.IOException;
+import javax.inject.Inject;
+import org.smslib.SMSLibException;
+import org.smslib.Service;
 
 /**
  * @author Otieno Lawrence
@@ -22,7 +27,8 @@ public class Dba {
 
 	
 	private EntityManager entityManager;
-
+       
+        
 	/**
 	 * Called only once to instantiate the persistence context.
 	 */
@@ -32,12 +38,23 @@ public class Dba {
 		emf = Persistence.createEntityManagerFactory("vehicleTrackerPU");
 		entityManager = emf.createEntityManager();
 		logger.info("Persistence Context initialized");
-		GatewayService.startService();
+                initializaGateway();
+                System.out.println("sikufika hapa");
 	    } catch (Exception e) {
 		logger.error("Failed to initialize persistence context. Application will not work as expected", e);
 	    }
-	}	
-	
+	}
+        
+        protected final void initializaGateway() {
+            try {
+                GatewayService.getGatewayService().startService();
+            } catch (SMSLibException | IOException | InterruptedException e) {
+                logger.error("Gateway Service failed to initialize successfully. " + e.getMessage(), e);
+            } catch (Exception exception) {
+                logger.error("Internal error occurred while initializing the gateway service. " + exception.getMessage(), exception );
+            }
+        }
+        
 	/**
 	 * Note that transactions should be managed
 	*

@@ -17,7 +17,7 @@
                             <h:outputText value="Vehicle Tracker"/>
                         </h:outputLink>
                     </div>
-                    <div id="menuItems" style="margin-top:  5px; margin-left: 300px">
+                    <div id="menuItems" style="margin-top:  1px; margin-left: 300px">
                         <h:outputLink value="#{request.contextPath}/vehicles/list.jsf">
                             <h:outputText value="Vehicles"/>
                         </h:outputLink>
@@ -29,16 +29,23 @@
                         <h:outputLink value="#{request.contextPath}/customers/list.jsf">
                             <h:outputText value="Customers"/>
                         </h:outputLink>
+                        <h:panelGroup style="margin-left: 200px" >
+                            <p:graphicImage value="#{resource['images/starting.png']}" rendered="#{'STARTING' eq gatewayServiceMonitor.gatewayStatus}" title="Gateway service status: starting.."/>
+                            <p:graphicImage value="#{resource['images/started.png']}" rendered="#{'STARTED' eq gatewayServiceMonitor.gatewayStatus}" title="Gateway service is Running"/>
+                            <p:graphicImage value="#{resource['images/stopping.png']}" rendered="#{'STOPPING' eq gatewayServiceMonitor.gatewayStatus}" title="Gateway service status is Stopping"/>
+                            <p:graphicImage value="#{resource['images/stopped.png']}" rendered="#{'STOPPED' eq gatewayServiceMonitor.gatewayStatus}" title="Gateway service status is Stopped"/>
+                        </h:panelGroup>
                     </div>
+                  
                     <div id="user-current" style="float: right; ">
-                        <p:commandButton id="user-account" value="User" style="float: right;  margin-top: -28px;"/>
-                        <p:overlayPanel dynamic="true" for="user-account" >
-                            <p:panel>
-                                <h:outputLink  value="#{request.contextPath}/j_spring_security_logout" style="color: black">
-                                    Logout
-                                </h:outputLink> 
-                            </p:panel>
-                        </p:overlayPanel>
+                            <p:commandButton id="user-account" value="User" style="float: right;  margin-top: -28px;"/>
+                            <p:overlayPanel dynamic="true" for="user-account" >
+                                <p:panel>
+                                    <h:outputLink  value="#{request.contextPath}/j_spring_security_logout" style="color: black">
+                                        Logout
+                                    </h:outputLink> 
+                                </p:panel>
+                            </p:overlayPanel>
                     </div>
                 </h:panelGroup>
             </h:panelGroup>

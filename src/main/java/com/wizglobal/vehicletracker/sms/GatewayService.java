@@ -19,16 +19,16 @@ import org.smslib.modem.SerialModemGateway;
  * @author Otieno Lawrence
  * 
  */
-public class GatewayService {
+public class GatewayService  {
 
 	private static Logger log = Logger.getLogger( GatewayService.class );
 
 	/** SMS Gateway Properties */
-	private static Properties gatewayProperties = new Properties();
-	private static Service service;
-	private static SerialModemGateway gateway;
+	private Properties gatewayProperties = new Properties();
+	private Service service;
+	private SerialModemGateway gateway;
 
-	public static Service getService() {
+	public Service getService() {
 		if( service == null ) {
 			service = Service.getInstance();
 			service.setInboundMessageNotification( new InboundNotification() );
@@ -37,7 +37,7 @@ public class GatewayService {
 		return service;
 	}
 
-	private static SerialModemGateway getGateway() {
+	private  SerialModemGateway getGateway() {
 		try {
 			InputStream inputStream = Thread.currentThread().getContextClassLoader()
 					.getResourceAsStream( "smslib/modem.properties" );
@@ -72,18 +72,52 @@ public class GatewayService {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	public static void stopService() throws TimeoutException, GatewayException, SMSLibException,
+	public void stopService() throws TimeoutException, GatewayException, SMSLibException,
 			IOException, InterruptedException {
 		getService().stopService();
 	}
 
-	public static void startService() throws TimeoutException, GatewayException, SMSLibException,
-			IOException, InterruptedException {
-		getService().addGateway( getGateway() );
-		log.info( "Starting SMS service" );
-		if( getService().getServiceStatus() != Service.ServiceStatus.STARTED ) {
-			getService().startService();
-		}
-		log.info( "SMS service successfully Started!" );
-	}
+	/**
+         * Starts the SMS service from a different thread to prevent the app from hanging when this method is invoked.
+         *
+         */
+        public void startService() {
+            Runnable runnable = new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            getService().addGateway( getGateway() );
+                                            log.info( "Starting SMS service" );
+                                            if( getService().getServiceStatus() != Service.ServiceStatus.STARTED ) {
+                                                    getService().startService();
+                                                    log.info( "SMS service successfully Started!" );
+                                            } else {
+                                                log.info( "SMS service already Started!" );
+                                            }
+                                        } catch (GatewayException ex) {
+                                           log.error("The SMS gateway failed to initialize. " + ex.getMessage(), ex);
+                                        } catch (SMSLibException ex) {
+                                            log.error("SMSLib internal error prevented the SMS service from initializing properly. " + ex.getMessage(), ex);
+                                        }catch ( IOException | InterruptedException ex) {
+                                            log.error("Error starting the SMS service. " + ex.getMessage(), ex);
+                                        }
+                                    }
+                                };
+            Thread newThread = new Thread(runnable);
+            newThread.start();
+        }
+
+        private GatewayService() {
+        }
+        
+        
+        
+        public static GatewayService getGatewayService(){
+            return GatewayServiceHolder.GATEWAY_SERVICE;
+        }
+        
+        private static final class GatewayServiceHolder {
+            private static final GatewayService GATEWAY_SERVICE = new GatewayService();
+        }
 }
